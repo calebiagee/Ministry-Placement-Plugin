@@ -25,7 +25,7 @@
 }
 
 /* ---- Reset ---- */
-#mpq-app *, #mpq-app *::before, #mpq-app *::after {
+.mpq-app *, .mpq-app *::before, .mpq-app *::after {
   box-sizing: border-box; margin: 0; padding: 0;
 }
 
@@ -117,7 +117,7 @@
   font-weight: 800;
   letter-spacing: 0.05em;
   cursor: pointer;
-  padding: 0.9rem 2rem;
+  padding: 1.05rem 2.5rem;
   text-decoration: none;
   text-transform: uppercase;
   transition: background var(--mpq-dur) var(--mpq-ease), transform 0.15s, box-shadow 0.15s, color 0.15s;
@@ -146,7 +146,7 @@
   opacity: 1;
 }
 
-.mpq-btn--lg { font-size: 1.1rem; padding: 1.1rem 3rem; }
+.mpq-btn--lg { font-size: 1.1rem; padding: 1.3rem 3.5rem; }
 .mpq-btn__arrow { transition: transform 0.2s ease; }
 .mpq-btn:not(:disabled):hover .mpq-btn__arrow { transform: translateX(3px); }
 
@@ -160,7 +160,7 @@
   text-transform: uppercase;
   color: var(--mpq-gray-600);
   cursor: pointer;
-  padding: 0.9rem 1.75rem;
+  padding: 1.05rem 1.75rem;
   transition: border-color 0.2s, color 0.2s;
 }
 .mpq-back-btn:hover { border-color: var(--mpq-gray-400); color: var(--mpq-black); }
