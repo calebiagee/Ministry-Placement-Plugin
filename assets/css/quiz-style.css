@@ -131,10 +131,12 @@
   color: var(--mpq-black);
   box-shadow: 0 3px 12px rgba(240,170,0,0.35);
 }
-.mpq-btn--primary:hover {
-  background: var(--mpq-gold-light);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(240,170,0,0.45);
+@media (hover: hover) {
+  .mpq-btn--primary:hover {
+    background: var(--mpq-gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(240,170,0,0.45);
+  }
 }
 .mpq-btn--primary:active { transform: none; }
 .mpq-btn--primary:disabled {
@@ -148,7 +150,9 @@
 
 .mpq-btn--lg { font-size: 1.1rem; padding: 1.3rem 3.5rem; }
 .mpq-btn__arrow { transition: transform 0.2s ease; }
-.mpq-btn:not(:disabled):hover .mpq-btn__arrow { transform: translateX(3px); }
+@media (hover: hover) {
+  .mpq-btn:not(:disabled):hover .mpq-btn__arrow { transform: translateX(3px); }
+}
 
 .mpq-back-btn {
   background: none;
@@ -163,7 +167,9 @@
   padding: 1.05rem 1.75rem;
   transition: border-color 0.2s, color 0.2s;
 }
-.mpq-back-btn:hover { border-color: var(--mpq-gray-400); color: var(--mpq-black); }
+@media (hover: hover) {
+  .mpq-back-btn:hover { border-color: var(--mpq-gray-400); color: var(--mpq-black); }
+}
 
 /* ============================================================
    Progress bar
@@ -256,7 +262,9 @@
   color: var(--mpq-gray-600); cursor: pointer; min-height: 56px;
   transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
 }
-.mpq-scale__btn:hover { border-color: var(--mpq-gold); color: var(--mpq-gold-dark); transform: translateY(-2px); }
+@media (hover: hover) {
+  .mpq-scale__btn:hover { border-color: var(--mpq-gold); color: var(--mpq-gold-dark); transform: translateY(-2px); }
+}
 .mpq-scale__btn.selected { border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black); font-weight: 900; }
 
 /* ---- Multi-select hint ---- */
@@ -289,7 +297,9 @@
   display: flex; align-items: center; gap: 1rem;
   transition: border-color 0.2s, background 0.2s, transform 0.15s;
 }
-.mpq-choice__btn:hover { border-color: var(--mpq-gold); transform: translateX(4px); }
+@media (hover: hover) {
+  .mpq-choice__btn:hover { border-color: var(--mpq-gold); transform: translateX(4px); }
+}
 .mpq-choice__btn.selected { border-color: var(--mpq-gold); background: var(--mpq-gold-bg); font-weight: 600; }
 .mpq-choice__key {
   width: 28px; height: 28px; flex-shrink: 0;
@@ -298,9 +308,13 @@
   font-size: 0.72rem; font-weight: 800; color: var(--mpq-gray-400);
   transition: border-color 0.2s, background 0.2s, color 0.2s;
 }
-.mpq-choice__btn.selected .mpq-choice__key,
-.mpq-choice__btn:hover .mpq-choice__key {
+.mpq-choice__btn.selected .mpq-choice__key {
   border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black);
+}
+@media (hover: hover) {
+  .mpq-choice__btn:hover .mpq-choice__key {
+    border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black);
+  }
 }
 
 /* ============================================================
@@ -386,7 +400,9 @@
   cursor: pointer;
   transition: box-shadow 0.2s, transform 0.2s;
 }
-.mpq-ministry-card:hover { box-shadow: var(--mpq-shadow-lg); transform: translateY(-2px); }
+@media (hover: hover) {
+  .mpq-ministry-card:hover { box-shadow: var(--mpq-shadow-lg); transform: translateY(-2px); }
+}
 .mpq-ministry-card--rank-1 { border-left-color: var(--mpq-gold); }
 .mpq-ministry-card--rank-2 { border-left-color: #AAAAAA; }
 .mpq-ministry-card--rank-3 { border-left-color: #C07C36; }
