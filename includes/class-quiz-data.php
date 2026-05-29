@@ -10,90 +10,73 @@ class MPQ_Quiz_Data {
 
 	public static function get_spiritual_gifts_questions() {
 		return [
-			// Teaching
-			[ 'id' => 'T1',  'category' => 'teaching',      'text' => 'I enjoy explaining Bible passages in ways that help others understand.',                        'type' => 'scale' ],
-			[ 'id' => 'T2',  'category' => 'teaching',      'text' => 'People often come to me to help them understand complex spiritual truths.',                      'type' => 'scale' ],
-			[ 'id' => 'T3',  'category' => 'teaching',      'text' => 'I love preparing lessons or studies that help others grow in their faith.',                      'type' => 'scale' ],
+			// Teaching (2)
+			[ 'id' => 'T1',  'category' => 'teaching',      'text' => 'I enjoy explaining Bible passages in ways that help others understand.',                      'type' => 'scale' ],
+			[ 'id' => 'T3',  'category' => 'teaching',      'text' => 'I love preparing lessons or studies that help others grow in their faith.',                    'type' => 'scale' ],
 
-			// Encouragement
-			[ 'id' => 'EN1', 'category' => 'encouragement', 'text' => 'I naturally find ways to lift others up when they\'re struggling.',                              'type' => 'scale' ],
-			[ 'id' => 'EN2', 'category' => 'encouragement', 'text' => 'People tell me I have a gift for saying the right thing at the right time.',                     'type' => 'scale' ],
-			[ 'id' => 'EN3', 'category' => 'encouragement', 'text' => 'I enjoy helping others recognize their potential and cheering them on.',                         'type' => 'scale' ],
+			// Encouragement (2)
+			[ 'id' => 'EN1', 'category' => 'encouragement', 'text' => 'I naturally find ways to lift others up when they\'re struggling.',                            'type' => 'scale' ],
+			[ 'id' => 'EN3', 'category' => 'encouragement', 'text' => 'I enjoy helping others recognize their potential and cheering them on.',                       'type' => 'scale' ],
 
-			// Giving
-			[ 'id' => 'GV1', 'category' => 'giving',        'text' => 'I feel deep satisfaction when I give generously to God\'s work.',                                'type' => 'scale' ],
-			[ 'id' => 'GV2', 'category' => 'giving',        'text' => 'I often sense when someone has a financial need before they say anything.',                      'type' => 'scale' ],
-			[ 'id' => 'GV3', 'category' => 'giving',        'text' => 'I give sacrificially and trust God to meet my own needs.',                                       'type' => 'scale' ],
+			// Giving (2)
+			[ 'id' => 'GV1', 'category' => 'giving',        'text' => 'I feel deep satisfaction when I give generously to God\'s work.',                              'type' => 'scale' ],
+			[ 'id' => 'GV3', 'category' => 'giving',        'text' => 'I give sacrificially and trust God to meet my own needs.',                                     'type' => 'scale' ],
 
-			// Leadership
-			[ 'id' => 'LD1', 'category' => 'leadership',    'text' => 'People naturally look to me to lead when direction is needed.',                                  'type' => 'scale' ],
-			[ 'id' => 'LD2', 'category' => 'leadership',    'text' => 'I am able to cast vision and motivate others to work toward a goal.',                            'type' => 'scale' ],
-			[ 'id' => 'LD3', 'category' => 'leadership',    'text' => 'I enjoy the challenge of guiding a group through difficult decisions.',                          'type' => 'scale' ],
+			// Leadership (2)
+			[ 'id' => 'LD1', 'category' => 'leadership',    'text' => 'People naturally look to me to lead when direction is needed.',                                'type' => 'scale' ],
+			[ 'id' => 'LD2', 'category' => 'leadership',    'text' => 'I am able to cast vision and motivate others to work toward a goal.',                          'type' => 'scale' ],
 
-			// Mercy
-			[ 'id' => 'MC1', 'category' => 'mercy',         'text' => 'I am deeply moved by the pain and struggles of others.',                                         'type' => 'scale' ],
-			[ 'id' => 'MC2', 'category' => 'mercy',         'text' => 'I am drawn to minister to people who are hurting or forgotten.',                                  'type' => 'scale' ],
-			[ 'id' => 'MC3', 'category' => 'mercy',         'text' => 'I can sit with someone in their suffering without feeling the need to fix it.',                  'type' => 'scale' ],
+			// Mercy (2)
+			[ 'id' => 'MC1', 'category' => 'mercy',         'text' => 'I am deeply moved by the pain and struggles of others.',                                       'type' => 'scale' ],
+			[ 'id' => 'MC2', 'category' => 'mercy',         'text' => 'I am drawn to minister to people who are hurting or forgotten.',                                'type' => 'scale' ],
 
-			// Service / Helps
-			[ 'id' => 'SV1', 'category' => 'service',       'text' => 'I feel most fulfilled when I\'m helping others complete their work.',                             'type' => 'scale' ],
-			[ 'id' => 'SV2', 'category' => 'service',       'text' => 'I love working behind the scenes so that ministry can happen.',                                  'type' => 'scale' ],
-			[ 'id' => 'SV3', 'category' => 'service',       'text' => 'I notice practical needs and want to meet them without being asked.',                            'type' => 'scale' ],
+			// Service / Helps (2)
+			[ 'id' => 'SV1', 'category' => 'service',       'text' => 'I feel most fulfilled when I\'m helping others complete their work.',                           'type' => 'scale' ],
+			[ 'id' => 'SV3', 'category' => 'service',       'text' => 'I notice practical needs and want to meet them without being asked.',                          'type' => 'scale' ],
 
-			// Administration
-			[ 'id' => 'AD1', 'category' => 'administration','text' => 'I enjoy creating systems and processes that help things run smoothly.',                          'type' => 'scale' ],
-			[ 'id' => 'AD2', 'category' => 'administration','text' => 'I thrive when organizing people, tasks, and resources toward a common goal.',                    'type' => 'scale' ],
-			[ 'id' => 'AD3', 'category' => 'administration','text' => 'I am good at managing details that others might overlook.',                                      'type' => 'scale' ],
+			// Administration (2)
+			[ 'id' => 'AD1', 'category' => 'administration','text' => 'I enjoy creating systems and processes that help things run smoothly.',                        'type' => 'scale' ],
+			[ 'id' => 'AD2', 'category' => 'administration','text' => 'I thrive when organizing people, tasks, and resources toward a common goal.',                  'type' => 'scale' ],
 
-			// Evangelism
-			[ 'id' => 'EV1', 'category' => 'evangelism',    'text' => 'I feel a strong urgency to share the Gospel with those who don\'t know Jesus.',                  'type' => 'scale' ],
-			[ 'id' => 'EV2', 'category' => 'evangelism',    'text' => 'I find it natural and comfortable to tell others about my faith.',                               'type' => 'scale' ],
-			[ 'id' => 'EV3', 'category' => 'evangelism',    'text' => 'I regularly look for opportunities to share the Good News.',                                     'type' => 'scale' ],
+			// Evangelism (2)
+			[ 'id' => 'EV1', 'category' => 'evangelism',    'text' => 'I feel a strong urgency to share the Gospel with those who don\'t know Jesus.',                'type' => 'scale' ],
+			[ 'id' => 'EV2', 'category' => 'evangelism',    'text' => 'I find it natural and comfortable to tell others about my faith.',                             'type' => 'scale' ],
 
-			// Pastor / Shepherd
-			[ 'id' => 'PS1', 'category' => 'pastor',        'text' => 'I feel responsible for the spiritual growth and wellbeing of those around me.',                  'type' => 'scale' ],
-			[ 'id' => 'PS2', 'category' => 'pastor',        'text' => 'I naturally invest in long-term relationships with people I disciple.',                          'type' => 'scale' ],
-			[ 'id' => 'PS3', 'category' => 'pastor',        'text' => 'I feel troubled when someone in my community drifts from their faith.',                         'type' => 'scale' ],
+			// Pastor / Shepherd (2)
+			[ 'id' => 'PS1', 'category' => 'pastor',        'text' => 'I feel responsible for the spiritual growth and wellbeing of those around me.',                'type' => 'scale' ],
+			[ 'id' => 'PS2', 'category' => 'pastor',        'text' => 'I naturally invest in long-term relationships with people I disciple.',                        'type' => 'scale' ],
 
-			// Wisdom
-			[ 'id' => 'WS1', 'category' => 'wisdom',        'text' => 'People frequently seek my counsel for important decisions.',                                     'type' => 'scale' ],
-			[ 'id' => 'WS2', 'category' => 'wisdom',        'text' => 'I have a sense of how biblical truth applies to complex, real-life situations.',                 'type' => 'scale' ],
-			[ 'id' => 'WS3', 'category' => 'wisdom',        'text' => 'I can usually see the wisest course of action even when it\'s not obvious.',                    'type' => 'scale' ],
+			// Wisdom (2)
+			[ 'id' => 'WS1', 'category' => 'wisdom',        'text' => 'People frequently seek my counsel for important decisions.',                                   'type' => 'scale' ],
+			[ 'id' => 'WS2', 'category' => 'wisdom',        'text' => 'I have a sense of how biblical truth applies to complex, real-life situations.',               'type' => 'scale' ],
 
-			// Knowledge
-			[ 'id' => 'KN1', 'category' => 'knowledge',     'text' => 'I love digging deep into Scripture and researching biblical truth.',                             'type' => 'scale' ],
-			[ 'id' => 'KN2', 'category' => 'knowledge',     'text' => 'I often discover insights in the Bible that others may have overlooked.',                       'type' => 'scale' ],
-			[ 'id' => 'KN3', 'category' => 'knowledge',     'text' => 'I feel driven to understand the deeper meaning behind what I read.',                             'type' => 'scale' ],
+			// Knowledge (2)
+			[ 'id' => 'KN1', 'category' => 'knowledge',     'text' => 'I love digging deep into Scripture and researching biblical truth.',                           'type' => 'scale' ],
+			[ 'id' => 'KN2', 'category' => 'knowledge',     'text' => 'I often discover insights in the Bible that others may have overlooked.',                     'type' => 'scale' ],
 
-			// Faith
-			[ 'id' => 'FT1', 'category' => 'faith',         'text' => 'I often sense God calling me to take steps others consider risky or unreasonable.',              'type' => 'scale' ],
-			[ 'id' => 'FT2', 'category' => 'faith',         'text' => 'I trust God\'s provision and direction even in very uncertain circumstances.',                   'type' => 'scale' ],
-			[ 'id' => 'FT3', 'category' => 'faith',         'text' => 'I have a strong confidence that God will act, even when outcomes seem impossible.',              'type' => 'scale' ],
+			// Faith (2)
+			[ 'id' => 'FT1', 'category' => 'faith',         'text' => 'I often sense God calling me to take steps others consider risky or unreasonable.',            'type' => 'scale' ],
+			[ 'id' => 'FT3', 'category' => 'faith',         'text' => 'I have a strong confidence that God will act, even when outcomes seem impossible.',            'type' => 'scale' ],
 
-			// Discernment
-			[ 'id' => 'DS1', 'category' => 'discernment',   'text' => 'I can often sense when someone\'s motives don\'t match what they\'re saying.',                   'type' => 'scale' ],
-			[ 'id' => 'DS2', 'category' => 'discernment',   'text' => 'I quickly recognize when teaching or doctrine doesn\'t align with Scripture.',                   'type' => 'scale' ],
-			[ 'id' => 'DS3', 'category' => 'discernment',   'text' => 'I am sensitive to spiritual influences in conversations or group settings.',                     'type' => 'scale' ],
+			// Discernment (2)
+			[ 'id' => 'DS1', 'category' => 'discernment',   'text' => 'I can often sense when someone\'s motives don\'t match what they\'re saying.',                 'type' => 'scale' ],
+			[ 'id' => 'DS2', 'category' => 'discernment',   'text' => 'I quickly recognize when teaching or doctrine doesn\'t align with Scripture.',                 'type' => 'scale' ],
 
-			// Hospitality
-			[ 'id' => 'HP1', 'category' => 'hospitality',   'text' => 'I love making others feel welcomed and completely at home in my presence.',                      'type' => 'scale' ],
-			[ 'id' => 'HP2', 'category' => 'hospitality',   'text' => 'I often open my home or personal space to others for fellowship or ministry.',                   'type' => 'scale' ],
-			[ 'id' => 'HP3', 'category' => 'hospitality',   'text' => 'I notice when people feel like outsiders and go out of my way to include them.',                 'type' => 'scale' ],
+			// Hospitality (2)
+			[ 'id' => 'HP1', 'category' => 'hospitality',   'text' => 'I love making others feel welcomed and completely at home in my presence.',                    'type' => 'scale' ],
+			[ 'id' => 'HP3', 'category' => 'hospitality',   'text' => 'I notice when people feel like outsiders and go out of my way to include them.',               'type' => 'scale' ],
 
-			// Prayer / Intercession
-			[ 'id' => 'PI1', 'category' => 'intercession',  'text' => 'I feel a deep burden to pray for specific people or needs for extended periods.',                'type' => 'scale' ],
-			[ 'id' => 'PI2', 'category' => 'intercession',  'text' => 'I often pray for others and sense God working in response.',                                     'type' => 'scale' ],
-			[ 'id' => 'PI3', 'category' => 'intercession',  'text' => 'Prayer is a primary way I connect with God, and I find it deeply fulfilling.',                   'type' => 'scale' ],
+			// Prayer / Intercession (2)
+			[ 'id' => 'PI1', 'category' => 'intercession',  'text' => 'I feel a deep burden to pray for specific people or needs for extended periods.',              'type' => 'scale' ],
+			[ 'id' => 'PI3', 'category' => 'intercession',  'text' => 'Prayer is a primary way I connect with God, and I find it deeply fulfilling.',                 'type' => 'scale' ],
 
-			// Creative Communication
-			[ 'id' => 'CC1', 'category' => 'creative',      'text' => 'I express spiritual truths through creative means — music, art, writing, drama, or design.',    'type' => 'scale' ],
-			[ 'id' => 'CC2', 'category' => 'creative',      'text' => 'I feel most alive when using creative gifts to communicate God\'s heart.',                       'type' => 'scale' ],
-			[ 'id' => 'CC3', 'category' => 'creative',      'text' => 'I believe creativity is a powerful ministry tool, and I want to use it for God.',                'type' => 'scale' ],
+			// Creative Communication (2)
+			[ 'id' => 'CC1', 'category' => 'creative',      'text' => 'I express spiritual truths through creative means — music, art, writing, drama, or design.',  'type' => 'scale' ],
+			[ 'id' => 'CC2', 'category' => 'creative',      'text' => 'I feel most alive when using creative gifts to communicate God\'s heart.',                     'type' => 'scale' ],
 
-			// Prophecy
-			[ 'id' => 'PY1', 'category' => 'prophecy',      'text' => 'I feel compelled to speak God\'s truth even when it\'s difficult or uncomfortable.',             'type' => 'scale' ],
-			[ 'id' => 'PY2', 'category' => 'prophecy',      'text' => 'I have a strong sense of what God wants to say to a group or individual.',                       'type' => 'scale' ],
-			[ 'id' => 'PY3', 'category' => 'prophecy',      'text' => 'I believe boldly declaring truth is central to my calling.',                                     'type' => 'scale' ],
+			// Prophecy (2)
+			[ 'id' => 'PY1', 'category' => 'prophecy',      'text' => 'I feel compelled to speak God\'s truth even when it\'s difficult or uncomfortable.',           'type' => 'scale' ],
+			[ 'id' => 'PY2', 'category' => 'prophecy',      'text' => 'I have a strong sense of what God wants to say to a group or individual.',                     'type' => 'scale' ],
 		];
 	}
 
