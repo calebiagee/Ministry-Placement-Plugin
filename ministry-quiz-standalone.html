@@ -505,13 +505,13 @@ body { margin: 0; padding: 0; }
   .mpq-form-row { grid-template-columns: 1fr; }
   .mpq-ministry-card__image { height: 140px; }
 }
-
 </style>
 </head>
 <body>
 
 <div id="mpq-app" class="mpq-app" role="main" aria-label="Ministry Placement Quiz">
 
+  <!-- Welcome -->
   <div id="mpq-welcome" class="mpq-screen mpq-screen--active">
     <div class="mpq-screen__inner">
       <p class="mpq-eyebrow">Hope Church</p>
@@ -527,6 +527,7 @@ body { margin: 0; padding: 0; }
     </div>
   </div>
 
+  <!-- Quiz -->
   <div id="mpq-quiz" class="mpq-screen" aria-live="polite">
     <div class="mpq-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <div id="mpq-progress-fill" class="mpq-progress-bar__fill"></div>
@@ -545,24 +546,25 @@ body { margin: 0; padding: 0; }
     </div>
   </div>
 
+  <!-- Results -->
   <div id="mpq-results" class="mpq-screen">
     <div class="mpq-results__inner">
       <div id="mpq-results-content"></div>
     </div>
   </div>
 
+  <!-- Confirmation -->
   <div id="mpq-confirmation" class="mpq-screen">
     <div class="mpq-screen__inner mpq-confirmation__inner">
       <div class="mpq-confirmation__icon">&#10003;</div>
       <p class="mpq-eyebrow">You&rsquo;re all set!</p>
       <h2 class="mpq-confirmation__title">Thanks for taking the next step.</h2>
       <p class="mpq-confirmation__body">We&rsquo;ve received your ministry interests and our team will be in touch soon. We can&rsquo;t wait to serve alongside you!</p>
-      <div id="mpq-confirmation__cta">
-        <a href="https://hopechurch.net" class="mpq-btn mpq-btn--primary">Visit Hope Church &rarr;</a>
-      </div>
+      <div id="mpq-confirmation__cta"></div>
     </div>
   </div>
 
+  <!-- Loading -->
   <div id="mpq-loading" class="mpq-loading mpq-loading--hidden" aria-hidden="true">
     <div class="mpq-loading__spinner"></div>
     <p>Discovering your gifts&hellip;</p>
@@ -571,106 +573,104 @@ body { margin: 0; padding: 0; }
 </div>
 
 <script>
-
 /* ============================================================
-   PREVIEW DATA — mirrors PHP class data for standalone use
+   All question data + client-side scoring engine
    ============================================================ */
 
 var mpqData = {
-  ajaxUrl:    null,
+  ajaxUrl:    '__preview__',
   nonce:      null,
   siteName:   'Hope Church',
   connectUrl: 'https://hopechurch.net',
-  questions: (function() {
-
+  questions: (function () {
     var sg = [
-      {id:'T1',  category:'teaching',      text:'I enjoy explaining Bible passages in ways that help others understand.',                       type:'scale'},
-      {id:'T2',  category:'teaching',      text:'People often come to me to help them understand complex spiritual truths.',                     type:'scale'},
-      {id:'T3',  category:'teaching',      text:'I love preparing lessons or studies that help others grow in their faith.',                     type:'scale'},
-      {id:'EN1', category:'encouragement', text:'I naturally find ways to lift others up when they\'re struggling.',                             type:'scale'},
-      {id:'EN2', category:'encouragement', text:'People tell me I have a gift for saying the right thing at the right time.',                    type:'scale'},
-      {id:'EN3', category:'encouragement', text:'I enjoy helping others recognize their potential and cheering them on.',                        type:'scale'},
-      {id:'GV1', category:'giving',        text:'I feel deep satisfaction when I give generously to God\'s work.',                               type:'scale'},
-      {id:'GV2', category:'giving',        text:'I often sense when someone has a financial need before they say anything.',                     type:'scale'},
-      {id:'GV3', category:'giving',        text:'I give sacrificially and trust God to meet my own needs.',                                      type:'scale'},
-      {id:'LD1', category:'leadership',    text:'People naturally look to me to lead when direction is needed.',                                 type:'scale'},
-      {id:'LD2', category:'leadership',    text:'I am able to cast vision and motivate others to work toward a goal.',                          type:'scale'},
-      {id:'LD3', category:'leadership',    text:'I enjoy the challenge of guiding a group through difficult decisions.',                        type:'scale'},
-      {id:'MC1', category:'mercy',         text:'I am deeply moved by the pain and struggles of others.',                                        type:'scale'},
-      {id:'MC2', category:'mercy',         text:'I am drawn to minister to people who are hurting or forgotten.',                                type:'scale'},
-      {id:'MC3', category:'mercy',         text:'I can sit with someone in their suffering without feeling the need to fix it.',                 type:'scale'},
-      {id:'SV1', category:'service',       text:'I feel most fulfilled when I\'m helping others complete their work.',                            type:'scale'},
-      {id:'SV2', category:'service',       text:'I love working behind the scenes so that ministry can happen.',                                 type:'scale'},
-      {id:'SV3', category:'service',       text:'I notice practical needs and want to meet them without being asked.',                          type:'scale'},
-      {id:'AD1', category:'administration',text:'I enjoy creating systems and processes that help things run smoothly.',                         type:'scale'},
-      {id:'AD2', category:'administration',text:'I thrive when organizing people, tasks, and resources toward a common goal.',                  type:'scale'},
-      {id:'AD3', category:'administration',text:'I am good at managing details that others might overlook.',                                    type:'scale'},
-      {id:'EV1', category:'evangelism',    text:'I feel a strong urgency to share the Gospel with those who don\'t know Jesus.',                 type:'scale'},
-      {id:'EV2', category:'evangelism',    text:'I find it natural and comfortable to tell others about my faith.',                             type:'scale'},
-      {id:'EV3', category:'evangelism',    text:'I regularly look for opportunities to share the Good News.',                                   type:'scale'},
-      {id:'PS1', category:'pastor',        text:'I feel responsible for the spiritual growth and wellbeing of those around me.',                 type:'scale'},
-      {id:'PS2', category:'pastor',        text:'I naturally invest in long-term relationships with people I disciple.',                        type:'scale'},
-      {id:'PS3', category:'pastor',        text:'I feel troubled when someone in my community drifts from their faith.',                       type:'scale'},
-      {id:'WS1', category:'wisdom',        text:'People frequently seek my counsel for important decisions.',                                   type:'scale'},
-      {id:'WS2', category:'wisdom',        text:'I have a sense of how biblical truth applies to complex, real-life situations.',               type:'scale'},
-      {id:'WS3', category:'wisdom',        text:'I can usually see the wisest course of action even when it\'s not obvious.',                  type:'scale'},
-      {id:'KN1', category:'knowledge',     text:'I love digging deep into Scripture and researching biblical truth.',                            type:'scale'},
-      {id:'KN2', category:'knowledge',     text:'I often discover insights in the Bible that others may have overlooked.',                     type:'scale'},
-      {id:'KN3', category:'knowledge',     text:'I feel driven to understand the deeper meaning behind what I read.',                           type:'scale'},
-      {id:'FT1', category:'faith',         text:'I often sense God calling me to take steps others consider risky or unreasonable.',             type:'scale'},
-      {id:'FT2', category:'faith',         text:'I trust God\'s provision and direction even in very uncertain circumstances.',                 type:'scale'},
-      {id:'FT3', category:'faith',         text:'I have a strong confidence that God will act, even when outcomes seem impossible.',            type:'scale'},
-      {id:'DS1', category:'discernment',   text:'I can often sense when someone\'s motives don\'t match what they\'re saying.',                 type:'scale'},
-      {id:'DS2', category:'discernment',   text:'I quickly recognize when teaching or doctrine doesn\'t align with Scripture.',                 type:'scale'},
-      {id:'DS3', category:'discernment',   text:'I am sensitive to spiritual influences in conversations or group settings.',                   type:'scale'},
-      {id:'HP1', category:'hospitality',   text:'I love making others feel welcomed and completely at home in my presence.',                    type:'scale'},
-      {id:'HP2', category:'hospitality',   text:'I often open my home or personal space to others for fellowship or ministry.',                 type:'scale'},
-      {id:'HP3', category:'hospitality',   text:'I notice when people feel like outsiders and go out of my way to include them.',              type:'scale'},
-      {id:'PI1', category:'intercession',  text:'I feel a deep burden to pray for specific people or needs for extended periods.',              type:'scale'},
-      {id:'PI2', category:'intercession',  text:'I often pray for others and sense God working in response.',                                   type:'scale'},
-      {id:'PI3', category:'intercession',  text:'Prayer is a primary way I connect with God, and I find it deeply fulfilling.',                type:'scale'},
-      {id:'CC1', category:'creative',      text:'I express spiritual truths through creative means — music, art, writing, drama, or design.',   type:'scale'},
-      {id:'CC2', category:'creative',      text:'I feel most alive when using creative gifts to communicate God\'s heart.',                     type:'scale'},
-      {id:'CC3', category:'creative',      text:'I believe creativity is a powerful ministry tool, and I want to use it for God.',             type:'scale'},
-      {id:'PY1', category:'prophecy',      text:'I feel compelled to speak God\'s truth even when it\'s difficult or uncomfortable.',           type:'scale'},
-      {id:'PY2', category:'prophecy',      text:'I have a strong sense of what God wants to say to a group or individual.',                    type:'scale'},
-      {id:'PY3', category:'prophecy',      text:'I believe boldly declaring truth is central to my calling.',                                  type:'scale'}
+      {id:'T1',  category:'teaching',       type:'scale', text:'I enjoy explaining Bible passages in ways that help others understand.'},
+      {id:'T2',  category:'teaching',       type:'scale', text:'People often come to me to help them understand complex spiritual truths.'},
+      {id:'T3',  category:'teaching',       type:'scale', text:'I love preparing lessons or studies that help others grow in their faith.'},
+      {id:'EN1', category:'encouragement',  type:'scale', text:'I naturally find ways to lift others up when they\'re struggling.'},
+      {id:'EN2', category:'encouragement',  type:'scale', text:'People tell me I have a gift for saying the right thing at the right time.'},
+      {id:'EN3', category:'encouragement',  type:'scale', text:'I enjoy helping others recognize their potential and cheering them on.'},
+      {id:'GV1', category:'giving',         type:'scale', text:'I feel deep satisfaction when I give generously to God\'s work.'},
+      {id:'GV2', category:'giving',         type:'scale', text:'I often sense when someone has a financial need before they say anything.'},
+      {id:'GV3', category:'giving',         type:'scale', text:'I give sacrificially and trust God to meet my own needs.'},
+      {id:'LD1', category:'leadership',     type:'scale', text:'People naturally look to me to lead when direction is needed.'},
+      {id:'LD2', category:'leadership',     type:'scale', text:'I am able to cast vision and motivate others to work toward a goal.'},
+      {id:'LD3', category:'leadership',     type:'scale', text:'I enjoy the challenge of guiding a group through difficult decisions.'},
+      {id:'MC1', category:'mercy',          type:'scale', text:'I am deeply moved by the pain and struggles of others.'},
+      {id:'MC2', category:'mercy',          type:'scale', text:'I am drawn to minister to people who are hurting or forgotten.'},
+      {id:'MC3', category:'mercy',          type:'scale', text:'I can sit with someone in their suffering without feeling the need to fix it.'},
+      {id:'SV1', category:'service',        type:'scale', text:'I feel most fulfilled when I\'m helping others complete their work.'},
+      {id:'SV2', category:'service',        type:'scale', text:'I love working behind the scenes so that ministry can happen.'},
+      {id:'SV3', category:'service',        type:'scale', text:'I notice practical needs and want to meet them without being asked.'},
+      {id:'AD1', category:'administration', type:'scale', text:'I enjoy creating systems and processes that help things run smoothly.'},
+      {id:'AD2', category:'administration', type:'scale', text:'I thrive when organizing people, tasks, and resources toward a common goal.'},
+      {id:'AD3', category:'administration', type:'scale', text:'I am good at managing details that others might overlook.'},
+      {id:'EV1', category:'evangelism',     type:'scale', text:'I feel a strong urgency to share the Gospel with those who don\'t know Jesus.'},
+      {id:'EV2', category:'evangelism',     type:'scale', text:'I find it natural and comfortable to tell others about my faith.'},
+      {id:'EV3', category:'evangelism',     type:'scale', text:'I regularly look for opportunities to share the Good News.'},
+      {id:'PS1', category:'pastor',         type:'scale', text:'I feel responsible for the spiritual growth and wellbeing of those around me.'},
+      {id:'PS2', category:'pastor',         type:'scale', text:'I naturally invest in long-term relationships with people I disciple.'},
+      {id:'PS3', category:'pastor',         type:'scale', text:'I feel troubled when someone in my community drifts from their faith.'},
+      {id:'WS1', category:'wisdom',         type:'scale', text:'People frequently seek my counsel for important decisions.'},
+      {id:'WS2', category:'wisdom',         type:'scale', text:'I have a sense of how biblical truth applies to complex, real-life situations.'},
+      {id:'WS3', category:'wisdom',         type:'scale', text:'I can usually see the wisest course of action even when it\'s not obvious.'},
+      {id:'KN1', category:'knowledge',      type:'scale', text:'I love digging deep into Scripture and researching biblical truth.'},
+      {id:'KN2', category:'knowledge',      type:'scale', text:'I often discover insights in the Bible that others may have overlooked.'},
+      {id:'KN3', category:'knowledge',      type:'scale', text:'I feel driven to understand the deeper meaning behind what I read.'},
+      {id:'FT1', category:'faith',          type:'scale', text:'I often sense God calling me to take steps others consider risky or unreasonable.'},
+      {id:'FT2', category:'faith',          type:'scale', text:'I trust God\'s provision and direction even in very uncertain circumstances.'},
+      {id:'FT3', category:'faith',          type:'scale', text:'I have a strong confidence that God will act, even when outcomes seem impossible.'},
+      {id:'DS1', category:'discernment',    type:'scale', text:'I can often sense when someone\'s motives don\'t match what they\'re saying.'},
+      {id:'DS2', category:'discernment',    type:'scale', text:'I quickly recognize when teaching or doctrine doesn\'t align with Scripture.'},
+      {id:'DS3', category:'discernment',    type:'scale', text:'I am sensitive to spiritual influences in conversations or group settings.'},
+      {id:'HP1', category:'hospitality',    type:'scale', text:'I love making others feel welcomed and completely at home in my presence.'},
+      {id:'HP2', category:'hospitality',    type:'scale', text:'I often open my home or personal space to others for fellowship or ministry.'},
+      {id:'HP3', category:'hospitality',    type:'scale', text:'I notice when people feel like outsiders and go out of my way to include them.'},
+      {id:'PI1', category:'intercession',   type:'scale', text:'I feel a deep burden to pray for specific people or needs for extended periods.'},
+      {id:'PI2', category:'intercession',   type:'scale', text:'I often pray for others and sense God working in response.'},
+      {id:'PI3', category:'intercession',   type:'scale', text:'Prayer is a primary way I connect with God, and I find it deeply fulfilling.'},
+      {id:'CC1', category:'creative',       type:'scale', text:'I express spiritual truths through creative means — music, art, writing, drama, or design.'},
+      {id:'CC2', category:'creative',       type:'scale', text:'I feel most alive when using creative gifts to communicate God\'s heart.'},
+      {id:'CC3', category:'creative',       type:'scale', text:'I believe creativity is a powerful ministry tool, and I want to use it for God.'},
+      {id:'PY1', category:'prophecy',       type:'scale', text:'I feel compelled to speak God\'s truth even when it\'s difficult or uncomfortable.'},
+      {id:'PY2', category:'prophecy',       type:'scale', text:'I have a strong sense of what God wants to say to a group or individual.'},
+      {id:'PY3', category:'prophecy',       type:'scale', text:'I believe boldly declaring truth is central to my calling.'}
     ];
 
     var iq = [
-      {id:'I1',  category:'interest_age',          type:'choice', text:'Which age group do you most enjoy spending time with?',
+      {id:'I1',  category:'interest_age',         type:'choice', text:'Which age group do you most enjoy spending time with?',
        options:[{value:'children',label:'Children (infant – 12)'},{value:'youth',label:'Teenagers & Young Adults'},{value:'adults',label:'Adults'},{value:'seniors',label:'Seniors'},{value:'all',label:'All ages — I love them equally'}]},
-      {id:'I2',  category:'interest_setting',       type:'choice', text:'Where do you feel most comfortable serving?',
+      {id:'I2',  category:'interest_setting',      type:'choice', text:'Where do you feel most comfortable serving?',
        options:[{value:'front',label:'Up front and visible (stage, door, leading)'},{value:'behind',label:'Behind the scenes — I keep things running'},{value:'one_on_one',label:'One-on-one conversations and relationships'},{value:'small_group',label:'Small groups and team settings'}]},
-      {id:'I3',  category:'interest_skill',         type:'choice', text:'Which of these best describes a skill or experience you have?',
-       options:[{value:'music',label:"I play an instrument or sing"},{value:'tech',label:'I work well with technology, audio/video, or computers'},{value:'physical',label:"I'm good with my hands — building, maintenance, or physical work"},{value:'people',label:"I'm a natural communicator and connector with people"}]},
-      {id:'I4',  category:'interest_children_exp',  type:'choice', text:'Have you worked with children as a teacher, coach, parent, or volunteer?',
-       options:[{value:'yes',label:"Yes — regularly and I love it"},{value:'some',label:"Some experience, and I'd like more"},{value:'no',label:"Not much experience yet"}]},
-      {id:'I5',  category:'interest_social',        type:'choice', text:"When you walk into a room full of people you don't know well, you tend to:",
+      {id:'I3',  category:'interest_skill',        type:'choice', text:'Which of these best describes a skill or experience you have?',
+       options:[{value:'music',label:'I play an instrument or sing'},{value:'tech',label:'I work well with technology, audio/video, or computers'},{value:'physical',label:"I'm good with my hands — building, maintenance, or physical work"},{value:'people',label:"I'm a natural communicator and connector with people"}]},
+      {id:'I4',  category:'interest_children_exp', type:'choice', text:'Have you worked with children as a teacher, coach, parent, or volunteer?',
+       options:[{value:'yes',label:'Yes — regularly and I love it'},{value:'some',label:"Some experience, and I'd like more"},{value:'no',label:'Not much experience yet'}]},
+      {id:'I5',  category:'interest_social',       type:'choice', text:"When you walk into a room full of people you don't know well, you tend to:",
        options:[{value:'initiate',label:'Start conversations and introduce yourself'},{value:'deepen',label:'Seek out one person and go deep'},{value:'observe',label:'Watch, listen, and ease in gradually'},{value:'help',label:'Look for something useful to do'}]},
-      {id:'I6',  category:'interest_outreach',      type:'choice', text:"How do you feel about reaching people who aren't part of a church yet?",
+      {id:'I6',  category:'interest_outreach',     type:'choice', text:"How do you feel about reaching people who aren't part of a church yet?",
        options:[{value:'yes',label:"I'm passionate about it — it drives me"},{value:'somewhat',label:'I care, but prefer working within the church'},{value:'no',label:"I'm more drawn to serving those already here"}]},
-      {id:'I7',  category:'interest_teaching_exp',  type:'choice', text:'Have you ever taught a class, led a group discussion, or mentored someone?',
+      {id:'I7',  category:'interest_teaching_exp', type:'choice', text:'Have you ever taught a class, led a group discussion, or mentored someone?',
        options:[{value:'yes',label:"Yes — it's something I do regularly"},{value:'some',label:'A few times — I enjoyed it'},{value:'no',label:"Not much, but I'm open to growing in it"}]},
-      {id:'I8',  category:'interest_hands_on',      type:'choice', text:"If a task needs to get done, you're most likely to:",
+      {id:'I8',  category:'interest_hands_on',     type:'choice', text:"If a task needs to get done, you're most likely to:",
        options:[{value:'jump_in',label:'Roll up my sleeves and just do it'},{value:'plan',label:'Make a plan and coordinate with others'},{value:'delegate',label:'Recruit the right people and lead the effort'},{value:'support',label:'Help wherever someone needs an extra hand'}]},
-      {id:'I9',  category:'interest_safety',        type:'choice', text:'How do you feel about a role that involves protecting and keeping people safe?',
+      {id:'I9',  category:'interest_safety',       type:'choice', text:'How do you feel about a role that involves protecting and keeping people safe?',
        options:[{value:'yes',label:"That's exactly my type of role"},{value:'maybe',label:"I'm open to it"},{value:'no',label:"I'd prefer a different kind of role"}]},
-      {id:'I10', category:'interest_prayer_life',   type:'choice', text:'How would you describe your prayer life?',
+      {id:'I10', category:'interest_prayer_life',  type:'choice', text:'How would you describe your prayer life?',
        options:[{value:'deep',label:"I pray for extended periods regularly — it's central to my life"},{value:'daily',label:'I pray briefly but consistently each day'},{value:'growing',label:"It's something I'm growing in"},{value:'new',label:'Prayer is relatively new to me'}]},
-      {id:'I11', category:'interest_creativity',    type:'choice', text:'Which creative area feels most natural to you?',
+      {id:'I11', category:'interest_creativity',   type:'choice', text:'Which creative area feels most natural to you?',
        options:[{value:'music',label:'Music — singing, playing, writing songs'},{value:'visual',label:'Visual arts, graphic design, or video'},{value:'writing',label:'Writing, storytelling, or speaking'},{value:'none',label:"Creativity isn't really my thing"}]},
-      {id:'I12', category:'interest_time',          type:'choice', text:'How much time could you realistically commit to serving each week?',
+      {id:'I12', category:'interest_time',         type:'choice', text:'How much time could you realistically commit to serving each week?',
        options:[{value:'minimal',label:'1 – 2 hours (Sundays only)'},{value:'moderate',label:'3 – 5 hours (Sundays + some midweek)'},{value:'significant',label:'6+ hours (a major commitment)'}]}
     ];
 
-    // Interleave: insert 1 interest question every ~4 gifts questions
-    var all = [], interval = Math.floor(sg.length / iq.length), gi = 0;
-    sg.forEach(function(q, i) {
+    /* Interleave: insert 1 interest question every ~4 spiritual gifts questions */
+    var all = [], gi = 0, interval = Math.floor(sg.length / iq.length);
+    sg.forEach(function (q, i) {
       all.push(q);
-      if ((i + 1) % interval === 0 && gi < iq.length) all.push(iq[gi++]);
+      if ((i + 1) % interval === 0 && gi < iq.length) { all.push(iq[gi]); gi++; }
     });
-    while (gi < iq.length) all.push(iq[gi++]);
+    while (gi < iq.length) { all.push(iq[gi]); gi++; }
     return all;
   }())
 };
@@ -700,26 +700,97 @@ var MPQ_Scoring = {
   },
 
   ministries: {
-    hope_kids:      {name:"Hope Kids",             description:"Invest in the next generation by creating a safe, fun, and Spirit-filled environment where children experience the love of Jesus.",     commitment:"Sundays + occasional events",
-      gifts:{service:2,teaching:3,encouragement:2,mercy:2,hospitality:1,pastor:1}, interest_age:{children:5,all:1}, interest_children_exp:{yes:4,some:2}, interest_teaching_exp:{yes:2,some:1}, interest_setting:{small_group:1}},
-    hope_students:  {name:"Hope Student Ministries", description:"Come alongside middle and high school students through authentic relationships, Biblical teaching, and life-on-life discipleship.",    commitment:"Weekly meetings + events",
-      gifts:{evangelism:2,encouragement:3,leadership:2,hospitality:2,pastor:3}, interest_age:{youth:5,all:1}, interest_social:{initiate:2,deepen:2}, interest_setting:{small_group:1,one_on_one:1}, interest_outreach:{yes:1}},
-    hope_young_adults:{name:"Hope Young Adults",  description:"Help build a community where people in their 20s and 30s find real belonging, lasting friendships, and a faith that anchors their lives.", commitment:"Weekly gatherings + events",
-      gifts:{encouragement:3,hospitality:3,evangelism:2,pastor:2,leadership:1}, interest_age:{adults:2,all:1}, interest_social:{initiate:2,deepen:1}, interest_setting:{small_group:2,front:1}, interest_outreach:{yes:1}},
-    worship:        {name:"Worship",               description:"Use your musical gifting to lead our church family into God's presence each Sunday through Spirit-led worship.",                         commitment:"Weekly rehearsals + Sundays",
-      gifts:{creative:5,faith:1,leadership:1}, interest_skill:{music:6,people:1}, interest_creativity:{music:6,visual:1}, interest_setting:{front:3}},
-    hospitality:    {name:"Hospitality",           description:"Create a warm, welcoming atmosphere where everyone feels genuinely seen, valued, and at home at Hope Church.",                           commitment:"Sunday mornings",
-      gifts:{hospitality:5,service:2,mercy:1,encouragement:2}, interest_social:{initiate:3,help:1}, interest_setting:{front:2}, interest_skill:{people:3}},
-    greeters:       {name:"Greeters",              description:"Be the first smile someone sees — warmly welcoming guests and members at the door.",                                                     commitment:"Sunday mornings (rotating)",
-      gifts:{hospitality:4,encouragement:2,service:1}, interest_social:{initiate:4,help:1}, interest_setting:{front:3}, interest_skill:{people:3}},
-    ushers:         {name:"Ushers",                description:"Help services run smoothly, assist guests, manage seating, and support our weekend experience.",                                          commitment:"Sunday mornings (rotating)",
-      gifts:{service:3,administration:2,hospitality:2}, interest_setting:{front:1,behind:2}, interest_hands_on:{jump_in:2,support:2}, interest_skill:{people:1}},
-    security:       {name:"Security",              description:"Protect and serve our church family by maintaining a safe environment during services and events.",                                       commitment:"Sundays + special events",
-      gifts:{service:3,administration:2,leadership:2,discernment:3,faith:1}, interest_safety:{yes:7,maybe:2}, interest_setting:{front:1,behind:1}, interest_hands_on:{jump_in:1,plan:1}},
-    facilities:     {name:"Facilities",            description:"Keep our campus clean, safe, and set up so that every ministry can happen without a hitch.",                                             commitment:"Weekdays + weekends as needed",
-      gifts:{service:5,administration:2}, interest_setting:{behind:4}, interest_hands_on:{jump_in:4,support:2}, interest_skill:{physical:6,tech:1}},
-    hope_family:    {name:"Lead a Hope Family",    description:"Facilitate a small group who does life together — growing in God's Word, carrying burdens, and becoming true church family.",            commitment:"Weekly Hope Family meeting + prep",
-      gifts:{teaching:2,pastor:4,encouragement:3,wisdom:2,hospitality:2}, interest_age:{adults:2,all:1}, interest_setting:{small_group:5,one_on_one:1}, interest_teaching_exp:{yes:2,some:1}, interest_social:{deepen:2,initiate:1}}
+    hope_kids_preschool: {
+      name:'Hope Kids — Preschool',
+      description:'Create a warm, nurturing environment where babies, toddlers, and preschoolers take their very first steps of faith and experience God\'s love through play, stories, and gentle care.',
+      commitment:'Sundays + occasional events',
+      gifts:{service:3,mercy:3,encouragement:2,hospitality:2,pastor:1},
+      interest_age:{children:5,all:1}, interest_children_exp:{yes:4,some:2}, interest_setting:{small_group:1}
+    },
+    hope_kids_elementary: {
+      name:'Hope Kids — Elementary',
+      description:'Help kids in Kindergarten through 5th grade discover who Jesus is through energetic worship, engaging Bible lessons, and meaningful friendships that build a lifelong faith.',
+      commitment:'Sundays + occasional events',
+      gifts:{teaching:4,encouragement:2,service:2,mercy:1,hospitality:1,pastor:1},
+      interest_age:{children:5,all:1}, interest_children_exp:{yes:4,some:2}, interest_teaching_exp:{yes:3,some:1}, interest_setting:{small_group:1}
+    },
+    hope_students: {
+      name:'Hope Student Ministries',
+      description:'Come alongside middle and high school students through authentic relationships, Biblical teaching, and life-on-life discipleship during a critical season of their lives.',
+      commitment:'Weekly meetings + events',
+      gifts:{evangelism:2,encouragement:3,leadership:2,hospitality:2,pastor:3},
+      interest_age:{youth:5,all:1}, interest_social:{initiate:2,deepen:2}, interest_setting:{small_group:1,one_on_one:1}, interest_outreach:{yes:1}
+    },
+    hope_young_adults: {
+      name:'Hope Young Adults',
+      description:'Help build a community where people in their 20s and 30s find real belonging, lasting friendships, and a faith that anchors their lives.',
+      commitment:'Weekly gatherings + community events',
+      gifts:{encouragement:3,hospitality:3,evangelism:2,pastor:2,leadership:1},
+      interest_age:{adults:2,all:1}, interest_social:{initiate:2,deepen:1}, interest_setting:{small_group:2,front:1}, interest_outreach:{yes:1}
+    },
+    worship: {
+      name:'Worship',
+      description:'Use your musical gifting to lead our church family into God\'s presence each Sunday through Spirit-led worship that points people to Jesus.',
+      commitment:'Weekly rehearsals + Sundays',
+      gifts:{creative:5,faith:1,leadership:1},
+      interest_skill:{music:6,people:1}, interest_creativity:{music:6,visual:1}, interest_setting:{front:3}
+    },
+    hospitality: {
+      name:'Hospitality',
+      description:'Create a warm, welcoming atmosphere where everyone — regulars and first-timers alike — feels genuinely seen, valued, and at home at Hope Church.',
+      commitment:'Sunday mornings',
+      gifts:{hospitality:5,service:2,mercy:1,encouragement:2},
+      interest_social:{initiate:3,help:1}, interest_setting:{front:2}, interest_skill:{people:3}
+    },
+    greeters: {
+      name:'Greeters',
+      description:'Be the first smile someone sees — warmly welcoming guests and members at the door and helping everyone feel like they\'ve come home.',
+      commitment:'Sunday mornings (rotating schedule)',
+      gifts:{hospitality:4,encouragement:2,service:1},
+      interest_social:{initiate:4,help:1}, interest_setting:{front:3}, interest_skill:{people:3}
+    },
+    ushers: {
+      name:'Ushers',
+      description:'Serve in the aisles to help services run smoothly, assist guests, manage seating, and support our weekend experience from start to finish.',
+      commitment:'Sunday mornings (rotating schedule)',
+      gifts:{service:3,administration:2,hospitality:2},
+      interest_setting:{front:1,behind:2}, interest_hands_on:{jump_in:2,support:2}, interest_skill:{people:1}
+    },
+    security: {
+      name:'Security',
+      description:'Protect and serve our church family by maintaining a safe environment during services and events so everyone can worship without distraction.',
+      commitment:'Sundays + special events',
+      gifts:{service:3,administration:2,leadership:2,discernment:3,faith:1},
+      interest_safety:{yes:7,maybe:2}, interest_setting:{front:1,behind:1}, interest_hands_on:{jump_in:1,plan:1}
+    },
+    facilities: {
+      name:'Facilities',
+      description:'Keep our campus clean, safe, and fully set up so that every ministry and service can happen without a hitch. If you love practical hands-on work, this is your place.',
+      commitment:'Weekdays + weekends as needed',
+      gifts:{service:5,administration:2},
+      interest_setting:{behind:4}, interest_hands_on:{jump_in:4,support:2}, interest_skill:{physical:6,tech:1}
+    },
+    hope_family: {
+      name:'Lead a Hope Family',
+      description:'Facilitate a small group of people who do life together — growing in God\'s Word, carrying one another\'s burdens, and becoming true church family.',
+      commitment:'Weekly Hope Family meeting + prep time',
+      gifts:{teaching:2,pastor:4,encouragement:3,wisdom:2,hospitality:2},
+      interest_age:{adults:2,all:1}, interest_setting:{small_group:5,one_on_one:1}, interest_teaching_exp:{yes:2,some:1}, interest_social:{deepen:2,initiate:1}
+    },
+    media: {
+      name:'Media Team',
+      description:'Use your technical and creative skills to support live worship, livestreaming, social media, graphic design, and the digital presence of Hope Church.',
+      commitment:'Sundays + special productions',
+      gifts:{administration:1,creative:3,service:3},
+      interest_skill:{tech:6,music:1}, interest_creativity:{visual:5,music:2}, interest_setting:{behind:4}, interest_hands_on:{plan:2,jump_in:1}
+    },
+    outreach: {
+      name:'Outreach',
+      description:'Bring the love of Jesus to our city through servant evangelism, community service, and Gospel conversations that reach people who don\'t yet know Hope Church.',
+      commitment:'Monthly events + ongoing opportunities',
+      gifts:{evangelism:4,giving:1,service:2,faith:2,mercy:2},
+      interest_outreach:{yes:6,somewhat:2}, interest_social:{initiate:3}, interest_hands_on:{jump_in:2}
+    }
   },
 
   interestMap: {
@@ -728,12 +799,11 @@ var MPQ_Scoring = {
     I9:'interest_safety', I10:'interest_prayer_life', I11:'interest_creativity', I12:'interest_time'
   },
 
-  calculate: function(answers) {
+  calculate: function (answers) {
     var scores = {}, counts = {};
     var self = this;
 
-    // Tally spiritual gifts scores
-    mpqData.questions.forEach(function(q) {
+    mpqData.questions.forEach(function (q) {
       if (q.type !== 'scale') return;
       var cat = q.category;
       if (!scores[cat]) { scores[cat] = 0; counts[cat] = 0; }
@@ -742,45 +812,42 @@ var MPQ_Scoring = {
       counts[cat]++;
     });
 
-    // Normalise to percentages
     var pct = {};
-    Object.keys(scores).forEach(function(cat) {
+    Object.keys(scores).forEach(function (cat) {
       pct[cat] = counts[cat] > 0 ? Math.round((scores[cat] / (counts[cat] * 5)) * 100) : 0;
     });
 
-    // Sort categories
-    var sortedCats = Object.keys(pct).sort(function(a, b) { return pct[b] - pct[a]; });
+    var sortedCats = Object.keys(pct).sort(function (a, b) { return pct[b] - pct[a]; });
 
-    var topGifts = sortedCats.slice(0, 3).map(function(cat, i) {
+    var topGifts = sortedCats.slice(0, 3).map(function (cat) {
       var info = self.giftsInfo[cat] || {name: cat, description: ''};
       return {category: cat, name: info.name, description: info.description, percentage: pct[cat]};
     });
 
-    var allGifts = sortedCats.map(function(cat) {
+    var allGifts = sortedCats.map(function (cat) {
       var info = self.giftsInfo[cat] || {name: cat};
       return {category: cat, name: info.name, percentage: pct[cat]};
     });
 
-    // Score ministries
     var mScores = {};
-    Object.keys(self.ministries).forEach(function(mid) {
+    Object.keys(self.ministries).forEach(function (mid) {
       var m = self.ministries[mid];
       var score = 0;
-      Object.keys(m.gifts).forEach(function(gift) {
+      Object.keys(m.gifts).forEach(function (gift) {
         score += ((pct[gift] || 0) / 100) * m.gifts[gift];
       });
-      Object.keys(self.interestMap).forEach(function(qid) {
+      Object.keys(self.interestMap).forEach(function (qid) {
         var intCat = self.interestMap[qid];
         var answered = answers[qid];
-        if (m[intCat] && answered && m[intCat][answered] !== undefined) {
+        if (m[intCat] && answered !== undefined && m[intCat][answered] !== undefined) {
           score += m[intCat][answered];
         }
       });
       mScores[mid] = score;
     });
 
-    var sortedM = Object.keys(mScores).sort(function(a, b) { return mScores[b] - mScores[a]; });
-    var topMinistries = sortedM.slice(0, 3).map(function(id) {
+    var sortedM = Object.keys(mScores).sort(function (a, b) { return mScores[b] - mScores[a]; });
+    var topMinistries = sortedM.slice(0, 3).map(function (id) {
       var m = self.ministries[id];
       return {id: id, name: m.name, description: m.description, commitment: m.commitment, image_url: '', logo_url: ''};
     });
@@ -789,12 +856,45 @@ var MPQ_Scoring = {
   }
 };
 
-</script>
-<script>
-/* jshint esversion:6 */
-/* global mpqData */
+/* ============================================================
+   Preview fetch override — intercepts AJAX calls for offline use
+   ============================================================ */
 (function () {
-  'use strict';
+  var _orig = window.fetch;
+  window.fetch = function (url, opts) {
+    if (url !== '__preview__') {
+      return _orig ? _orig.apply(this, arguments) : Promise.reject(new Error('No network'));
+    }
+
+    var answers = {}, action = '';
+    if (opts && opts.body && typeof opts.body.forEach === 'function') {
+      opts.body.forEach(function (val, key) {
+        if (key === 'action') { action = val; return; }
+        var m = key.match(/^answers\[(.+)\]$/);
+        if (m) { answers[m[1]] = isNaN(val) ? val : parseInt(val, 10); }
+      });
+    }
+
+    var responseData;
+    if (action === 'mpq_submit') {
+      responseData = {success: true, data: MPQ_Scoring.calculate(answers)};
+    } else {
+      responseData = {success: true, data: {id: 0}};
+    }
+
+    return Promise.resolve({
+      ok: true,
+      json: function () { return Promise.resolve(responseData); }
+    });
+  };
+}());
+</script>
+
+<script>
+/* ============================================================
+   Quiz UI — wrapped in DOMContentLoaded for guaranteed DOM access
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', function () {
 
   /* ------------------------------------------------------------------ */
   /* State                                                                */
@@ -804,12 +904,11 @@ var MPQ_Scoring = {
   var current     = 0;
   var total       = questions.length;
   var exiting     = false;
-  var resultsData = null;   // stored after first AJAX call
+  var resultsData = null;
 
   /* ------------------------------------------------------------------ */
   /* DOM refs                                                             */
   /* ------------------------------------------------------------------ */
-  var app          = document.getElementById('mpq-app');
   var welcome      = document.getElementById('mpq-welcome');
   var quizScreen   = document.getElementById('mpq-quiz');
   var resultsScr   = document.getElementById('mpq-results');
@@ -828,20 +927,19 @@ var MPQ_Scoring = {
   /* Helpers                                                              */
   /* ------------------------------------------------------------------ */
   function showScreen(id) {
-    var screens = [welcome, quizScreen, resultsScr, confirmScr];
-    screens.forEach(function (s) {
-      s.style.display = 'none';
-      s.classList.remove('mpq-screen--active');
+    [welcome, quizScreen, resultsScr, confirmScr].forEach(function (s) {
+      if (s) { s.style.display = 'none'; s.classList.remove('mpq-screen--active'); }
     });
     var target = document.getElementById(id);
     if (target) {
       target.style.display = 'flex';
       target.classList.add('mpq-screen--active');
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try { window.scrollTo({top: 0, behavior: 'smooth'}); } catch (e) { window.scrollTo(0, 0); }
   }
 
   function setLoading(on) {
+    if (!loading) return;
     if (on) {
       loading.classList.remove('mpq-loading--hidden');
       loading.removeAttribute('aria-hidden');
@@ -853,10 +951,12 @@ var MPQ_Scoring = {
 
   function updateProgress() {
     var pct = Math.round((current / total) * 100);
-    progressFill.style.width = pct + '%';
-    progressFill.parentElement.setAttribute('aria-valuenow', pct);
-    qCounter.textContent = 'Question ' + (current + 1) + ' of ' + total;
-    backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+    if (progressFill) {
+      progressFill.style.width = pct + '%';
+      progressFill.parentElement.setAttribute('aria-valuenow', pct);
+    }
+    if (qCounter) qCounter.textContent = 'Question ' + (current + 1) + ' of ' + total;
+    if (backBtn) backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
   }
 
   function isAnswered(q) {
@@ -893,12 +993,13 @@ var MPQ_Scoring = {
       updateProgress();
     }
 
-    nextBtn.disabled = !isAnswered(q);
-
-    var isLast = idx === total - 1;
-    nextBtn.innerHTML = isLast
-      ? 'See My Results <span class="mpq-btn__arrow">&#8594;</span>'
-      : 'Next <span class="mpq-btn__arrow">&#8594;</span>';
+    if (nextBtn) {
+      nextBtn.disabled = !isAnswered(q);
+      var isLast = idx === total - 1;
+      nextBtn.innerHTML = isLast
+        ? 'See My Results <span class="mpq-btn__arrow">&#8594;</span>'
+        : 'Next <span class="mpq-btn__arrow">&#8594;</span>';
+    }
   }
 
   function renderScale(q) {
@@ -936,7 +1037,7 @@ var MPQ_Scoring = {
           qWrap.querySelectorAll('.mpq-scale__btn').forEach(function (b) { b.classList.remove('selected'); });
           btn.classList.add('selected');
           answers[q.id] = parseInt(btn.getAttribute('data-val'), 10);
-          nextBtn.disabled = false;
+          if (nextBtn) nextBtn.disabled = false;
           setTimeout(advance, 320);
         });
       });
@@ -946,7 +1047,7 @@ var MPQ_Scoring = {
           qWrap.querySelectorAll('.mpq-choice__btn').forEach(function (b) { b.classList.remove('selected'); });
           btn.classList.add('selected');
           answers[q.id] = btn.getAttribute('data-val');
-          nextBtn.disabled = false;
+          if (nextBtn) nextBtn.disabled = false;
           setTimeout(advance, 320);
         });
       });
@@ -966,6 +1067,9 @@ var MPQ_Scoring = {
     }
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Event listeners                                                      */
+  /* ------------------------------------------------------------------ */
   startBtn.addEventListener('click', function () {
     showScreen('mpq-quiz');
     renderQuestion(0);
@@ -981,22 +1085,20 @@ var MPQ_Scoring = {
   });
 
   document.addEventListener('keydown', function (e) {
-    if (quizScreen.style.display === 'none') return;
+    if (!quizScreen || quizScreen.style.display === 'none') return;
     var q = questions[current];
     if (e.key === 'Enter' && isAnswered(q)) { advance(); return; }
 
     if (q.type === 'scale') {
       var n = parseInt(e.key, 10);
       if (n >= 1 && n <= 5) {
-        var target = qWrap.querySelector('.mpq-scale__btn[data-val="' + n + '"]');
-        if (target) {
-          target.click();
-        }
+        var scaleBtn = qWrap.querySelector('.mpq-scale__btn[data-val="' + n + '"]');
+        if (scaleBtn) scaleBtn.click();
       }
     }
 
     if (q.type === 'choice') {
-      var map = { a: 0, b: 1, c: 2, d: 3, e: 4 };
+      var map = {a:0, b:1, c:2, d:3, e:4};
       var idx = map[e.key.toLowerCase()];
       if (idx !== undefined) {
         var btns = qWrap.querySelectorAll('.mpq-choice__btn');
@@ -1006,11 +1108,11 @@ var MPQ_Scoring = {
   });
 
   /* ------------------------------------------------------------------ */
-  /* Quiz submit → calculate results                                      */
+  /* Quiz submit                                                          */
   /* ------------------------------------------------------------------ */
   function submitQuiz() {
     setLoading(true);
-    showScreen('mpq-results');   // show skeleton while loading
+    showScreen('mpq-results');
 
     var formData = new FormData();
     formData.append('action', 'mpq_submit');
@@ -1019,7 +1121,7 @@ var MPQ_Scoring = {
       formData.append('answers[' + k + ']', answers[k]);
     });
 
-    fetch(mpqData.ajaxUrl, { method: 'POST', body: formData })
+    fetch(mpqData.ajaxUrl, {method: 'POST', body: formData})
       .then(function (r) { return r.json(); })
       .then(function (data) {
         setLoading(false);
@@ -1030,9 +1132,9 @@ var MPQ_Scoring = {
           alert('Something went wrong. Please try again.');
         }
       })
-      .catch(function () {
+      .catch(function (err) {
         setLoading(false);
-        alert('Network error. Please check your connection and try again.');
+        alert('Could not calculate results. ' + (err ? err.message : ''));
       });
   }
 
@@ -1040,21 +1142,18 @@ var MPQ_Scoring = {
   /* Results rendering                                                    */
   /* ------------------------------------------------------------------ */
   function renderResults(data) {
-    var topGifts      = data.top_gifts;
-    var topMinistries = data.top_ministries;
-    var allGifts      = data.all_gifts;
-    var allMData      = data.all_ministries_data || {};
+    var topGifts      = data.top_gifts      || [];
+    var topMinistries = data.top_ministries || [];
+    var allGifts      = data.all_gifts      || [];
 
     var rankLabels   = ['Your #1 Gift', 'Your #2 Gift', 'Your #3 Gift'];
     var mBadges      = ['Best Match', 'Great Fit', 'Strong Fit'];
     var mRankClasses = ['mpq-ministry-card--rank-1', 'mpq-ministry-card--rank-2', 'mpq-ministry-card--rank-3'];
 
-    /* ---- Header ---- */
     var html = '<p class="mpq-results__eyebrow">Your Results</p>'
       + '<h2 class="mpq-results__title">Here\'s How God<br>Has Wired You</h2>'
       + '<p class="mpq-results__subtitle">Based on your answers, here are your top spiritual gifts and the Hope Church ministries where you\'d likely thrive.</p>';
 
-    /* ---- Top Gifts ---- */
     html += '<p class="mpq-section-title">Your Top Spiritual Gifts</p>';
     html += '<div class="mpq-gifts-grid">';
     topGifts.forEach(function (g, i) {
@@ -1067,22 +1166,18 @@ var MPQ_Scoring = {
     });
     html += '</div>';
 
-    /* ---- Ministry recommendations ---- */
     html += '<p class="mpq-section-title">Recommended Ministries for You</p>'
       + '<p class="mpq-results__subtitle" style="margin-top:-1rem;margin-bottom:1.5rem;">Check the ministries you\'re interested in, then fill out your info below so our team can connect with you.</p>';
 
     html += '<div class="mpq-ministries-list" id="mpq-ministry-cards">';
     topMinistries.forEach(function (m, i) {
-      var imgStyle = m.image_url
-        ? 'background-image:url(' + m.image_url + ')'
-        : '';
-      var imgClass = m.image_url ? 'mpq-ministry-card__image' : 'mpq-ministry-card__image mpq-ministry-card__image--placeholder';
+      var imgStyle = m.image_url ? 'background-image:url(' + m.image_url + ')' : '';
+      var imgClass = 'mpq-ministry-card__image' + (m.image_url ? '' : ' mpq-ministry-card__image--placeholder');
 
-      html += '<label class="mpq-ministry-card ' + mRankClasses[i] + '" for="mpq-m-' + m.id + '">'
+      html += '<label class="mpq-ministry-card ' + mRankClasses[i] + '" for="mpq-m-' + escAttr(m.id) + '">'
         + '<div class="' + imgClass + '" style="' + imgStyle + '">';
-
       if (m.logo_url) {
-        html += '<img src="' + m.logo_url + '" class="mpq-ministry-card__logo" alt="' + escAttr(m.name) + ' logo">';
+        html += '<img src="' + escAttr(m.logo_url) + '" class="mpq-ministry-card__logo" alt="' + escAttr(m.name) + ' logo">';
       }
       html += '<span class="mpq-ministry-card__badge">' + mBadges[i] + '</span>'
         + '</div>'
@@ -1100,7 +1195,6 @@ var MPQ_Scoring = {
     });
     html += '</div>';
 
-    /* ---- All gifts bar chart ---- */
     html += '<p class="mpq-section-title" style="margin-top:3rem;">Your Full Gifts Profile</p>'
       + '<div class="mpq-all-gifts">';
     allGifts.forEach(function (g) {
@@ -1112,27 +1206,21 @@ var MPQ_Scoring = {
     });
     html += '</div>';
 
-    /* ---- Connect form ---- */
     html += '<div class="mpq-connect-form" id="mpq-connect-form">'
       + '<h3 class="mpq-connect-form__title">Ready to Take the Next Step?</h3>'
       + '<p class="mpq-connect-form__desc">Enter your info and our team will reach out to help get you connected!</p>'
       + '<div id="mpq-connect-error" class="mpq-connect-error" style="display:none;"></div>'
       + '<div class="mpq-form-row">'
-      + '<div class="mpq-form-field">'
-      + '<label for="mpq-name">Your Name</label>'
-      + '<input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name">'
+      + '<div class="mpq-form-field"><label for="mpq-name">Your Name</label>'
+      + '<input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name"></div>'
+      + '<div class="mpq-form-field"><label for="mpq-email">Email Address</label>'
+      + '<input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email"></div>'
       + '</div>'
-      + '<div class="mpq-form-field">'
-      + '<label for="mpq-email">Email Address</label>'
-      + '<input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email">'
-      + '</div>'
-      + '</div>'
-      + '<button class="mpq-btn mpq-btn--primary" id="mpq-connect-btn">Connect Me &rarr;</button>'
+      + '<button class="mpq-btn mpq-btn--primary" id="mpq-connect-btn">Connect Me &#8594;</button>'
       + '</div>';
 
     resultsCont.innerHTML = html;
 
-    /* Animate bars */
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         resultsCont.querySelectorAll('.mpq-gift-bar__fill').forEach(function (bar) {
@@ -1141,14 +1229,11 @@ var MPQ_Scoring = {
       });
     });
 
-    /* Wire connect button */
-    document.getElementById('mpq-connect-btn').addEventListener('click', function () {
-      handleConnect();
-    });
+    document.getElementById('mpq-connect-btn').addEventListener('click', handleConnect);
   }
 
   /* ------------------------------------------------------------------ */
-  /* Connect (save + email)                                               */
+  /* Connect form                                                         */
   /* ------------------------------------------------------------------ */
   function handleConnect() {
     var nameEl  = document.getElementById('mpq-name');
@@ -1158,50 +1243,49 @@ var MPQ_Scoring = {
     var name  = nameEl  ? nameEl.value.trim()  : '';
     var email = emailEl ? emailEl.value.trim() : '';
 
-    // Gather selected ministries
     var checked = resultsCont.querySelectorAll('.mpq-ministry-check:checked');
     var selIds  = [];
     checked.forEach(function (cb) { selIds.push(cb.value); });
 
-    // Validation
     var errors = [];
-    if (!name)              errors.push('Please enter your name.');
+    if (!name)                errors.push('Please enter your name.');
     if (!isValidEmail(email)) errors.push('Please enter a valid email address.');
-    if (selIds.length === 0)  errors.push('Please select at least one ministry you\'re interested in.');
+    if (!selIds.length)       errors.push('Please select at least one ministry you\'re interested in.');
 
     if (errors.length) {
-      errEl.innerHTML  = errors.map(function (e) { return '<p>' + escHtml(e) + '</p>'; }).join('');
+      errEl.innerHTML = errors.map(function (e) { return '<p>' + escHtml(e) + '</p>'; }).join('');
       errEl.style.display = 'block';
-      errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      try { errEl.scrollIntoView({behavior: 'smooth', block: 'center'}); } catch (e) {}
       return;
     }
 
     errEl.style.display = 'none';
     setLoading(true);
 
-    var d   = resultsData;
+    var d      = resultsData;
     var recIds = (d.top_ministries || []).map(function (m) { return m.id; }).join(',');
 
     var formData = new FormData();
-    formData.append('action',          'mpq_confirm');
-    formData.append('nonce',           mpqData.nonce);
-    formData.append('name',            name);
-    formData.append('email',           email);
-    formData.append('rec_ministries',  recIds);
-    formData.append('sel_ministries',  selIds.join(','));
-    formData.append('top_gifts',       JSON.stringify(d.top_gifts || []));
-    formData.append('answers_json',    JSON.stringify(answers));
+    formData.append('action',         'mpq_confirm');
+    formData.append('nonce',          mpqData.nonce);
+    formData.append('name',           name);
+    formData.append('email',          email);
+    formData.append('rec_ministries', recIds);
+    formData.append('sel_ministries', selIds.join(','));
+    formData.append('top_gifts',      JSON.stringify(d.top_gifts || []));
+    formData.append('answers_json',   JSON.stringify(answers));
 
-    fetch(mpqData.ajaxUrl, { method: 'POST', body: formData })
+    fetch(mpqData.ajaxUrl, {method: 'POST', body: formData})
       .then(function (r) { return r.json(); })
       .then(function (data) {
         setLoading(false);
         if (data.success) {
-          renderConfirmation(mpqData.connectUrl);
+          if (confirmCta && mpqData.connectUrl) {
+            confirmCta.innerHTML = '<a href="' + escAttr(mpqData.connectUrl) + '" class="mpq-btn mpq-btn--primary">Visit Our Connect Page &#8594;</a>';
+          }
           showScreen('mpq-confirmation');
         } else {
-          var msg = (data.data && data.data.message) ? data.data.message : 'Something went wrong. Please try again.';
-          alert(msg);
+          alert((data.data && data.data.message) ? data.data.message : 'Something went wrong. Please try again.');
         }
       })
       .catch(function () {
@@ -1210,16 +1294,8 @@ var MPQ_Scoring = {
       });
   }
 
-  function renderConfirmation(connectUrl) {
-    var ctaHtml = '';
-    if (connectUrl) {
-      ctaHtml = '<a href="' + escAttr(connectUrl) + '" class="mpq-btn mpq-btn--primary">Visit Our Connect Page &rarr;</a>';
-    }
-    if (confirmCta) confirmCta.innerHTML = ctaHtml;
-  }
-
   /* ------------------------------------------------------------------ */
-  /* Security helpers                                                     */
+  /* Utilities                                                            */
   /* ------------------------------------------------------------------ */
   function escHtml(str) {
     return String(str)
@@ -1235,49 +1311,7 @@ var MPQ_Scoring = {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
   }
 
-}());
-
-</script>
-<script>
-
-/* Patch: override the AJAX submit with client-side scoring for preview */
-(function() {
-  // We do this by monkey-patching after quiz.js loads.
-  // quiz.js checks mpqData.ajaxUrl; we set it to a local handler.
-  mpqData.ajaxUrl = '__preview__';
-
-  // Override fetch so our local call works
-  var _originalFetch = window.fetch;
-  window.fetch = function(url, opts) {
-    if (url !== '__preview__') return _originalFetch.apply(this, arguments);
-
-    // Parse answers from FormData
-    var formData = opts.body;
-    var answers = {};
-    var action = '';
-    for (var pair of formData.entries()) {
-      var key = pair[0], val = pair[1];
-      if (key === 'action') { action = val; continue; }
-      var m = key.match(/^answers\[(.+)\]$/);
-      if (m) answers[m[1]] = isNaN(val) ? val : parseInt(val, 10);
-    }
-
-    var responseData;
-    if (action === 'mpq_submit') {
-      var results = MPQ_Scoring.calculate(answers);
-      responseData = { success: true, data: results };
-    } else if (action === 'mpq_confirm') {
-      // Simulate successful save in preview mode
-      responseData = { success: true, data: { id: 0 } };
-      console.log('[Preview] Connection submitted — in production this would email the team.');
-    }
-
-    return Promise.resolve({
-      json: function() { return Promise.resolve(responseData); }
-    });
-  };
-}());
-
+}); // end DOMContentLoaded
 </script>
 
 </body>
