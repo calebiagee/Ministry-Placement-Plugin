@@ -99,10 +99,10 @@ class Ministry_Placement_Quiz {
 			<div id="mpq-welcome" class="mpq-screen mpq-screen--active">
 				<div class="mpq-screen__inner">
 					<p class="mpq-eyebrow">Hope Church</p>
-					<h1 class="mpq-welcome__title">Find Your Place<br>to Serve</h1>
+					<h1 class="mpq-welcome__title">Find Your<br>Place to Serve</h1>
 					<p class="mpq-welcome__subtitle">Answer a few questions about how God has wired you and we'll help match you with the ministries where you'll thrive.</p>
 					<ul class="mpq-welcome__meta">
-						<li><span class="mpq-meta-icon">&#9201;</span> About 10 minutes</li>
+						<li><span class="mpq-meta-icon">&#9201;</span> About 7 minutes</li>
 						<li><span class="mpq-meta-icon">&#128100;</span> No sign-up required</li>
 					</ul>
 					<button id="mpq-start-btn" class="mpq-btn mpq-btn--primary mpq-btn--lg">

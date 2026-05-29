@@ -42,19 +42,19 @@ body { margin: 0; padding: 0; }
 
 /* Welcome */
 #mpq-welcome { background: var(--mpq-black); color: var(--mpq-white); text-align: center; padding: 3rem 1.5rem; }
-.mpq-screen__inner { max-width: 560px; width: 100%; }
-.mpq-eyebrow { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mpq-gold); margin-bottom: 1.25rem; }
-.mpq-welcome__title { font-size: clamp(2.4rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.0; letter-spacing: -0.01em; text-transform: uppercase; color: var(--mpq-white); margin-bottom: 1.25rem; font-style: italic; }
-.mpq-welcome__subtitle { font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.7); max-width: 440px; margin: 0 auto 2rem; }
-.mpq-welcome__meta { list-style: none; display: flex; gap: 2rem; justify-content: center; font-size: 0.85rem; color: rgba(255,255,255,0.45); margin-bottom: 2.5rem; }
+.mpq-screen__inner { max-width: 640px; width: 100%; }
+.mpq-eyebrow { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mpq-gold); margin-bottom: 1.5rem; }
+.mpq-welcome__title { font-size: clamp(2.2rem, 6.5vw, 4rem); font-weight: 900; line-height: 1.0; letter-spacing: -0.01em; text-transform: uppercase; color: var(--mpq-white); margin-bottom: 1.5rem; font-style: italic; }
+.mpq-welcome__subtitle { font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.7); max-width: 520px; margin: 0 auto 2rem; text-wrap: balance; }
+.mpq-welcome__meta { list-style: none; display: flex; gap: 2.5rem; justify-content: center; font-size: 0.875rem; color: rgba(255,255,255,0.45); margin-bottom: 2.5rem; }
 .mpq-meta-icon { margin-right: 0.35rem; }
 
 /* Buttons */
 .mpq-btn {
   display: inline-flex; align-items: center; gap: 0.5rem;
   border: 2px solid transparent; border-radius: 0;
-  font-size: 1rem; font-weight: 800; letter-spacing: 0.04em;
-  cursor: pointer; padding: 0.8rem 1.75rem; text-decoration: none;
+  font-size: 1rem; font-weight: 800; letter-spacing: 0.05em;
+  cursor: pointer; padding: 0.9rem 2rem; text-decoration: none;
   text-transform: uppercase;
   transition: background var(--mpq-dur) var(--mpq-ease), transform 0.15s, box-shadow 0.15s, color 0.15s;
   outline: none; line-height: 1;
@@ -64,14 +64,14 @@ body { margin: 0; padding: 0; }
 .mpq-btn--primary:hover { background: var(--mpq-gold-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(240,170,0,0.45); }
 .mpq-btn--primary:active { transform: none; }
 .mpq-btn--primary:disabled { background: var(--mpq-gray-200); color: var(--mpq-gray-400); box-shadow: none; cursor: not-allowed; transform: none; opacity: 1; }
-.mpq-btn--lg { font-size: 1.1rem; padding: 1rem 2.25rem; }
+.mpq-btn--lg { font-size: 1.1rem; padding: 1.1rem 3rem; }
 .mpq-btn__arrow { transition: transform 0.2s ease; }
 .mpq-btn:not(:disabled):hover .mpq-btn__arrow { transform: translateX(3px); }
 
 .mpq-back-btn {
   background: none; border: 1.5px solid var(--mpq-gray-200); border-radius: 0;
-  font-size: 0.875rem; font-weight: 600; letter-spacing: 0.03em;
-  color: var(--mpq-gray-600); cursor: pointer; padding: 0.65rem 1.25rem;
+  font-size: 0.875rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--mpq-gray-600); cursor: pointer; padding: 0.9rem 1.75rem;
   transition: border-color 0.2s, color 0.2s;
 }
 .mpq-back-btn:hover { border-color: var(--mpq-gray-400); color: var(--mpq-black); }
@@ -83,13 +83,13 @@ body { margin: 0; padding: 0; }
 /* Quiz screen */
 #mpq-quiz { display: none; flex-direction: column; min-height: 100vh; background: var(--mpq-white); }
 .mpq-quiz__header {
-  padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: center;
+  padding: 1.75rem 2rem 1.25rem; display: flex; align-items: center; justify-content: center;
   border-bottom: 1px solid var(--mpq-gray-100); flex-shrink: 0;
 }
 .mpq-q-counter { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mpq-gray-400); }
 .mpq-quiz__body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 4rem 2rem; overflow: hidden; }
 .mpq-quiz__footer {
-  padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center;
+  padding: 1.75rem 2rem 2rem; display: flex; justify-content: space-between; align-items: center;
   border-top: 1px solid var(--mpq-gray-100); flex-shrink: 0;
 }
 
@@ -258,9 +258,9 @@ body { margin: 0; padding: 0; }
 .mpq-confirmation__body  { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.7); margin-bottom: 2rem; }
 
 @media (max-width: 600px) {
-  .mpq-quiz__header { padding: 1rem 1.25rem; }
+  .mpq-quiz__header { padding: 1.25rem 1.25rem 1rem; }
   .mpq-quiz__body   { padding: 2.5rem 1.25rem; }
-  .mpq-quiz__footer { padding: 1.25rem 1.25rem; }
+  .mpq-quiz__footer { padding: 1.25rem 1.25rem 1.75rem; }
   .mpq-scale__options { gap: 6px; }
   .mpq-scale__btn { min-height: 48px; font-size: 0.9rem; border-radius: 8px; }
   .mpq-gifts-grid { grid-template-columns: 1fr; }
@@ -278,10 +278,10 @@ body { margin: 0; padding: 0; }
   <div id="mpq-welcome" class="mpq-screen mpq-screen--active">
     <div class="mpq-screen__inner">
       <p class="mpq-eyebrow">Hope Church</p>
-      <h1 class="mpq-welcome__title">Find Your Place<br>to Serve</h1>
+      <h1 class="mpq-welcome__title">Find Your<br>Place to Serve</h1>
       <p class="mpq-welcome__subtitle">Answer a few questions about how God has wired you and we&rsquo;ll help match you with the ministries where you&rsquo;ll thrive.</p>
       <ul class="mpq-welcome__meta">
-        <li><span class="mpq-meta-icon">&#9201;</span> About 10 minutes</li>
+        <li><span class="mpq-meta-icon">&#9201;</span> About 7 minutes</li>
         <li><span class="mpq-meta-icon">&#128100;</span> No sign-up required</li>
       </ul>
       <button id="mpq-start-btn" class="mpq-btn mpq-btn--primary mpq-btn--lg">
