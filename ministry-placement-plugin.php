@@ -177,16 +177,17 @@ class Ministry_Placement_Quiz {
 		$results    = MPQ_Results_Calculator::calculate( $answers );
 		$ms_settings = get_option( 'mpq_ministry_settings', [] );
 
-		// Attach image data to top ministries
+		// Attach image data to top ministries (admin override → hardcoded default)
+		$all_ministries = MPQ_Quiz_Data::get_ministries();
 		foreach ( $results['top_ministries'] as &$m ) {
-			$s             = $ms_settings[ $m['id'] ] ?? [];
-			$m['image_url'] = esc_url( $s['image_url'] ?? '' );
+			$s              = $ms_settings[ $m['id'] ] ?? [];
+			$default_img    = $all_ministries[ $m['id'] ]['image_url'] ?? '';
+			$m['image_url'] = esc_url( $s['image_url'] ?: $default_img );
 			$m['logo_url']  = esc_url( $s['logo_url']  ?? '' );
 		}
 		unset( $m );
 
 		// Also pass ALL ministry data for display on results (with images)
-		$all_ministries   = MPQ_Quiz_Data::get_ministries();
 		$ministries_client = [];
 		foreach ( $all_ministries as $id => $ministry ) {
 			$s = $ms_settings[ $id ] ?? [];
@@ -195,7 +196,7 @@ class Ministry_Placement_Quiz {
 				'name'        => $ministry['name'],
 				'description' => $ministry['description'],
 				'commitment'  => $ministry['commitment'],
-				'image_url'   => esc_url( $s['image_url'] ?? '' ),
+				'image_url'   => esc_url( $s['image_url'] ?: ( $ministry['image_url'] ?? '' ) ),
 				'logo_url'    => esc_url( $s['logo_url']  ?? '' ),
 			];
 		}

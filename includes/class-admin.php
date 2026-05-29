@@ -147,11 +147,13 @@ class MPQ_Admin {
 
 				<div class="mpq-ministry-grid">
 				<?php foreach ( $ministries as $id => $m ) :
-					$ms        = $settings[ $id ] ?? [];
-					$image_id  = intval( $ms['image_id']  ?? 0 );
-					$image_url = esc_url( $ms['image_url']  ?? '' );
-					$logo_id   = intval( $ms['logo_id']   ?? 0 );
-					$logo_url  = esc_url( $ms['logo_url']   ?? '' );
+					$ms          = $settings[ $id ] ?? [];
+					$image_id    = intval( $ms['image_id']  ?? 0 );
+					$image_url   = esc_url( $ms['image_url']  ?? '' );
+					$logo_id     = intval( $ms['logo_id']   ?? 0 );
+					$logo_url    = esc_url( $ms['logo_url']   ?? '' );
+					$default_img = esc_url( $m['image_url'] ?? '' );
+					$has_override = (bool) $image_url;
 				?>
 					<div class="mpq-ministry-row">
 						<div class="mpq-ministry-row__title">
@@ -163,18 +165,26 @@ class MPQ_Admin {
 							<!-- Banner image -->
 							<div class="mpq-media-field">
 								<label>Banner Image</label>
-								<div class="mpq-media-preview <?php echo $image_url ? 'has-image' : ''; ?>" id="preview-image-<?php echo esc_attr( $id ); ?>">
-									<?php if ( $image_url ) : ?>
-										<img src="<?php echo $image_url; ?>" alt="">
+								<div class="mpq-media-preview <?php echo ( $image_url || $default_img ) ? 'has-image' : ''; ?>" id="preview-image-<?php echo esc_attr( $id ); ?>">
+									<?php $preview_src = $image_url ?: $default_img; ?>
+									<?php if ( $preview_src ) : ?>
+										<img src="<?php echo $preview_src; ?>" alt="">
+									<?php endif; ?>
+									<?php if ( ! $has_override && $default_img ) : ?>
+										<span class="mpq-default-badge">Default</span>
 									<?php endif; ?>
 								</div>
 								<input type="hidden" name="image_id[<?php echo esc_attr( $id ); ?>]" id="image_id_<?php echo esc_attr( $id ); ?>" value="<?php echo $image_id; ?>">
 								<input type="hidden" name="image_url[<?php echo esc_attr( $id ); ?>]" id="image_url_<?php echo esc_attr( $id ); ?>" value="<?php echo $image_url; ?>">
-								<button type="button" class="button mpq-media-btn" data-target-id="image_id_<?php echo esc_attr( $id ); ?>" data-target-url="image_url_<?php echo esc_attr( $id ); ?>" data-preview="preview-image-<?php echo esc_attr( $id ); ?>">
-									<?php echo $image_url ? 'Change Image' : 'Upload Image'; ?>
+								<button type="button" class="button mpq-media-btn"
+									data-target-id="image_id_<?php echo esc_attr( $id ); ?>"
+									data-target-url="image_url_<?php echo esc_attr( $id ); ?>"
+									data-preview="preview-image-<?php echo esc_attr( $id ); ?>"
+									data-default-src="<?php echo $default_img; ?>">
+									<?php echo $has_override ? 'Change Image' : 'Upload Override'; ?>
 								</button>
-								<?php if ( $image_url ) : ?>
-									<button type="button" class="button mpq-media-clear" data-target-id="image_id_<?php echo esc_attr( $id ); ?>" data-target-url="image_url_<?php echo esc_attr( $id ); ?>" data-preview="preview-image-<?php echo esc_attr( $id ); ?>">Remove</button>
+								<?php if ( $has_override ) : ?>
+									<button type="button" class="button mpq-media-clear" data-target-id="image_id_<?php echo esc_attr( $id ); ?>" data-target-url="image_url_<?php echo esc_attr( $id ); ?>" data-preview="preview-image-<?php echo esc_attr( $id ); ?>" data-default-src="<?php echo $default_img; ?>">Restore Default</button>
 								<?php endif; ?>
 							</div>
 
