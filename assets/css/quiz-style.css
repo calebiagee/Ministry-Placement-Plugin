@@ -234,6 +234,14 @@
 .mpq-scale__btn:hover { border-color: var(--mpq-gold); color: var(--mpq-gold-dark); transform: translateY(-2px); }
 .mpq-scale__btn.selected { border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black); font-weight: 900; }
 
+/* ---- Multi-select hint ---- */
+.mpq-multi__hint {
+  display: inline-block;
+  font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mpq-gold-dark); background: var(--mpq-gold-bg);
+  border-radius: 99px; padding: 0.25rem 0.75rem; margin-bottom: 1rem;
+}
+
 /* ---- Choice ---- */
 .mpq-choices { display: flex; flex-direction: column; gap: 10px; }
 .mpq-choice__btn {
@@ -306,7 +314,7 @@
 
 .mpq-section-title {
   font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--mpq-gray-400); margin-bottom: 1rem;
+  color: var(--mpq-gray-400); margin-top: 2.5rem; margin-bottom: 1.25rem;
   padding-bottom: 0.5rem; border-bottom: 1px solid var(--mpq-gray-200);
 }
 

@@ -126,8 +126,8 @@ class MPQ_Quiz_Data {
 				],
 			],
 			[
-				'id' => 'I3', 'category' => 'interest_skill', 'type' => 'choice',
-				'text' => 'Which of these best describes a skill or experience you have?',
+				'id' => 'I3', 'category' => 'interest_skill', 'type' => 'multi',
+				'text' => 'Which of these describe skills or experiences you have?',
 				'options' => [
 					[ 'value' => 'music',         'label' => 'I play an instrument or sing' ],
 					[ 'value' => 'tech',          'label' => 'I work well with technology, audio/video, or computers' ],
@@ -202,8 +202,8 @@ class MPQ_Quiz_Data {
 				],
 			],
 			[
-				'id' => 'I11', 'category' => 'interest_creativity', 'type' => 'choice',
-				'text' => 'Which creative area feels most natural to you?',
+				'id' => 'I11', 'category' => 'interest_creativity', 'type' => 'multi',
+				'text' => 'Which creative areas feel natural to you?',
 				'options' => [
 					[ 'value' => 'music',    'label' => 'Music — singing, playing, writing songs' ],
 					[ 'value' => 'visual',   'label' => 'Visual arts, graphic design, or video' ],

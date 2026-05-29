@@ -48,11 +48,6 @@ class MPQ_Results_Calculator {
 		}
 
 		// --- Score each ministry ---
-		$interest_answers = [];
-		foreach ( $interest_map as $q_id => $int_category ) {
-			$interest_answers[ $int_category ] = $answers[ $q_id ] ?? null;
-		}
-
 		$ministry_scores = [];
 
 		foreach ( $ministries as $mid => $ministry ) {
@@ -63,13 +58,17 @@ class MPQ_Results_Calculator {
 				$score += ( ( $percentages[ $gift ] ?? 0 ) / 100 ) * $weight;
 			}
 
-			// Interest bonuses
-			$interest_keys = [ 'interest_age', 'interest_setting', 'interest_activity', 'interest_outreach', 'interest_time' ];
-			foreach ( $interest_keys as $ikey ) {
-				if ( ! isset( $ministry[ $ikey ] ) ) continue;
-				$answered = $interest_answers[ $ikey ] ?? null;
-				if ( $answered && isset( $ministry[ $ikey ][ $answered ] ) ) {
-					$score += $ministry[ $ikey ][ $answered ];
+			// Interest bonuses — iterate every interest question
+			foreach ( $interest_map as $q_id => $int_cat ) {
+				if ( ! isset( $ministry[ $int_cat ] ) ) continue;
+				$raw = $answers[ $q_id ] ?? null;
+				if ( $raw === null ) continue;
+				// Handle both single values and arrays (multi-select questions)
+				$vals = is_array( $raw ) ? $raw : [ $raw ];
+				foreach ( $vals as $v ) {
+					if ( isset( $ministry[ $int_cat ][ $v ] ) ) {
+						$score += $ministry[ $int_cat ][ $v ];
+					}
 				}
 			}
 

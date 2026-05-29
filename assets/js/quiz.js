@@ -67,6 +67,9 @@
   }
 
   function isAnswered(q) {
+    if (q.type === 'multi') {
+      return Array.isArray(answers[q.id]) && answers[q.id].length > 0;
+    }
     return answers[q.id] !== undefined && answers[q.id] !== null && answers[q.id] !== '';
   }
 
@@ -81,7 +84,7 @@
       + '<span class="mpq-question__type">' + typeLabel + '</span>'
       + '<p class="mpq-question__text">' + escHtml(q.text) + '</p>';
 
-    html += q.type === 'scale' ? renderScale(q) : renderChoices(q);
+    html += q.type === 'scale' ? renderScale(q) : (q.type === 'multi' ? renderMulti(q) : renderChoices(q));
     html += '</div>';
 
     if (qWrap.firstChild && !exiting) {
@@ -123,6 +126,23 @@
 
   var choiceKeys = ['A', 'B', 'C', 'D', 'E'];
 
+  function renderMulti(q) {
+    var selected = Array.isArray(answers[q.id]) ? answers[q.id] : [];
+    var html = '<p class="mpq-multi__hint">Select all that apply</p>'
+      + '<div class="mpq-choices" role="group">';
+    q.options.forEach(function (opt, i) {
+      var isSel = selected.indexOf(opt.value) !== -1;
+      var selCls = isSel ? ' selected' : '';
+      var keyHtml = isSel ? '&#10003;' : choiceKeys[i];
+      html += '<button class="mpq-choice__btn' + selCls + '" data-val="' + escAttr(opt.value) + '" type="button">'
+        + '<span class="mpq-choice__key">' + keyHtml + '</span>'
+        + '<span>' + escHtml(opt.label) + '</span>'
+        + '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
   function renderChoices(q) {
     var html = '<div class="mpq-choices" role="group">';
     q.options.forEach(function (opt, i) {
@@ -145,6 +165,26 @@
           answers[q.id] = parseInt(btn.getAttribute('data-val'), 10);
           nextBtn.disabled = false;
           setTimeout(advance, 320);
+        });
+      });
+    } else if (q.type === 'multi') {
+      var allBtns = qWrap.querySelectorAll('.mpq-choice__btn');
+      allBtns.forEach(function (btn, btnIdx) {
+        btn.addEventListener('click', function () {
+          var val = btn.getAttribute('data-val');
+          var cur = Array.isArray(answers[q.id]) ? answers[q.id].slice() : [];
+          var pos = cur.indexOf(val);
+          if (pos === -1) {
+            cur.push(val);
+            btn.classList.add('selected');
+            btn.querySelector('.mpq-choice__key').innerHTML = '&#10003;';
+          } else {
+            cur.splice(pos, 1);
+            btn.classList.remove('selected');
+            btn.querySelector('.mpq-choice__key').textContent = choiceKeys[btnIdx];
+          }
+          answers[q.id] = cur;
+          nextBtn.disabled = cur.length === 0;
         });
       });
     } else {
@@ -202,7 +242,7 @@
       }
     }
 
-    if (q.type === 'choice') {
+    if (q.type === 'choice' || q.type === 'multi') {
       var map = { a: 0, b: 1, c: 2, d: 3, e: 4 };
       var idx = map[e.key.toLowerCase()];
       if (idx !== undefined) {
@@ -223,7 +263,12 @@
     formData.append('action', 'mpq_submit');
     formData.append('nonce', mpqData.nonce);
     Object.keys(answers).forEach(function (k) {
-      formData.append('answers[' + k + ']', answers[k]);
+      var v = answers[k];
+      if (Array.isArray(v)) {
+        v.forEach(function (item) { formData.append('answers[' + k + '][]', item); });
+      } else {
+        formData.append('answers[' + k + ']', v);
+      }
     });
 
     fetch(mpqData.ajaxUrl, { method: 'POST', body: formData })
@@ -276,7 +321,7 @@
 
     /* ---- Ministry recommendations ---- */
     html += '<p class="mpq-section-title">Recommended Ministries for You</p>'
-      + '<p class="mpq-results__subtitle" style="margin-top:-1rem;margin-bottom:1.5rem;">Check the ministries you\'re interested in, then fill out your info below so our team can connect with you.</p>';
+      + '<p class="mpq-results__subtitle" style="margin-top:0;margin-bottom:1.5rem;">Check the ministries you\'re interested in, then fill out your info below so our team can connect with you.</p>';
 
     html += '<div class="mpq-ministries-list" id="mpq-ministry-cards">';
     topMinistries.forEach(function (m, i) {

@@ -8,11 +8,11 @@
 body { margin: 0; padding: 0; }
 /* ============================================================
    Hope Church — Ministry Placement Quiz
-   Brand: Black #111111 · White #FFFFFF · Gold #C8A43A
+   Brand: Black #111111 · White #FFFFFF · Gold #F0AA00
    ============================================================ */
 
 :root {
-  --mpq-gold:        #F0AA00;   /* Hope Church bright gold */
+  --mpq-gold:        #F0AA00;
   --mpq-gold-light:  #FFD04D;
   --mpq-gold-dark:   #C88800;
   --mpq-gold-bg:     rgba(240,170,0,0.08);
@@ -23,7 +23,7 @@ body { margin: 0; padding: 0; }
   --mpq-gray-200:    #E4E4E4;
   --mpq-gray-400:    #9A9A9A;
   --mpq-gray-600:    #555555;
-  --mpq-radius-sm:   3px;   /* Hope Church uses sharp rectangular buttons */
+  --mpq-radius-sm:   3px;
   --mpq-radius:      6px;
   --mpq-radius-lg:   8px;
   --mpq-shadow:      0 2px 16px rgba(0,0,0,0.08);
@@ -32,208 +32,112 @@ body { margin: 0; padding: 0; }
   --mpq-dur:         360ms;
 }
 
-/* ---- Reset ---- */
 #mpq-app *, #mpq-app *::before, #mpq-app *::after {
   box-sizing: border-box; margin: 0; padding: 0;
 }
 
-/* ---- Shell ---- */
 #mpq-app {
-  position: relative;
-  min-height: 100vh;
+  position: relative; min-height: 100vh;
   background: var(--mpq-white);
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-  color: var(--mpq-black);
-  overflow-x: hidden;
+  color: var(--mpq-black); overflow-x: hidden;
 }
 
 /* ============================================================
    Screens
    ============================================================ */
 .mpq-screen { display: none; min-height: 100vh; }
-.mpq-screen--active {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+.mpq-screen--active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
 /* ============================================================
    Welcome
    ============================================================ */
-#mpq-welcome {
-  background: var(--mpq-black);
-  color: var(--mpq-white);
-  text-align: center;
-  padding: 3rem 1.5rem;
-}
-
+#mpq-welcome { background: var(--mpq-black); color: var(--mpq-white); text-align: center; padding: 3rem 1.5rem; }
 .mpq-screen__inner { max-width: 560px; width: 100%; }
-
 .mpq-eyebrow {
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--mpq-gold);
-  margin-bottom: 1.25rem;
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mpq-gold); margin-bottom: 1.25rem;
 }
-
 .mpq-welcome__title {
-  font-size: clamp(2.4rem, 7vw, 4.5rem);
-  font-weight: 900;
-  line-height: 1.0;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;  /* Hope Church all-caps headline style */
-  color: var(--mpq-white);
-  margin-bottom: 1.25rem;
-  font-style: italic;         /* matches their display headline style */
+  font-size: clamp(2.4rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.0;
+  letter-spacing: -0.01em; text-transform: uppercase; color: var(--mpq-white);
+  margin-bottom: 1.25rem; font-style: italic;
 }
-
 .mpq-welcome__subtitle {
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: rgba(255,255,255,0.7);
-  max-width: 440px;
-  margin: 0 auto 2rem;
+  font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.7);
+  max-width: 440px; margin: 0 auto 2rem;
 }
-
 .mpq-welcome__meta {
-  list-style: none;
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 2.5rem;
+  list-style: none; display: flex; gap: 2rem; justify-content: center;
+  font-size: 0.85rem; color: rgba(255,255,255,0.45); margin-bottom: 2.5rem;
 }
-
 .mpq-meta-icon { margin-right: 0.35rem; }
 
 /* ============================================================
    Buttons
    ============================================================ */
 .mpq-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: 2px solid transparent;
-  border-radius: 0;           /* Hope Church rectangular button style */
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  padding: 0.8rem 1.75rem;
-  text-decoration: none;
-  text-transform: uppercase;  /* matching site's button style */
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  border: 2px solid transparent; border-radius: 0;
+  font-size: 1rem; font-weight: 800; letter-spacing: 0.04em;
+  cursor: pointer; padding: 0.8rem 1.75rem; text-decoration: none;
+  text-transform: uppercase;
   transition: background var(--mpq-dur) var(--mpq-ease), transform 0.15s, box-shadow 0.15s, color 0.15s;
-  outline: none;
-  line-height: 1;
+  outline: none; line-height: 1;
 }
 .mpq-btn:focus-visible { box-shadow: 0 0 0 3px rgba(200,164,58,0.45); }
-
 .mpq-btn--primary { background: var(--mpq-gold); color: var(--mpq-black); }
 .mpq-btn--primary:hover { background: var(--mpq-gold-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(200,164,58,0.35); }
 .mpq-btn--primary:active { transform: none; }
 .mpq-btn--primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
-
 .mpq-btn--lg { font-size: 1.1rem; padding: 1rem 2.25rem; }
 .mpq-btn__arrow { transition: transform 0.2s ease; }
 .mpq-btn:hover .mpq-btn__arrow { transform: translateX(3px); }
-
 .mpq-back-btn {
-  background: none; border: none;
-  font-size: 0.85rem; font-weight: 500;
-  color: var(--mpq-gray-400); cursor: pointer;
-  padding: 0.4rem 0.75rem;
-  border-radius: var(--mpq-radius-sm);
-  transition: color 0.2s;
+  background: none; border: none; font-size: 0.85rem; font-weight: 500;
+  color: var(--mpq-gray-400); cursor: pointer; padding: 0.4rem 0.75rem;
+  border-radius: var(--mpq-radius-sm); transition: color 0.2s;
 }
 .mpq-back-btn:hover { color: var(--mpq-black); }
 
 /* ============================================================
    Progress bar
    ============================================================ */
-.mpq-progress-bar {
-  position: fixed; top: 0; left: 0; right: 0;
-  height: 3px; background: var(--mpq-gray-200); z-index: 100;
-}
-.mpq-progress-bar__fill {
-  height: 100%; background: var(--mpq-gold);
-  width: 0%; transition: width 0.5s var(--mpq-ease);
-  border-radius: 0 2px 2px 0;
-}
+.mpq-progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--mpq-gray-200); z-index: 100; }
+.mpq-progress-bar__fill { height: 100%; background: var(--mpq-gold); width: 0%; transition: width 0.5s var(--mpq-ease); border-radius: 0 2px 2px 0; }
 
 /* ============================================================
    Quiz screen
    ============================================================ */
-#mpq-quiz {
-  display: none;
-  flex-direction: column;
-  min-height: 100vh;
-  background: var(--mpq-white);
-}
-
+#mpq-quiz { display: none; flex-direction: column; min-height: 100vh; background: var(--mpq-white); }
 .mpq-quiz__header {
-  padding: 1.25rem 2rem;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid var(--mpq-gray-100);
-  flex-shrink: 0;
+  padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--mpq-gray-100); flex-shrink: 0;
 }
-
-.mpq-q-counter {
-  font-size: 0.75rem; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--mpq-gray-400);
-}
-
-.mpq-quiz__body {
-  flex: 1; display: flex;
-  align-items: center; justify-content: center;
-  padding: 3rem 1.5rem; overflow: hidden;
-}
-
-.mpq-quiz__footer {
-  padding: 1.5rem 2rem;
-  display: flex; justify-content: flex-end;
-  border-top: 1px solid var(--mpq-gray-100);
-  flex-shrink: 0;
-}
+.mpq-q-counter { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mpq-gray-400); }
+.mpq-quiz__body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 1.5rem; overflow: hidden; }
+.mpq-quiz__footer { padding: 1.5rem 2rem; display: flex; justify-content: flex-end; border-top: 1px solid var(--mpq-gray-100); flex-shrink: 0; }
 
 /* ============================================================
    Question
    ============================================================ */
 .mpq-question-wrap { max-width: 680px; width: 100%; }
-
 .mpq-question { animation: mpqIn var(--mpq-dur) var(--mpq-ease) both; }
 .mpq-question--exit { animation: mpqOut 260ms var(--mpq-ease) both; }
-
 @keyframes mpqIn  { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
 @keyframes mpqOut { from { opacity:1; transform:none; } to { opacity:0; transform:translateY(-20px); } }
-
 .mpq-question__type {
-  display: inline-block;
-  font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  display: inline-block; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--mpq-gold-dark); background: var(--mpq-gold-bg);
   border-radius: 99px; padding: 0.25rem 0.75rem; margin-bottom: 1.25rem;
 }
-
-.mpq-question__text {
-  font-size: clamp(1.2rem, 3.5vw, 1.75rem);
-  font-weight: 700; line-height: 1.35; letter-spacing: -0.02em;
-  color: var(--mpq-black); margin-bottom: 2rem;
-}
+.mpq-question__text { font-size: clamp(1.2rem, 3.5vw, 1.75rem); font-weight: 700; line-height: 1.35; letter-spacing: -0.02em; color: var(--mpq-black); margin-bottom: 2rem; }
 
 /* ---- Likert scale ---- */
-.mpq-scale__label-row {
-  display: flex; justify-content: space-between;
-  font-size: 0.7rem; color: var(--mpq-gray-400);
-  margin-bottom: 0.6rem; padding: 0 2px;
-}
+.mpq-scale__label-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--mpq-gray-400); margin-bottom: 0.6rem; padding: 0 2px; }
 .mpq-scale__options { display: flex; gap: 10px; }
 .mpq-scale__btn {
-  flex: 1; aspect-ratio: 1;
-  display: flex; align-items: center; justify-content: center;
+  flex: 1; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
   border: 2px solid var(--mpq-gray-200); border-radius: var(--mpq-radius);
   background: var(--mpq-white); font-size: 1rem; font-weight: 700;
   color: var(--mpq-gray-600); cursor: pointer; min-height: 56px;
@@ -242,15 +146,20 @@ body { margin: 0; padding: 0; }
 .mpq-scale__btn:hover { border-color: var(--mpq-gold); color: var(--mpq-gold-dark); transform: translateY(-2px); }
 .mpq-scale__btn.selected { border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black); font-weight: 900; }
 
-/* ---- Choice ---- */
+/* ---- Multi-select hint ---- */
+.mpq-multi__hint {
+  display: inline-block; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mpq-gold-dark); background: var(--mpq-gold-bg);
+  border-radius: 99px; padding: 0.25rem 0.75rem; margin-bottom: 1rem;
+}
+
+/* ---- Choice / Multi ---- */
 .mpq-choices { display: flex; flex-direction: column; gap: 10px; }
 .mpq-choice__btn {
-  width: 100%; text-align: left;
-  padding: 1rem 1.25rem;
+  width: 100%; text-align: left; padding: 1rem 1.25rem;
   border: 2px solid var(--mpq-gray-200); border-radius: var(--mpq-radius);
   background: var(--mpq-white); font-size: 0.975rem; font-weight: 500;
-  color: var(--mpq-black); cursor: pointer;
-  display: flex; align-items: center; gap: 1rem;
+  color: var(--mpq-black); cursor: pointer; display: flex; align-items: center; gap: 1rem;
   transition: border-color 0.2s, background 0.2s, transform 0.15s;
 }
 .mpq-choice__btn:hover { border-color: var(--mpq-gold); transform: translateX(4px); }
@@ -263,25 +172,19 @@ body { margin: 0; padding: 0; }
   transition: border-color 0.2s, background 0.2s, color 0.2s;
 }
 .mpq-choice__btn.selected .mpq-choice__key,
-.mpq-choice__btn:hover .mpq-choice__key {
-  border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black);
-}
+.mpq-choice__btn:hover .mpq-choice__key { border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black); }
 
 /* ============================================================
    Loading
    ============================================================ */
 .mpq-loading {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(4px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 1.25rem; font-size: 1rem; color: var(--mpq-gray-600);
+  position: fixed; inset: 0; z-index: 200; background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(4px); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.25rem; font-size: 1rem; color: var(--mpq-gray-600);
 }
 .mpq-loading--hidden { display: none; }
 .mpq-loading__spinner {
-  width: 44px; height: 44px;
-  border: 3px solid var(--mpq-gray-200); border-top-color: var(--mpq-gold);
+  width: 44px; height: 44px; border: 3px solid var(--mpq-gray-200); border-top-color: var(--mpq-gold);
   border-radius: 50%; animation: mpqSpin 0.7s linear infinite;
 }
 @keyframes mpqSpin { to { transform: rotate(360deg); } }
@@ -290,45 +193,20 @@ body { margin: 0; padding: 0; }
    Results screen
    ============================================================ */
 #mpq-results { background: var(--mpq-gray-50); align-items: flex-start; }
-
-.mpq-results__inner {
-  max-width: 760px; width: 100%;
-  margin: 0 auto; padding: 4rem 1.5rem 5rem;
-}
-
-.mpq-results__eyebrow {
-  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--mpq-gold-dark); margin-bottom: 0.75rem;
-}
-
-.mpq-results__title {
-  font-size: clamp(1.75rem, 5vw, 2.75rem);
-  font-weight: 900; letter-spacing: -0.03em; line-height: 1.1;
-  margin-bottom: 0.5rem; color: var(--mpq-black);
-}
-
-.mpq-results__subtitle {
-  font-size: 0.95rem; color: var(--mpq-gray-600);
-  line-height: 1.65; margin-bottom: 2.5rem;
-}
+.mpq-results__inner { max-width: 760px; width: 100%; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
+.mpq-results__eyebrow { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mpq-gold-dark); margin-bottom: 0.75rem; }
+.mpq-results__title { font-size: clamp(1.75rem, 5vw, 2.75rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.5rem; color: var(--mpq-black); }
+.mpq-results__subtitle { font-size: 0.95rem; color: var(--mpq-gray-600); line-height: 1.65; margin-bottom: 2rem; }
 
 .mpq-section-title {
   font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--mpq-gray-400); margin-bottom: 1rem;
+  color: var(--mpq-gray-400); margin-top: 2.5rem; margin-bottom: 1.25rem;
   padding-bottom: 0.5rem; border-bottom: 1px solid var(--mpq-gray-200);
 }
 
 /* ---- Gift cards ---- */
-.mpq-gifts-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem; margin-bottom: 3rem;
-}
-
-.mpq-gift-card {
-  background: var(--mpq-white); border-radius: var(--mpq-radius);
-  padding: 1.5rem; box-shadow: var(--mpq-shadow);
-  border-top: 4px solid var(--mpq-gold);
-}
+.mpq-gifts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.mpq-gift-card { background: var(--mpq-white); border-radius: var(--mpq-radius); padding: 1.5rem; box-shadow: var(--mpq-shadow); border-top: 4px solid var(--mpq-gold); }
 .mpq-gift-card--rank-1 { border-top-color: var(--mpq-gold); }
 .mpq-gift-card--rank-2 { border-top-color: #AAAAAA; }
 .mpq-gift-card--rank-3 { border-top-color: #C07C36; }
@@ -339,102 +217,64 @@ body { margin: 0; padding: 0; }
 
 /* ---- Ministry cards ---- */
 .mpq-ministries-list { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 1.5rem; }
-
 .mpq-ministry-card {
-  background: var(--mpq-white);
-  border-radius: var(--mpq-radius);
-  box-shadow: var(--mpq-shadow);
-  overflow: hidden;
-  display: flex; flex-direction: column;
-  border-left: 4px solid transparent;
-  cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.2s;
+  background: var(--mpq-white); border-radius: var(--mpq-radius); box-shadow: var(--mpq-shadow);
+  overflow: hidden; display: flex; flex-direction: column; border-left: 4px solid transparent;
+  cursor: pointer; transition: box-shadow 0.2s, transform 0.2s;
 }
 .mpq-ministry-card:hover { box-shadow: var(--mpq-shadow-lg); transform: translateY(-2px); }
 .mpq-ministry-card--rank-1 { border-left-color: var(--mpq-gold); }
 .mpq-ministry-card--rank-2 { border-left-color: #AAAAAA; }
 .mpq-ministry-card--rank-3 { border-left-color: #C07C36; }
-
 .mpq-ministry-card__image {
-  width: 100%; height: 180px;
-  background: var(--mpq-black);
+  width: 100%; height: 120px; background: var(--mpq-black);
   background-size: cover; background-position: center;
-  position: relative; display: flex;
-  align-items: flex-end; padding: 1rem;
+  position: relative; display: flex; align-items: flex-end; padding: 0.75rem;
 }
 .mpq-ministry-card__image--placeholder {
-  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+  background: linear-gradient(135deg, #1c1c1c 0%, #2d2d2d 50%, #1a1a1a 100%);
 }
 .mpq-ministry-card__logo {
-  position: absolute; top: 1rem; right: 1rem;
-  height: 40px; width: auto; object-fit: contain;
-  background: white; border-radius: 6px; padding: 4px 8px;
+  position: absolute; top: 0.75rem; right: 0.75rem;
+  height: 36px; width: auto; object-fit: contain;
+  background: white; border-radius: 4px; padding: 3px 6px;
 }
 .mpq-ministry-card__badge {
   display: inline-block; font-size: 0.65rem; font-weight: 800;
   letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--mpq-black); background: var(--mpq-gold);
-  border-radius: 99px; padding: 0.25rem 0.7rem;
+  border-radius: 99px; padding: 0.2rem 0.65rem;
 }
-
-.mpq-ministry-card__body {
-  padding: 1.25rem 1.5rem 1rem; flex: 1;
-}
-.mpq-ministry-card__name { font-size: 1.2rem; font-weight: 800; color: var(--mpq-black); margin-bottom: 0.5rem; }
+.mpq-ministry-card__body { padding: 1.25rem 1.5rem 1rem; flex: 1; }
+.mpq-ministry-card__name { font-size: 1.1rem; font-weight: 800; color: var(--mpq-black); margin-bottom: 0.4rem; }
 .mpq-ministry-card__desc { font-size: 0.875rem; line-height: 1.6; color: var(--mpq-gray-600); margin-bottom: 0.75rem; }
-.mpq-ministry-card__commitment {
-  font-size: 0.78rem; font-weight: 600; color: var(--mpq-gray-400);
-  display: flex; align-items: center; gap: 0.4rem;
-}
+.mpq-ministry-card__commitment { font-size: 0.78rem; font-weight: 600; color: var(--mpq-gray-400); display: flex; align-items: center; gap: 0.4rem; }
 .mpq-ministry-card__commitment::before { content: '🕐'; }
 
 /* ---- Ministry interest checkbox ---- */
 .mpq-ministry-card__check {
-  padding: 1rem 1.5rem 1.25rem;
-  display: flex; align-items: center; gap: 0.75rem;
-  border-top: 1px solid var(--mpq-gray-100);
-  user-select: none;
+  padding: 0.875rem 1.5rem 1rem; display: flex; align-items: center; gap: 0.75rem;
+  border-top: 1px solid var(--mpq-gray-100); user-select: none;
 }
 .mpq-ministry-check { display: none; }
 .mpq-ministry-check__box {
-  width: 24px; height: 24px; flex-shrink: 0;
-  border: 2px solid var(--mpq-gray-200); border-radius: 6px;
-  background: var(--mpq-white);
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color 0.2s, background 0.2s;
-  position: relative;
+  width: 22px; height: 22px; flex-shrink: 0; border: 2px solid var(--mpq-gray-200); border-radius: 5px;
+  background: var(--mpq-white); display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, background 0.2s; position: relative;
 }
 .mpq-ministry-check__box::after {
-  content: '';
-  width: 6px; height: 10px;
+  content: ''; width: 5px; height: 9px;
   border: 2px solid var(--mpq-black); border-top: 0; border-left: 0;
-  transform: rotate(45deg) scale(0) translateY(-1px);
-  transition: transform 0.15s ease;
-  position: absolute;
+  transform: rotate(45deg) scale(0) translateY(-1px); transition: transform 0.15s ease; position: absolute;
 }
-.mpq-ministry-check:checked ~ .mpq-ministry-check__box {
-  border-color: var(--mpq-gold); background: var(--mpq-gold);
-}
-.mpq-ministry-check:checked ~ .mpq-ministry-check__box::after {
-  transform: rotate(45deg) scale(1) translateY(-1px);
-}
-.mpq-ministry-check__label {
-  font-size: 0.9rem; font-weight: 600; color: var(--mpq-gray-600);
-  transition: color 0.2s;
-}
-.mpq-ministry-card:has(.mpq-ministry-check:checked) .mpq-ministry-check__label {
-  color: var(--mpq-gold-dark);
-}
+.mpq-ministry-check:checked ~ .mpq-ministry-check__box { border-color: var(--mpq-gold); background: var(--mpq-gold); }
+.mpq-ministry-check:checked ~ .mpq-ministry-check__box::after { transform: rotate(45deg) scale(1) translateY(-1px); }
+.mpq-ministry-check__label { font-size: 0.9rem; font-weight: 600; color: var(--mpq-gray-600); transition: color 0.2s; }
+.mpq-ministry-card:has(.mpq-ministry-check:checked) .mpq-ministry-check__label { color: var(--mpq-gold-dark); }
 
 /* ---- All gifts bar chart ---- */
-.mpq-all-gifts {
-  background: var(--mpq-white); border-radius: var(--mpq-radius);
-  padding: 1.75rem; box-shadow: var(--mpq-shadow); margin-bottom: 2.5rem;
-}
-.mpq-gift-bar-row {
-  display: grid; grid-template-columns: 140px 1fr 40px;
-  align-items: center; gap: 0.75rem; margin-bottom: 0.6rem;
-}
+.mpq-all-gifts { background: var(--mpq-white); border-radius: var(--mpq-radius); padding: 1.75rem; box-shadow: var(--mpq-shadow); margin-bottom: 2.5rem; }
+.mpq-gift-bar-row { display: grid; grid-template-columns: 140px 1fr 40px; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
 .mpq-gift-bar-row:last-child { margin-bottom: 0; }
 .mpq-gift-bar__label { font-size: 0.78rem; font-weight: 600; color: var(--mpq-black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mpq-gift-bar__track { height: 8px; background: var(--mpq-gray-100); border-radius: 99px; overflow: hidden; }
@@ -442,38 +282,16 @@ body { margin: 0; padding: 0; }
 .mpq-gift-bar__pct   { font-size: 0.73rem; font-weight: 700; color: var(--mpq-gray-400); text-align: right; }
 
 /* ---- Connect form ---- */
-.mpq-connect-form {
-  background: var(--mpq-black);
-  border-radius: var(--mpq-radius-lg);
-  padding: 2.5rem; color: var(--mpq-white);
-  margin-top: 3rem;
-}
+.mpq-connect-form { background: var(--mpq-black); border-radius: var(--mpq-radius-lg); padding: 2.5rem; color: var(--mpq-white); margin-top: 3rem; }
 .mpq-connect-form__title { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
 .mpq-connect-form__desc  { font-size: 0.925rem; color: rgba(255,255,255,0.65); margin-bottom: 1.75rem; }
-
-.mpq-connect-error {
-  background: rgba(255,60,60,0.12);
-  border: 1px solid rgba(255,60,60,0.3);
-  border-radius: var(--mpq-radius-sm);
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
-  font-size: 0.875rem; color: #ff6b6b;
-}
+.mpq-connect-error { background: rgba(255,60,60,0.12); border: 1px solid rgba(255,60,60,0.3); border-radius: var(--mpq-radius-sm); padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.875rem; color: #ff6b6b; }
 .mpq-connect-error p { margin: 0 0 4px; }
 .mpq-connect-error p:last-child { margin: 0; }
-
-.mpq-form-row {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 1rem; margin-bottom: 1.5rem;
-}
+.mpq-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
 .mpq-form-field { display: flex; flex-direction: column; gap: 0.4rem; }
 .mpq-form-field label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: rgba(255,255,255,0.6); text-transform: uppercase; }
-.mpq-form-field input {
-  background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15);
-  border-radius: var(--mpq-radius-sm); padding: 0.75rem 1rem;
-  font-size: 1rem; color: var(--mpq-white); outline: none;
-  transition: border-color 0.2s;
-}
+.mpq-form-field input { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15); border-radius: var(--mpq-radius-sm); padding: 0.75rem 1rem; font-size: 1rem; color: var(--mpq-white); outline: none; transition: border-color 0.2s; }
 .mpq-form-field input::placeholder { color: rgba(255,255,255,0.3); }
 .mpq-form-field input:focus { border-color: var(--mpq-gold); }
 
@@ -482,12 +300,7 @@ body { margin: 0; padding: 0; }
    ============================================================ */
 #mpq-confirmation { background: var(--mpq-black); color: var(--mpq-white); }
 .mpq-confirmation__inner { max-width: 520px; text-align: center; padding: 2rem 1.5rem; }
-.mpq-confirmation__icon {
-  width: 72px; height: 72px; background: var(--mpq-gold);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 2rem; font-weight: 900; color: var(--mpq-black);
-  margin: 0 auto 1.5rem;
-}
+.mpq-confirmation__icon { width: 72px; height: 72px; background: var(--mpq-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: var(--mpq-black); margin: 0 auto 1.5rem; }
 .mpq-confirmation__title { font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 1rem; }
 .mpq-confirmation__body  { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.7); margin-bottom: 2rem; }
 
@@ -503,7 +316,7 @@ body { margin: 0; padding: 0; }
   .mpq-gifts-grid { grid-template-columns: 1fr; }
   .mpq-gift-bar-row { grid-template-columns: 100px 1fr 34px; gap: 0.5rem; }
   .mpq-form-row { grid-template-columns: 1fr; }
-  .mpq-ministry-card__image { height: 140px; }
+  .mpq-ministry-card__image { height: 90px; }
 }
 </style>
 </head>
@@ -574,7 +387,7 @@ body { margin: 0; padding: 0; }
 
 <script>
 /* ============================================================
-   All question data + client-side scoring engine
+   Question data + client-side scoring engine
    ============================================================ */
 
 var mpqData = {
@@ -642,7 +455,7 @@ var mpqData = {
        options:[{value:'children',label:'Children (infant – 12)'},{value:'youth',label:'Teenagers & Young Adults'},{value:'adults',label:'Adults'},{value:'seniors',label:'Seniors'},{value:'all',label:'All ages — I love them equally'}]},
       {id:'I2',  category:'interest_setting',      type:'choice', text:'Where do you feel most comfortable serving?',
        options:[{value:'front',label:'Up front and visible (stage, door, leading)'},{value:'behind',label:'Behind the scenes — I keep things running'},{value:'one_on_one',label:'One-on-one conversations and relationships'},{value:'small_group',label:'Small groups and team settings'}]},
-      {id:'I3',  category:'interest_skill',        type:'choice', text:'Which of these best describes a skill or experience you have?',
+      {id:'I3',  category:'interest_skill',        type:'multi',  text:'Which of these describe skills or experiences you have?',
        options:[{value:'music',label:'I play an instrument or sing'},{value:'tech',label:'I work well with technology, audio/video, or computers'},{value:'physical',label:"I'm good with my hands — building, maintenance, or physical work"},{value:'people',label:"I'm a natural communicator and connector with people"}]},
       {id:'I4',  category:'interest_children_exp', type:'choice', text:'Have you worked with children as a teacher, coach, parent, or volunteer?',
        options:[{value:'yes',label:'Yes — regularly and I love it'},{value:'some',label:"Some experience, and I'd like more"},{value:'no',label:'Not much experience yet'}]},
@@ -658,13 +471,12 @@ var mpqData = {
        options:[{value:'yes',label:"That's exactly my type of role"},{value:'maybe',label:"I'm open to it"},{value:'no',label:"I'd prefer a different kind of role"}]},
       {id:'I10', category:'interest_prayer_life',  type:'choice', text:'How would you describe your prayer life?',
        options:[{value:'deep',label:"I pray for extended periods regularly — it's central to my life"},{value:'daily',label:'I pray briefly but consistently each day'},{value:'growing',label:"It's something I'm growing in"},{value:'new',label:'Prayer is relatively new to me'}]},
-      {id:'I11', category:'interest_creativity',   type:'choice', text:'Which creative area feels most natural to you?',
+      {id:'I11', category:'interest_creativity',   type:'multi',  text:'Which creative areas feel natural to you?',
        options:[{value:'music',label:'Music — singing, playing, writing songs'},{value:'visual',label:'Visual arts, graphic design, or video'},{value:'writing',label:'Writing, storytelling, or speaking'},{value:'none',label:"Creativity isn't really my thing"}]},
       {id:'I12', category:'interest_time',         type:'choice', text:'How much time could you realistically commit to serving each week?',
        options:[{value:'minimal',label:'1 – 2 hours (Sundays only)'},{value:'moderate',label:'3 – 5 hours (Sundays + some midweek)'},{value:'significant',label:'6+ hours (a major commitment)'}]}
     ];
 
-    /* Interleave: insert 1 interest question every ~4 spiritual gifts questions */
     var all = [], gi = 0, interval = Math.floor(sg.length / iq.length);
     sg.forEach(function (q, i) {
       all.push(q);
@@ -676,7 +488,7 @@ var mpqData = {
 };
 
 /* ============================================================
-   Client-side scoring engine (mirrors PHP class)
+   Client-side scoring engine
    ============================================================ */
 var MPQ_Scoring = {
   giftsInfo: {
@@ -701,93 +513,80 @@ var MPQ_Scoring = {
 
   ministries: {
     hope_kids_preschool: {
-      name:'Hope Kids — Preschool',
+      name:'Hope Kids — Preschool', commitment:'Sundays + occasional events',
       description:'Create a warm, nurturing environment where babies, toddlers, and preschoolers take their very first steps of faith and experience God\'s love through play, stories, and gentle care.',
-      commitment:'Sundays + occasional events',
       gifts:{service:3,mercy:3,encouragement:2,hospitality:2,pastor:1},
       interest_age:{children:5,all:1}, interest_children_exp:{yes:4,some:2}, interest_setting:{small_group:1}
     },
     hope_kids_elementary: {
-      name:'Hope Kids — Elementary',
+      name:'Hope Kids — Elementary', commitment:'Sundays + occasional events',
       description:'Help kids in Kindergarten through 5th grade discover who Jesus is through energetic worship, engaging Bible lessons, and meaningful friendships that build a lifelong faith.',
-      commitment:'Sundays + occasional events',
       gifts:{teaching:4,encouragement:2,service:2,mercy:1,hospitality:1,pastor:1},
       interest_age:{children:5,all:1}, interest_children_exp:{yes:4,some:2}, interest_teaching_exp:{yes:3,some:1}, interest_setting:{small_group:1}
     },
     hope_students: {
-      name:'Hope Student Ministries',
+      name:'Hope Student Ministries', commitment:'Weekly meetings + events',
       description:'Come alongside middle and high school students through authentic relationships, Biblical teaching, and life-on-life discipleship during a critical season of their lives.',
-      commitment:'Weekly meetings + events',
       gifts:{evangelism:2,encouragement:3,leadership:2,hospitality:2,pastor:3},
       interest_age:{youth:5,all:1}, interest_social:{initiate:2,deepen:2}, interest_setting:{small_group:1,one_on_one:1}, interest_outreach:{yes:1}
     },
     hope_young_adults: {
-      name:'Hope Young Adults',
+      name:'Hope Young Adults', commitment:'Weekly gatherings + community events',
       description:'Help build a community where people in their 20s and 30s find real belonging, lasting friendships, and a faith that anchors their lives.',
-      commitment:'Weekly gatherings + community events',
       gifts:{encouragement:3,hospitality:3,evangelism:2,pastor:2,leadership:1},
       interest_age:{adults:2,all:1}, interest_social:{initiate:2,deepen:1}, interest_setting:{small_group:2,front:1}, interest_outreach:{yes:1}
     },
     worship: {
-      name:'Worship',
+      name:'Worship', commitment:'Weekly rehearsals + Sundays',
       description:'Use your musical gifting to lead our church family into God\'s presence each Sunday through Spirit-led worship that points people to Jesus.',
-      commitment:'Weekly rehearsals + Sundays',
       gifts:{creative:5,faith:1,leadership:1},
       interest_skill:{music:6,people:1}, interest_creativity:{music:6,visual:1}, interest_setting:{front:3}
     },
     hospitality: {
-      name:'Hospitality',
+      name:'Hospitality', commitment:'Sunday mornings',
       description:'Create a warm, welcoming atmosphere where everyone — regulars and first-timers alike — feels genuinely seen, valued, and at home at Hope Church.',
-      commitment:'Sunday mornings',
       gifts:{hospitality:5,service:2,mercy:1,encouragement:2},
       interest_social:{initiate:3,help:1}, interest_setting:{front:2}, interest_skill:{people:3}
     },
     greeters: {
-      name:'Greeters',
+      name:'Greeters', commitment:'Sunday mornings (rotating schedule)',
       description:'Be the first smile someone sees — warmly welcoming guests and members at the door and helping everyone feel like they\'ve come home.',
-      commitment:'Sunday mornings (rotating schedule)',
       gifts:{hospitality:4,encouragement:2,service:1},
       interest_social:{initiate:4,help:1}, interest_setting:{front:3}, interest_skill:{people:3}
     },
     ushers: {
-      name:'Ushers',
+      name:'Ushers', commitment:'Sunday mornings (rotating schedule)',
       description:'Serve in the aisles to help services run smoothly, assist guests, manage seating, and support our weekend experience from start to finish.',
-      commitment:'Sunday mornings (rotating schedule)',
       gifts:{service:3,administration:2,hospitality:2},
       interest_setting:{front:1,behind:2}, interest_hands_on:{jump_in:2,support:2}, interest_skill:{people:1}
     },
     security: {
-      name:'Security',
+      name:'Security', commitment:'Sundays + special events',
       description:'Protect and serve our church family by maintaining a safe environment during services and events so everyone can worship without distraction.',
-      commitment:'Sundays + special events',
       gifts:{service:3,administration:2,leadership:2,discernment:3,faith:1},
       interest_safety:{yes:7,maybe:2}, interest_setting:{front:1,behind:1}, interest_hands_on:{jump_in:1,plan:1}
     },
     facilities: {
-      name:'Facilities',
+      name:'Facilities', commitment:'Weekdays + weekends as needed',
       description:'Keep our campus clean, safe, and fully set up so that every ministry and service can happen without a hitch. If you love practical hands-on work, this is your place.',
-      commitment:'Weekdays + weekends as needed',
       gifts:{service:5,administration:2},
       interest_setting:{behind:4}, interest_hands_on:{jump_in:4,support:2}, interest_skill:{physical:6,tech:1}
     },
     hope_family: {
-      name:'Lead a Hope Family',
+      name:'Lead a Hope Family', commitment:'Weekly Hope Family meeting + prep time',
       description:'Facilitate a small group of people who do life together — growing in God\'s Word, carrying one another\'s burdens, and becoming true church family.',
-      commitment:'Weekly Hope Family meeting + prep time',
       gifts:{teaching:2,pastor:4,encouragement:3,wisdom:2,hospitality:2},
       interest_age:{adults:2,all:1}, interest_setting:{small_group:5,one_on_one:1}, interest_teaching_exp:{yes:2,some:1}, interest_social:{deepen:2,initiate:1}
     },
     media: {
-      name:'Media Team',
+      name:'Media Team', commitment:'Sundays + special productions',
       description:'Use your technical and creative skills to support live worship, livestreaming, social media, graphic design, and the digital presence of Hope Church.',
-      commitment:'Sundays + special productions',
       gifts:{administration:1,creative:3,service:3},
       interest_skill:{tech:6,music:1}, interest_creativity:{visual:5,music:2}, interest_setting:{behind:4}, interest_hands_on:{plan:2,jump_in:1}
     },
     outreach: {
-      name:'Outreach',
+      name:'Outreach', commitment:'Monthly events + ongoing opportunities',
       description:'Bring the love of Jesus to our city through servant evangelism, community service, and Gospel conversations that reach people who don\'t yet know Hope Church.',
-      commitment:'Monthly events + ongoing opportunities',
       gifts:{evangelism:4,giving:1,service:2,faith:2,mercy:2},
       interest_outreach:{yes:6,somewhat:2}, interest_social:{initiate:3}, interest_hands_on:{jump_in:2}
     }
@@ -808,8 +607,7 @@ var MPQ_Scoring = {
       var cat = q.category;
       if (!scores[cat]) { scores[cat] = 0; counts[cat] = 0; }
       var val = Math.min(5, Math.max(1, parseInt(answers[q.id] || 1, 10)));
-      scores[cat] += val;
-      counts[cat]++;
+      scores[cat] += val; counts[cat]++;
     });
 
     var pct = {};
@@ -818,12 +616,10 @@ var MPQ_Scoring = {
     });
 
     var sortedCats = Object.keys(pct).sort(function (a, b) { return pct[b] - pct[a]; });
-
     var topGifts = sortedCats.slice(0, 3).map(function (cat) {
       var info = self.giftsInfo[cat] || {name: cat, description: ''};
       return {category: cat, name: info.name, description: info.description, percentage: pct[cat]};
     });
-
     var allGifts = sortedCats.map(function (cat) {
       var info = self.giftsInfo[cat] || {name: cat};
       return {category: cat, name: info.name, percentage: pct[cat]};
@@ -838,10 +634,13 @@ var MPQ_Scoring = {
       });
       Object.keys(self.interestMap).forEach(function (qid) {
         var intCat = self.interestMap[qid];
-        var answered = answers[qid];
-        if (m[intCat] && answered !== undefined && m[intCat][answered] !== undefined) {
-          score += m[intCat][answered];
-        }
+        if (!m[intCat]) return;
+        var raw = answers[qid];
+        if (raw === undefined || raw === null) return;
+        var vals = Array.isArray(raw) ? raw : [raw];
+        vals.forEach(function (v) {
+          if (m[intCat][v] !== undefined) score += m[intCat][v];
+        });
       });
       mScores[mid] = score;
     });
@@ -857,48 +656,38 @@ var MPQ_Scoring = {
 };
 
 /* ============================================================
-   Preview fetch override — intercepts AJAX calls for offline use
+   Preview fetch override
    ============================================================ */
 (function () {
-  var _orig = window.fetch;
   window.fetch = function (url, opts) {
-    if (url !== '__preview__') {
-      return _orig ? _orig.apply(this, arguments) : Promise.reject(new Error('No network'));
-    }
-
     var answers = {}, action = '';
     if (opts && opts.body && typeof opts.body.forEach === 'function') {
       opts.body.forEach(function (val, key) {
         if (key === 'action') { action = val; return; }
-        var m = key.match(/^answers\[(.+)\]$/);
-        if (m) { answers[m[1]] = isNaN(val) ? val : parseInt(val, 10); }
+        var m = key.match(/^answers\[(.+?)\]\[\]$/);
+        if (m) {
+          if (!answers[m[1]]) answers[m[1]] = [];
+          answers[m[1]].push(isNaN(val) ? val : parseInt(val, 10));
+          return;
+        }
+        var s = key.match(/^answers\[(.+?)\]$/);
+        if (s) { answers[s[1]] = isNaN(val) ? val : parseInt(val, 10); }
       });
     }
-
-    var responseData;
-    if (action === 'mpq_submit') {
-      responseData = {success: true, data: MPQ_Scoring.calculate(answers)};
-    } else {
-      responseData = {success: true, data: {id: 0}};
-    }
-
-    return Promise.resolve({
-      ok: true,
-      json: function () { return Promise.resolve(responseData); }
-    });
+    var responseData = action === 'mpq_submit'
+      ? {success: true, data: MPQ_Scoring.calculate(answers)}
+      : {success: true, data: {id: 0}};
+    return Promise.resolve({ok: true, json: function () { return Promise.resolve(responseData); }});
   };
 }());
 </script>
 
 <script>
 /* ============================================================
-   Quiz UI — wrapped in DOMContentLoaded for guaranteed DOM access
+   Quiz UI
    ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* ------------------------------------------------------------------ */
-  /* State                                                                */
-  /* ------------------------------------------------------------------ */
   var questions   = mpqData.questions;
   var answers     = {};
   var current     = 0;
@@ -906,9 +695,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var exiting     = false;
   var resultsData = null;
 
-  /* ------------------------------------------------------------------ */
-  /* DOM refs                                                             */
-  /* ------------------------------------------------------------------ */
   var welcome      = document.getElementById('mpq-welcome');
   var quizScreen   = document.getElementById('mpq-quiz');
   var resultsScr   = document.getElementById('mpq-results');
@@ -923,80 +709,56 @@ document.addEventListener('DOMContentLoaded', function () {
   var resultsCont  = document.getElementById('mpq-results-content');
   var confirmCta   = document.getElementById('mpq-confirmation__cta');
 
-  /* ------------------------------------------------------------------ */
-  /* Helpers                                                              */
-  /* ------------------------------------------------------------------ */
   function showScreen(id) {
     [welcome, quizScreen, resultsScr, confirmScr].forEach(function (s) {
       if (s) { s.style.display = 'none'; s.classList.remove('mpq-screen--active'); }
     });
     var target = document.getElementById(id);
-    if (target) {
-      target.style.display = 'flex';
-      target.classList.add('mpq-screen--active');
-    }
+    if (target) { target.style.display = 'flex'; target.classList.add('mpq-screen--active'); }
     try { window.scrollTo({top: 0, behavior: 'smooth'}); } catch (e) { window.scrollTo(0, 0); }
   }
 
   function setLoading(on) {
     if (!loading) return;
-    if (on) {
-      loading.classList.remove('mpq-loading--hidden');
-      loading.removeAttribute('aria-hidden');
-    } else {
-      loading.classList.add('mpq-loading--hidden');
-      loading.setAttribute('aria-hidden', 'true');
-    }
+    if (on) { loading.classList.remove('mpq-loading--hidden'); loading.removeAttribute('aria-hidden'); }
+    else     { loading.classList.add('mpq-loading--hidden');    loading.setAttribute('aria-hidden', 'true'); }
   }
 
   function updateProgress() {
     var pct = Math.round((current / total) * 100);
-    if (progressFill) {
-      progressFill.style.width = pct + '%';
-      progressFill.parentElement.setAttribute('aria-valuenow', pct);
-    }
+    if (progressFill) { progressFill.style.width = pct + '%'; progressFill.parentElement.setAttribute('aria-valuenow', pct); }
     if (qCounter) qCounter.textContent = 'Question ' + (current + 1) + ' of ' + total;
     if (backBtn) backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
   }
 
   function isAnswered(q) {
+    if (q.type === 'multi') return Array.isArray(answers[q.id]) && answers[q.id].length > 0;
     return answers[q.id] !== undefined && answers[q.id] !== null && answers[q.id] !== '';
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Question rendering                                                   */
-  /* ------------------------------------------------------------------ */
+  var choiceKeys = ['A', 'B', 'C', 'D', 'E'];
+
   function renderQuestion(idx) {
     var q = questions[idx];
     var typeLabel = q.type === 'scale' ? 'Spiritual Gifts' : 'About You';
-
     var html = '<div class="mpq-question">'
       + '<span class="mpq-question__type">' + typeLabel + '</span>'
       + '<p class="mpq-question__text">' + escHtml(q.text) + '</p>';
-
-    html += q.type === 'scale' ? renderScale(q) : renderChoices(q);
+    html += q.type === 'scale' ? renderScale(q) : (q.type === 'multi' ? renderMulti(q) : renderChoices(q));
     html += '</div>';
 
     if (qWrap.firstChild && !exiting) {
       exiting = true;
       var old = qWrap.firstChild;
       old.classList.add('mpq-question--exit');
-      setTimeout(function () {
-        qWrap.innerHTML = html;
-        attachHandlers(q);
-        updateProgress();
-        exiting = false;
-      }, 260);
+      setTimeout(function () { qWrap.innerHTML = html; attachHandlers(q); updateProgress(); exiting = false; }, 260);
     } else if (!exiting) {
-      qWrap.innerHTML = html;
-      attachHandlers(q);
-      updateProgress();
+      qWrap.innerHTML = html; attachHandlers(q); updateProgress();
     }
 
     if (nextBtn) {
       nextBtn.disabled = !isAnswered(q);
-      var isLast = idx === total - 1;
-      nextBtn.innerHTML = isLast
+      nextBtn.innerHTML = (idx === total - 1)
         ? 'See My Results <span class="mpq-btn__arrow">&#8594;</span>'
         : 'Next <span class="mpq-btn__arrow">&#8594;</span>';
     }
@@ -1015,7 +777,19 @@ document.addEventListener('DOMContentLoaded', function () {
     return html;
   }
 
-  var choiceKeys = ['A', 'B', 'C', 'D', 'E'];
+  function renderMulti(q) {
+    var selected = Array.isArray(answers[q.id]) ? answers[q.id] : [];
+    var html = '<p class="mpq-multi__hint">Select all that apply</p><div class="mpq-choices" role="group">';
+    q.options.forEach(function (opt, i) {
+      var isSel = selected.indexOf(opt.value) !== -1;
+      html += '<button class="mpq-choice__btn' + (isSel ? ' selected' : '') + '" data-val="' + escAttr(opt.value) + '" type="button">'
+        + '<span class="mpq-choice__key">' + (isSel ? '&#10003;' : choiceKeys[i]) + '</span>'
+        + '<span>' + escHtml(opt.label) + '</span>'
+        + '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
 
   function renderChoices(q) {
     var html = '<div class="mpq-choices" role="group">';
@@ -1041,6 +815,26 @@ document.addEventListener('DOMContentLoaded', function () {
           setTimeout(advance, 320);
         });
       });
+    } else if (q.type === 'multi') {
+      var allBtns = Array.prototype.slice.call(qWrap.querySelectorAll('.mpq-choice__btn'));
+      allBtns.forEach(function (btn, btnIdx) {
+        btn.addEventListener('click', function () {
+          var val = btn.getAttribute('data-val');
+          var cur = Array.isArray(answers[q.id]) ? answers[q.id].slice() : [];
+          var pos = cur.indexOf(val);
+          if (pos === -1) {
+            cur.push(val);
+            btn.classList.add('selected');
+            btn.querySelector('.mpq-choice__key').innerHTML = '&#10003;';
+          } else {
+            cur.splice(pos, 1);
+            btn.classList.remove('selected');
+            btn.querySelector('.mpq-choice__key').textContent = choiceKeys[btnIdx];
+          }
+          answers[q.id] = cur;
+          if (nextBtn) nextBtn.disabled = cur.length === 0;
+        });
+      });
     } else {
       qWrap.querySelectorAll('.mpq-choice__btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -1054,93 +848,52 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Navigation                                                           */
-  /* ------------------------------------------------------------------ */
   function advance() {
     if (!isAnswered(questions[current])) return;
-    if (current < total - 1) {
-      current++;
-      renderQuestion(current);
-    } else {
-      submitQuiz();
-    }
+    if (current < total - 1) { current++; renderQuestion(current); }
+    else { submitQuiz(); }
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Event listeners                                                      */
-  /* ------------------------------------------------------------------ */
-  startBtn.addEventListener('click', function () {
-    showScreen('mpq-quiz');
-    renderQuestion(0);
-  });
-
+  startBtn.addEventListener('click', function () { showScreen('mpq-quiz'); renderQuestion(0); });
   nextBtn.addEventListener('click', advance);
-
-  backBtn.addEventListener('click', function () {
-    if (current > 0) {
-      current--;
-      renderQuestion(current);
-    }
-  });
+  backBtn.addEventListener('click', function () { if (current > 0) { current--; renderQuestion(current); } });
 
   document.addEventListener('keydown', function (e) {
     if (!quizScreen || quizScreen.style.display === 'none') return;
     var q = questions[current];
     if (e.key === 'Enter' && isAnswered(q)) { advance(); return; }
-
     if (q.type === 'scale') {
       var n = parseInt(e.key, 10);
-      if (n >= 1 && n <= 5) {
-        var scaleBtn = qWrap.querySelector('.mpq-scale__btn[data-val="' + n + '"]');
-        if (scaleBtn) scaleBtn.click();
-      }
+      if (n >= 1 && n <= 5) { var sb = qWrap.querySelector('.mpq-scale__btn[data-val="'+n+'"]'); if (sb) sb.click(); }
     }
-
-    if (q.type === 'choice') {
-      var map = {a:0, b:1, c:2, d:3, e:4};
+    if (q.type === 'choice' || q.type === 'multi') {
+      var map = {a:0,b:1,c:2,d:3,e:4};
       var idx = map[e.key.toLowerCase()];
-      if (idx !== undefined) {
-        var btns = qWrap.querySelectorAll('.mpq-choice__btn');
-        if (btns[idx]) btns[idx].click();
-      }
+      if (idx !== undefined) { var btns = qWrap.querySelectorAll('.mpq-choice__btn'); if (btns[idx]) btns[idx].click(); }
     }
   });
 
-  /* ------------------------------------------------------------------ */
-  /* Quiz submit                                                          */
-  /* ------------------------------------------------------------------ */
   function submitQuiz() {
     setLoading(true);
     showScreen('mpq-results');
-
     var formData = new FormData();
     formData.append('action', 'mpq_submit');
     formData.append('nonce', mpqData.nonce);
     Object.keys(answers).forEach(function (k) {
-      formData.append('answers[' + k + ']', answers[k]);
+      var v = answers[k];
+      if (Array.isArray(v)) { v.forEach(function (item) { formData.append('answers[' + k + '][]', item); }); }
+      else { formData.append('answers[' + k + ']', v); }
     });
-
-    fetch(mpqData.ajaxUrl, {method: 'POST', body: formData})
+    fetch(mpqData.ajaxUrl, {method:'POST', body:formData})
       .then(function (r) { return r.json(); })
       .then(function (data) {
         setLoading(false);
-        if (data.success) {
-          resultsData = data.data;
-          renderResults(data.data);
-        } else {
-          alert('Something went wrong. Please try again.');
-        }
+        if (data.success) { resultsData = data.data; renderResults(data.data); }
+        else { alert('Something went wrong. Please try again.'); }
       })
-      .catch(function (err) {
-        setLoading(false);
-        alert('Could not calculate results. ' + (err ? err.message : ''));
-      });
+      .catch(function (err) { setLoading(false); alert('Could not calculate results. ' + (err ? err.message : '')); });
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Results rendering                                                    */
-  /* ------------------------------------------------------------------ */
   function renderResults(data) {
     var topGifts      = data.top_gifts      || [];
     var topMinistries = data.top_ministries || [];
@@ -1154,10 +907,10 @@ document.addEventListener('DOMContentLoaded', function () {
       + '<h2 class="mpq-results__title">Here\'s How God<br>Has Wired You</h2>'
       + '<p class="mpq-results__subtitle">Based on your answers, here are your top spiritual gifts and the Hope Church ministries where you\'d likely thrive.</p>';
 
-    html += '<p class="mpq-section-title">Your Top Spiritual Gifts</p>';
+    html += '<p class="mpq-section-title" style="margin-top:0;">Your Top Spiritual Gifts</p>';
     html += '<div class="mpq-gifts-grid">';
     topGifts.forEach(function (g, i) {
-      html += '<div class="mpq-gift-card mpq-gift-card--rank-' + (i + 1) + '">'
+      html += '<div class="mpq-gift-card mpq-gift-card--rank-' + (i+1) + '">'
         + '<div class="mpq-gift-card__rank">' + rankLabels[i] + '</div>'
         + '<div class="mpq-gift-card__name">' + escHtml(g.name) + '</div>'
         + '<div class="mpq-gift-card__pct">' + g.percentage + '%</div>'
@@ -1167,18 +920,15 @@ document.addEventListener('DOMContentLoaded', function () {
     html += '</div>';
 
     html += '<p class="mpq-section-title">Recommended Ministries for You</p>'
-      + '<p class="mpq-results__subtitle" style="margin-top:-1rem;margin-bottom:1.5rem;">Check the ministries you\'re interested in, then fill out your info below so our team can connect with you.</p>';
+      + '<p class="mpq-results__subtitle" style="margin-top:0;margin-bottom:1.5rem;">Check the ministries you\'re interested in, then fill out your info below so our team can connect with you.</p>';
 
     html += '<div class="mpq-ministries-list" id="mpq-ministry-cards">';
     topMinistries.forEach(function (m, i) {
       var imgStyle = m.image_url ? 'background-image:url(' + m.image_url + ')' : '';
       var imgClass = 'mpq-ministry-card__image' + (m.image_url ? '' : ' mpq-ministry-card__image--placeholder');
-
       html += '<label class="mpq-ministry-card ' + mRankClasses[i] + '" for="mpq-m-' + escAttr(m.id) + '">'
         + '<div class="' + imgClass + '" style="' + imgStyle + '">';
-      if (m.logo_url) {
-        html += '<img src="' + escAttr(m.logo_url) + '" class="mpq-ministry-card__logo" alt="' + escAttr(m.name) + ' logo">';
-      }
+      if (m.logo_url) html += '<img src="' + escAttr(m.logo_url) + '" class="mpq-ministry-card__logo" alt="' + escAttr(m.name) + ' logo">';
       html += '<span class="mpq-ministry-card__badge">' + mBadges[i] + '</span>'
         + '</div>'
         + '<div class="mpq-ministry-card__body">'
@@ -1195,8 +945,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     html += '</div>';
 
-    html += '<p class="mpq-section-title" style="margin-top:3rem;">Your Full Gifts Profile</p>'
-      + '<div class="mpq-all-gifts">';
+    html += '<p class="mpq-section-title">Your Full Gifts Profile</p><div class="mpq-all-gifts">';
     allGifts.forEach(function (g) {
       html += '<div class="mpq-gift-bar-row">'
         + '<span class="mpq-gift-bar__label">' + escHtml(g.name) + '</span>'
@@ -1211,10 +960,8 @@ document.addEventListener('DOMContentLoaded', function () {
       + '<p class="mpq-connect-form__desc">Enter your info and our team will reach out to help get you connected!</p>'
       + '<div id="mpq-connect-error" class="mpq-connect-error" style="display:none;"></div>'
       + '<div class="mpq-form-row">'
-      + '<div class="mpq-form-field"><label for="mpq-name">Your Name</label>'
-      + '<input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name"></div>'
-      + '<div class="mpq-form-field"><label for="mpq-email">Email Address</label>'
-      + '<input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email"></div>'
+      + '<div class="mpq-form-field"><label for="mpq-name">Your Name</label><input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name"></div>'
+      + '<div class="mpq-form-field"><label for="mpq-email">Email Address</label><input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email"></div>'
       + '</div>'
       + '<button class="mpq-btn mpq-btn--primary" id="mpq-connect-btn">Connect Me &#8594;</button>'
       + '</div>';
@@ -1223,29 +970,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
-        resultsCont.querySelectorAll('.mpq-gift-bar__fill').forEach(function (bar) {
-          bar.style.width = bar.getAttribute('data-pct') + '%';
-        });
+        resultsCont.querySelectorAll('.mpq-gift-bar__fill').forEach(function (bar) { bar.style.width = bar.getAttribute('data-pct') + '%'; });
       });
     });
 
     document.getElementById('mpq-connect-btn').addEventListener('click', handleConnect);
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Connect form                                                         */
-  /* ------------------------------------------------------------------ */
   function handleConnect() {
     var nameEl  = document.getElementById('mpq-name');
     var emailEl = document.getElementById('mpq-email');
     var errEl   = document.getElementById('mpq-connect-error');
-
-    var name  = nameEl  ? nameEl.value.trim()  : '';
-    var email = emailEl ? emailEl.value.trim() : '';
-
-    var checked = resultsCont.querySelectorAll('.mpq-ministry-check:checked');
+    var name    = nameEl  ? nameEl.value.trim()  : '';
+    var email   = emailEl ? emailEl.value.trim() : '';
     var selIds  = [];
-    checked.forEach(function (cb) { selIds.push(cb.value); });
+    resultsCont.querySelectorAll('.mpq-ministry-check:checked').forEach(function (cb) { selIds.push(cb.value); });
 
     var errors = [];
     if (!name)                errors.push('Please enter your name.');
@@ -1255,27 +994,25 @@ document.addEventListener('DOMContentLoaded', function () {
     if (errors.length) {
       errEl.innerHTML = errors.map(function (e) { return '<p>' + escHtml(e) + '</p>'; }).join('');
       errEl.style.display = 'block';
-      try { errEl.scrollIntoView({behavior: 'smooth', block: 'center'}); } catch (e) {}
+      try { errEl.scrollIntoView({behavior:'smooth', block:'center'}); } catch (e) {}
       return;
     }
 
     errEl.style.display = 'none';
     setLoading(true);
-
-    var d      = resultsData;
+    var d = resultsData;
     var recIds = (d.top_ministries || []).map(function (m) { return m.id; }).join(',');
-
     var formData = new FormData();
-    formData.append('action',         'mpq_confirm');
-    formData.append('nonce',          mpqData.nonce);
-    formData.append('name',           name);
-    formData.append('email',          email);
+    formData.append('action', 'mpq_confirm');
+    formData.append('nonce', mpqData.nonce);
+    formData.append('name', name);
+    formData.append('email', email);
     formData.append('rec_ministries', recIds);
     formData.append('sel_ministries', selIds.join(','));
-    formData.append('top_gifts',      JSON.stringify(d.top_gifts || []));
-    formData.append('answers_json',   JSON.stringify(answers));
+    formData.append('top_gifts', JSON.stringify(d.top_gifts || []));
+    formData.append('answers_json', JSON.stringify(answers));
 
-    fetch(mpqData.ajaxUrl, {method: 'POST', body: formData})
+    fetch(mpqData.ajaxUrl, {method:'POST', body:formData})
       .then(function (r) { return r.json(); })
       .then(function (data) {
         setLoading(false);
@@ -1285,31 +1022,17 @@ document.addEventListener('DOMContentLoaded', function () {
           }
           showScreen('mpq-confirmation');
         } else {
-          alert((data.data && data.data.message) ? data.data.message : 'Something went wrong. Please try again.');
+          alert((data.data && data.data.message) ? data.data.message : 'Something went wrong.');
         }
       })
-      .catch(function () {
-        setLoading(false);
-        alert('Network error. Please check your connection and try again.');
-      });
+      .catch(function () { setLoading(false); alert('Network error. Please try again.'); });
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Utilities                                                            */
-  /* ------------------------------------------------------------------ */
   function escHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
   }
-
-  function escAttr(str) {
-    return String(str).replace(/"/g, '&quot;');
-  }
-
-  function isValidEmail(e) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  }
+  function escAttr(str) { return String(str).replace(/"/g,'&quot;'); }
+  function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
 
 }); // end DOMContentLoaded
 </script>
