@@ -11,7 +11,7 @@
   var current     = 0;
   var total       = questions.length;
   var exiting     = false;
-  var resultsData = null;   // stored after first AJAX call
+  var resultsData = null;
 
   /* ------------------------------------------------------------------ */
   /* DOM refs                                                             */
@@ -45,7 +45,7 @@
       target.style.display = 'flex';
       target.classList.add('mpq-screen--active');
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
   }
 
   function setLoading(on) {
@@ -84,8 +84,23 @@
       + '<span class="mpq-question__type">' + typeLabel + '</span>'
       + '<p class="mpq-question__text">' + escHtml(q.text) + '</p>';
 
-    html += q.type === 'scale' ? renderScale(q) : (q.type === 'multi' ? renderMulti(q) : renderChoices(q));
+    if (q.type === 'scale') {
+      html += renderScale(q);
+    } else if (q.type === 'multi') {
+      html += renderMulti(q);
+    } else {
+      html += renderChoices(q);
+    }
     html += '</div>';
+
+    var isLast = idx === total - 1;
+
+    /* For multi questions the Next button lives inline; hide the footer one */
+    nextBtn.style.display = (q.type === 'multi') ? 'none' : '';
+    nextBtn.disabled = !isAnswered(q);
+    nextBtn.innerHTML = isLast
+      ? 'See My Results <span class="mpq-btn__arrow">&#8594;</span>'
+      : 'Next <span class="mpq-btn__arrow">&#8594;</span>';
 
     if (qWrap.firstChild && !exiting) {
       exiting = true;
@@ -93,22 +108,15 @@
       old.classList.add('mpq-question--exit');
       setTimeout(function () {
         qWrap.innerHTML = html;
-        attachHandlers(q);
+        attachHandlers(q, isLast);
         updateProgress();
         exiting = false;
       }, 260);
     } else if (!exiting) {
       qWrap.innerHTML = html;
-      attachHandlers(q);
+      attachHandlers(q, isLast);
       updateProgress();
     }
-
-    nextBtn.disabled = !isAnswered(q);
-
-    var isLast = idx === total - 1;
-    nextBtn.innerHTML = isLast
-      ? 'See My Results <span class="mpq-btn__arrow">&#8594;</span>'
-      : 'Next <span class="mpq-btn__arrow">&#8594;</span>';
   }
 
   function renderScale(q) {
@@ -128,6 +136,7 @@
 
   function renderMulti(q) {
     var selected = Array.isArray(answers[q.id]) ? answers[q.id] : [];
+    var hasAnswer = selected.length > 0;
     var html = '<p class="mpq-multi__hint">Select all that apply</p>'
       + '<div class="mpq-choices" role="group">';
     q.options.forEach(function (opt, i) {
@@ -139,7 +148,13 @@
         + '<span>' + escHtml(opt.label) + '</span>'
         + '</button>';
     });
-    html += '</div>';
+    html += '</div>'
+      + '<div class="mpq-multi__next">'
+      + '<button class="mpq-btn mpq-btn--primary mpq-multi__next-btn" type="button"'
+      + (hasAnswer ? '' : ' disabled') + '>'
+      + 'Next <span class="mpq-btn__arrow">&#8594;</span>'
+      + '</button>'
+      + '</div>';
     return html;
   }
 
@@ -156,7 +171,7 @@
     return html;
   }
 
-  function attachHandlers(q) {
+  function attachHandlers(q, isLast) {
     if (q.type === 'scale') {
       qWrap.querySelectorAll('.mpq-scale__btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -168,6 +183,12 @@
         });
       });
     } else if (q.type === 'multi') {
+      var multiNextBtn = qWrap.querySelector('.mpq-multi__next-btn');
+      if (multiNextBtn) {
+        multiNextBtn.innerHTML = (isLast ? 'See My Results' : 'Next')
+          + ' <span class="mpq-btn__arrow">&#8594;</span>';
+        multiNextBtn.addEventListener('click', advance);
+      }
       var allBtns = qWrap.querySelectorAll('.mpq-choice__btn');
       allBtns.forEach(function (btn, btnIdx) {
         btn.addEventListener('click', function () {
@@ -184,7 +205,7 @@
             btn.querySelector('.mpq-choice__key').textContent = choiceKeys[btnIdx];
           }
           answers[q.id] = cur;
-          nextBtn.disabled = cur.length === 0;
+          if (multiNextBtn) multiNextBtn.disabled = cur.length === 0;
         });
       });
     } else {
@@ -236,9 +257,7 @@
       var n = parseInt(e.key, 10);
       if (n >= 1 && n <= 5) {
         var target = qWrap.querySelector('.mpq-scale__btn[data-val="' + n + '"]');
-        if (target) {
-          target.click();
-        }
+        if (target) target.click();
       }
     }
 
@@ -257,7 +276,7 @@
   /* ------------------------------------------------------------------ */
   function submitQuiz() {
     setLoading(true);
-    showScreen('mpq-results');   // show skeleton while loading
+    showScreen('mpq-results');
 
     var formData = new FormData();
     formData.append('action', 'mpq_submit');
@@ -295,19 +314,17 @@
     var topGifts      = data.top_gifts;
     var topMinistries = data.top_ministries;
     var allGifts      = data.all_gifts;
-    var allMData      = data.all_ministries_data || {};
 
     var rankLabels   = ['Your #1 Gift', 'Your #2 Gift', 'Your #3 Gift'];
     var mBadges      = ['Best Match', 'Great Fit', 'Strong Fit'];
     var mRankClasses = ['mpq-ministry-card--rank-1', 'mpq-ministry-card--rank-2', 'mpq-ministry-card--rank-3'];
 
-    /* ---- Header ---- */
     var html = '<p class="mpq-results__eyebrow">Your Results</p>'
       + '<h2 class="mpq-results__title">Here\'s How God<br>Has Wired You</h2>'
       + '<p class="mpq-results__subtitle">Based on your answers, here are your top spiritual gifts and the Hope Church ministries where you\'d likely thrive.</p>';
 
     /* ---- Top Gifts ---- */
-    html += '<p class="mpq-section-title">Your Top Spiritual Gifts</p>';
+    html += '<p class="mpq-section-title" style="margin-top:0">Your Top Spiritual Gifts</p>';
     html += '<div class="mpq-gifts-grid">';
     topGifts.forEach(function (g, i) {
       html += '<div class="mpq-gift-card mpq-gift-card--rank-' + (i + 1) + '">'
@@ -325,21 +342,23 @@
 
     html += '<div class="mpq-ministries-list" id="mpq-ministry-cards">';
     topMinistries.forEach(function (m, i) {
-      var imgStyle = m.image_url
-        ? 'background-image:url(' + m.image_url + ')'
-        : '';
-      var imgClass = m.image_url ? 'mpq-ministry-card__image' : 'mpq-ministry-card__image mpq-ministry-card__image--placeholder';
+      html += '<label class="mpq-ministry-card ' + mRankClasses[i] + '" for="mpq-m-' + escAttr(m.id) + '">';
 
-      html += '<label class="mpq-ministry-card ' + mRankClasses[i] + '" for="mpq-m-' + m.id + '">'
-        + '<div class="' + imgClass + '" style="' + imgStyle + '">';
-
-      if (m.logo_url) {
-        html += '<img src="' + m.logo_url + '" class="mpq-ministry-card__logo" alt="' + escAttr(m.name) + ' logo">';
+      /* Only render image area if there's an actual image URL */
+      if (m.image_url) {
+        html += '<div class="mpq-ministry-card__image" style="background-image:url(' + m.image_url + ')">';
+        if (m.logo_url) {
+          html += '<img src="' + m.logo_url + '" class="mpq-ministry-card__logo" alt="' + escAttr(m.name) + ' logo">';
+        }
+        html += '<span class="mpq-ministry-card__badge">' + mBadges[i] + '</span>'
+          + '</div>';
       }
-      html += '<span class="mpq-ministry-card__badge">' + mBadges[i] + '</span>'
-        + '</div>'
-        + '<div class="mpq-ministry-card__body">'
-        + '<div class="mpq-ministry-card__name">' + escHtml(m.name) + '</div>'
+
+      html += '<div class="mpq-ministry-card__body">';
+      if (!m.image_url) {
+        html += '<span class="mpq-ministry-card__badge">' + mBadges[i] + '</span>';
+      }
+      html += '<div class="mpq-ministry-card__name">' + escHtml(m.name) + '</div>'
         + '<p class="mpq-ministry-card__desc">' + escHtml(m.description) + '</p>'
         + '<span class="mpq-ministry-card__commitment">' + escHtml(m.commitment) + '</span>'
         + '</div>'
@@ -353,7 +372,7 @@
     html += '</div>';
 
     /* ---- All gifts bar chart ---- */
-    html += '<p class="mpq-section-title" style="margin-top:3rem;">Your Full Gifts Profile</p>'
+    html += '<p class="mpq-section-title">Your Full Gifts Profile</p>'
       + '<div class="mpq-all-gifts">';
     allGifts.forEach(function (g) {
       html += '<div class="mpq-gift-bar-row">'
@@ -384,7 +403,6 @@
 
     resultsCont.innerHTML = html;
 
-    /* Animate bars */
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         resultsCont.querySelectorAll('.mpq-gift-bar__fill').forEach(function (bar) {
@@ -393,10 +411,7 @@
       });
     });
 
-    /* Wire connect button */
-    document.getElementById('mpq-connect-btn').addEventListener('click', function () {
-      handleConnect();
-    });
+    document.getElementById('mpq-connect-btn').addEventListener('click', handleConnect);
   }
 
   /* ------------------------------------------------------------------ */
@@ -410,14 +425,12 @@
     var name  = nameEl  ? nameEl.value.trim()  : '';
     var email = emailEl ? emailEl.value.trim() : '';
 
-    // Gather selected ministries
     var checked = resultsCont.querySelectorAll('.mpq-ministry-check:checked');
     var selIds  = [];
     checked.forEach(function (cb) { selIds.push(cb.value); });
 
-    // Validation
     var errors = [];
-    if (!name)              errors.push('Please enter your name.');
+    if (!name)               errors.push('Please enter your name.');
     if (!isValidEmail(email)) errors.push('Please enter a valid email address.');
     if (selIds.length === 0)  errors.push('Please select at least one ministry you\'re interested in.');
 

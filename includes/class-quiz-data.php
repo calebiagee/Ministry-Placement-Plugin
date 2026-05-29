@@ -424,6 +424,16 @@ class MPQ_Quiz_Data {
 				'interest_hands_on'   => [ 'jump_in' => 2 ],
 			],
 
+			'prayer_team' => [
+				'name'        => 'Prayer Ministry Team',
+				'description' => 'Come alongside others to pray with them during services, at prayer gatherings, and at key moments in people\'s lives. If intercession is central to your calling, this is your place.',
+				'commitment'  => 'Sundays + prayer gatherings',
+				'gifts'       => [ 'intercession' => 6, 'mercy' => 2, 'encouragement' => 2, 'faith' => 3, 'wisdom' => 1 ],
+				'interest_prayer_life' => [ 'deep' => 7, 'daily' => 3, 'growing' => 1 ],
+				'interest_social'      => [ 'one_on_one' => 3, 'deepen' => 2 ],
+				'interest_setting'     => [ 'one_on_one' => 2, 'front' => 1 ],
+			],
+
 		];
 	}
 

@@ -118,12 +118,12 @@ class Ministry_Placement_Quiz {
 				</div>
 				<div class="mpq-quiz__header">
 					<div id="mpq-q-counter" class="mpq-q-counter"></div>
-					<button id="mpq-back-btn" class="mpq-back-btn" aria-label="Previous question">&#8592; Back</button>
 				</div>
 				<div class="mpq-quiz__body">
 					<div id="mpq-question-wrap" class="mpq-question-wrap"></div>
 				</div>
 				<div class="mpq-quiz__footer">
+					<button id="mpq-back-btn" class="mpq-back-btn" aria-label="Previous question">&#8592; Back</button>
 					<button id="mpq-next-btn" class="mpq-btn mpq-btn--primary" disabled>
 						Next <span class="mpq-btn__arrow">&#8594;</span>
 					</button>

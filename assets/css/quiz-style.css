@@ -32,6 +32,7 @@
 /* ---- Shell ---- */
 #mpq-app {
   position: relative;
+  width: 100%;
   min-height: 100vh;
   background: var(--mpq-white);
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
@@ -76,10 +77,10 @@
   font-weight: 900;
   line-height: 1.0;
   letter-spacing: -0.01em;
-  text-transform: uppercase;  /* Hope Church all-caps headline style */
+  text-transform: uppercase;
   color: var(--mpq-white);
   margin-bottom: 1.25rem;
-  font-style: italic;         /* matches their display headline style */
+  font-style: italic;
 }
 
 .mpq-welcome__subtitle {
@@ -110,38 +111,57 @@
   align-items: center;
   gap: 0.5rem;
   border: 2px solid transparent;
-  border-radius: 0;           /* Hope Church rectangular button style */
+  border-radius: 0;
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   cursor: pointer;
   padding: 0.8rem 1.75rem;
   text-decoration: none;
-  text-transform: uppercase;  /* matching site's button style */
+  text-transform: uppercase;
   transition: background var(--mpq-dur) var(--mpq-ease), transform 0.15s, box-shadow 0.15s, color 0.15s;
   outline: none;
   line-height: 1;
 }
 .mpq-btn:focus-visible { box-shadow: 0 0 0 3px rgba(200,164,58,0.45); }
 
-.mpq-btn--primary { background: var(--mpq-gold); color: var(--mpq-black); }
-.mpq-btn--primary:hover { background: var(--mpq-gold-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(200,164,58,0.35); }
+.mpq-btn--primary {
+  background: var(--mpq-gold);
+  color: var(--mpq-black);
+  box-shadow: 0 3px 12px rgba(240,170,0,0.35);
+}
+.mpq-btn--primary:hover {
+  background: var(--mpq-gold-light);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(240,170,0,0.45);
+}
 .mpq-btn--primary:active { transform: none; }
-.mpq-btn--primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.mpq-btn--primary:disabled {
+  background: var(--mpq-gray-200);
+  color: var(--mpq-gray-400);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 1;
+}
 
 .mpq-btn--lg { font-size: 1.1rem; padding: 1rem 2.25rem; }
 .mpq-btn__arrow { transition: transform 0.2s ease; }
-.mpq-btn:hover .mpq-btn__arrow { transform: translateX(3px); }
+.mpq-btn:not(:disabled):hover .mpq-btn__arrow { transform: translateX(3px); }
 
 .mpq-back-btn {
-  background: none; border: none;
-  font-size: 0.85rem; font-weight: 500;
-  color: var(--mpq-gray-400); cursor: pointer;
-  padding: 0.4rem 0.75rem;
-  border-radius: var(--mpq-radius-sm);
-  transition: color 0.2s;
+  background: none;
+  border: 1.5px solid var(--mpq-gray-200);
+  border-radius: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--mpq-gray-600);
+  cursor: pointer;
+  padding: 0.65rem 1.25rem;
+  transition: border-color 0.2s, color 0.2s;
 }
-.mpq-back-btn:hover { color: var(--mpq-black); }
+.mpq-back-btn:hover { border-color: var(--mpq-gray-400); color: var(--mpq-black); }
 
 /* ============================================================
    Progress bar
@@ -168,7 +188,7 @@
 
 .mpq-quiz__header {
   padding: 1.25rem 2rem;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: center;
   border-bottom: 1px solid var(--mpq-gray-100);
   flex-shrink: 0;
 }
@@ -182,12 +202,15 @@
 .mpq-quiz__body {
   flex: 1; display: flex;
   align-items: center; justify-content: center;
-  padding: 3rem 1.5rem; overflow: hidden;
+  padding: 4rem 2rem;
+  overflow: hidden;
 }
 
 .mpq-quiz__footer {
   padding: 1.5rem 2rem;
-  display: flex; justify-content: flex-end;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-top: 1px solid var(--mpq-gray-100);
   flex-shrink: 0;
 }
@@ -207,20 +230,20 @@
   display: inline-block;
   font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--mpq-gold-dark); background: var(--mpq-gold-bg);
-  border-radius: 99px; padding: 0.25rem 0.75rem; margin-bottom: 1.25rem;
+  border-radius: 99px; padding: 0.25rem 0.75rem; margin-bottom: 1.5rem;
 }
 
 .mpq-question__text {
   font-size: clamp(1.2rem, 3.5vw, 1.75rem);
   font-weight: 700; line-height: 1.35; letter-spacing: -0.02em;
-  color: var(--mpq-black); margin-bottom: 2rem;
+  color: var(--mpq-black); margin-bottom: 2.5rem;
 }
 
 /* ---- Likert scale ---- */
 .mpq-scale__label-row {
   display: flex; justify-content: space-between;
   font-size: 0.7rem; color: var(--mpq-gray-400);
-  margin-bottom: 0.6rem; padding: 0 2px;
+  margin-bottom: 0.75rem; padding: 0 2px;
 }
 .mpq-scale__options { display: flex; gap: 10px; }
 .mpq-scale__btn {
@@ -240,6 +263,17 @@
   font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--mpq-gold-dark); background: var(--mpq-gold-bg);
   border-radius: 99px; padding: 0.25rem 0.75rem; margin-bottom: 1rem;
+}
+
+/* ---- Multi-select inline Next ---- */
+.mpq-multi__next {
+  display: flex;
+  margin-top: 1.75rem;
+  width: 100%;
+  justify-content: flex-end;
+}
+.mpq-multi__next .mpq-btn {
+  min-width: 160px;
 }
 
 /* ---- Choice ---- */
@@ -293,7 +327,7 @@
 
 .mpq-results__inner {
   max-width: 760px; width: 100%;
-  margin: 0 auto; padding: 4rem 1.5rem 5rem;
+  margin: 0 auto; padding: 4rem 2rem 5rem;
 }
 
 .mpq-results__eyebrow {
@@ -304,7 +338,7 @@
 .mpq-results__title {
   font-size: clamp(1.75rem, 5vw, 2.75rem);
   font-weight: 900; letter-spacing: -0.03em; line-height: 1.1;
-  margin-bottom: 0.5rem; color: var(--mpq-black);
+  margin-bottom: 0.75rem; color: var(--mpq-black);
 }
 
 .mpq-results__subtitle {
@@ -314,14 +348,14 @@
 
 .mpq-section-title {
   font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--mpq-gray-400); margin-top: 2.5rem; margin-bottom: 1.25rem;
+  color: var(--mpq-gray-400); margin-top: 3rem; margin-bottom: 1.5rem;
   padding-bottom: 0.5rem; border-bottom: 1px solid var(--mpq-gray-200);
 }
 
 /* ---- Gift cards ---- */
 .mpq-gifts-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem; margin-bottom: 3rem;
+  gap: 1rem; margin-bottom: 0.5rem;
 }
 
 .mpq-gift-card {
@@ -355,26 +389,29 @@
 .mpq-ministry-card--rank-2 { border-left-color: #AAAAAA; }
 .mpq-ministry-card--rank-3 { border-left-color: #C07C36; }
 
+/* Image area — only rendered when an actual URL is provided */
 .mpq-ministry-card__image {
-  width: 100%; height: 180px;
+  width: 100%; height: 160px;
   background: var(--mpq-black);
   background-size: cover; background-position: center;
   position: relative; display: flex;
   align-items: flex-end; padding: 1rem;
-}
-.mpq-ministry-card__image--placeholder {
-  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
 }
 .mpq-ministry-card__logo {
   position: absolute; top: 1rem; right: 1rem;
   height: 40px; width: auto; object-fit: contain;
   background: white; border-radius: 6px; padding: 4px 8px;
 }
+
+/* Badge — inside image when image exists, inside body when no image */
 .mpq-ministry-card__badge {
   display: inline-block; font-size: 0.65rem; font-weight: 800;
   letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--mpq-black); background: var(--mpq-gold);
   border-radius: 99px; padding: 0.25rem 0.7rem;
+}
+.mpq-ministry-card__body .mpq-ministry-card__badge {
+  margin-bottom: 0.75rem;
 }
 
 .mpq-ministry-card__body {
@@ -495,13 +532,13 @@
    Responsive
    ============================================================ */
 @media (max-width: 600px) {
-  .mpq-quiz__header { padding: 1rem; }
-  .mpq-quiz__body   { padding: 2rem 1rem; }
-  .mpq-quiz__footer { padding: 1rem; }
+  .mpq-quiz__header { padding: 1rem 1.25rem; }
+  .mpq-quiz__body   { padding: 2.5rem 1.25rem; }
+  .mpq-quiz__footer { padding: 1.25rem 1.25rem; }
   .mpq-scale__options { gap: 6px; }
   .mpq-scale__btn { min-height: 48px; font-size: 0.9rem; border-radius: 8px; }
   .mpq-gifts-grid { grid-template-columns: 1fr; }
   .mpq-gift-bar-row { grid-template-columns: 100px 1fr 34px; gap: 0.5rem; }
   .mpq-form-row { grid-template-columns: 1fr; }
-  .mpq-ministry-card__image { height: 140px; }
+  .mpq-results__inner { padding: 2.5rem 1.25rem 4rem; }
 }
