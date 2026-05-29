@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Ministry Placement Quiz — Hope Church</title>
+<style>
+body { margin: 0; padding: 0; }
+
+:root {
+  --mpq-gold:        #F0AA00;
+  --mpq-gold-light:  #FFD04D;
+  --mpq-gold-dark:   #C88800;
+  --mpq-gold-bg:     rgba(240,170,0,0.08);
+  --mpq-black:       #111111;
+  --mpq-white:       #FFFFFF;
+  --mpq-gray-50:     #F9F9F9;
+  --mpq-gray-100:    #F2F2F2;
+  --mpq-gray-200:    #E4E4E4;
+  --mpq-gray-400:    #9A9A9A;
+  --mpq-gray-600:    #555555;
+  --mpq-radius-sm:   3px;
+  --mpq-radius:      6px;
+  --mpq-radius-lg:   8px;
+  --mpq-shadow:      0 2px 16px rgba(0,0,0,0.08);
+  --mpq-shadow-lg:   0 8px 40px rgba(0,0,0,0.14);
+  --mpq-ease:        cubic-bezier(0.16,1,0.3,1);
+  --mpq-dur:         360ms;
+}
+
+#mpq-app *, #mpq-app *::before, #mpq-app *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+#mpq-app {
+  position: relative; width: 100%; min-height: 100vh;
+  background: var(--mpq-white);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  color: var(--mpq-black); overflow-x: hidden;
+}
+
+.mpq-screen { display: none; min-height: 100vh; }
+.mpq-screen--active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+/* Welcome */
+#mpq-welcome { background: var(--mpq-black); color: var(--mpq-white); text-align: center; padding: 3rem 1.5rem; }
+.mpq-screen__inner { max-width: 640px; width: 100%; }
+.mpq-eyebrow { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mpq-gold); margin-bottom: 1.5rem; }
+.mpq-welcome__title { font-size: clamp(2.2rem, 6.5vw, 4rem); font-weight: 900; line-height: 1.0; letter-spacing: -0.01em; text-transform: uppercase; color: var(--mpq-white); margin-bottom: 1.5rem; font-style: italic; }
+.mpq-welcome__subtitle { font-size: 1.05rem; line-height: 1.7; color: rgba(255,255,255,0.7); max-width: 520px; margin: 0 auto 2rem; text-wrap: balance; }
+.mpq-welcome__meta { list-style: none; display: flex; gap: 2.5rem; justify-content: center; font-size: 0.875rem; color: rgba(255,255,255,0.45); margin-bottom: 2.5rem; }
+.mpq-meta-icon { margin-right: 0.35rem; }
+
+/* Buttons */
+.mpq-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  border: 2px solid transparent; border-radius: 0;
+  font-size: 1rem; font-weight: 800; letter-spacing: 0.05em;
+  cursor: pointer; padding: 0.9rem 2rem; text-decoration: none;
+  text-transform: uppercase;
+  transition: background var(--mpq-dur) var(--mpq-ease), transform 0.15s, box-shadow 0.15s, color 0.15s;
+  outline: none; line-height: 1;
+}
+.mpq-btn:focus-visible { box-shadow: 0 0 0 3px rgba(200,164,58,0.45); }
+.mpq-btn--primary { background: var(--mpq-gold); color: var(--mpq-black); box-shadow: 0 3px 12px rgba(240,170,0,0.35); }
+.mpq-btn--primary:hover { background: var(--mpq-gold-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(240,170,0,0.45); }
+.mpq-btn--primary:active { transform: none; }
+.mpq-btn--primary:disabled { background: var(--mpq-gray-200); color: var(--mpq-gray-400); box-shadow: none; cursor: not-allowed; transform: none; opacity: 1; }
+.mpq-btn--lg { font-size: 1.1rem; padding: 1.1rem 3rem; }
+.mpq-btn__arrow { transition: transform 0.2s ease; }
+.mpq-btn:not(:disabled):hover .mpq-btn__arrow { transform: translateX(3px); }
+
+.mpq-back-btn {
+  background: none; border: 1.5px solid var(--mpq-gray-200); border-radius: 0;
+  font-size: 0.875rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--mpq-gray-600); cursor: pointer; padding: 0.9rem 1.75rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+.mpq-back-btn:hover { border-color: var(--mpq-gray-400); color: var(--mpq-black); }
+
+/* Progress bar */
+.mpq-progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--mpq-gray-200); z-index: 100; }
+.mpq-progress-bar__fill { height: 100%; background: var(--mpq-gold); width: 0%; transition: width 0.5s var(--mpq-ease); border-radius: 0 2px 2px 0; }
+
+/* Quiz screen */
+#mpq-quiz { display: none; flex-direction: column; min-height: 100vh; background: var(--mpq-white); }
+.mpq-quiz__header {
+  padding: 1.75rem 2rem 1.25rem; display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid var(--mpq-gray-100); flex-shrink: 0;
+}
+.mpq-q-counter { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mpq-gray-400); }
+.mpq-quiz__body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 4rem 2rem; overflow: hidden; }
+.mpq-quiz__footer {
+  padding: 1.75rem 2rem 2rem; display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--mpq-gray-100); flex-shrink: 0;
+}
+
+/* Question */
+.mpq-question-wrap { max-width: 680px; width: 100%; }
+.mpq-question { animation: mpqIn var(--mpq-dur) var(--mpq-ease) both; }
+.mpq-question--exit { animation: mpqOut 260ms var(--mpq-ease) both; }
+@keyframes mpqIn  { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
+@keyframes mpqOut { from { opacity:1; transform:none; } to { opacity:0; transform:translateY(-20px); } }
+.mpq-question__type {
+  display: inline-block; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mpq-gold-dark); background: var(--mpq-gold-bg);
+  border-radius: 99px; padding: 0.25rem 0.75rem; margin-bottom: 1.5rem;
+}
+.mpq-question__text { font-size: clamp(1.2rem, 3.5vw, 1.75rem); font-weight: 700; line-height: 1.35; letter-spacing: -0.02em; color: var(--mpq-black); margin-bottom: 2.5rem; }
+
+/* Likert scale */
+.mpq-scale__label-row { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--mpq-gray-400); margin-bottom: 0.75rem; padding: 0 2px; }
+.mpq-scale__options { display: flex; gap: 10px; }
+.mpq-scale__btn {
+  flex: 1; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--mpq-gray-200); border-radius: var(--mpq-radius);
+  background: var(--mpq-white); font-size: 1rem; font-weight: 700;
+  color: var(--mpq-gray-600); cursor: pointer; min-height: 56px;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+}
+.mpq-scale__btn:hover { border-color: var(--mpq-gold); color: var(--mpq-gold-dark); transform: translateY(-2px); }
+.mpq-scale__btn.selected { border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black); font-weight: 900; }
+
+/* Multi-select */
+.mpq-multi__hint {
+  display: inline-block; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mpq-gold-dark); background: var(--mpq-gold-bg);
+  border-radius: 99px; padding: 0.25rem 0.75rem; margin-bottom: 1rem;
+}
+.mpq-multi__next { display: flex; margin-top: 1.75rem; width: 100%; justify-content: flex-end; }
+.mpq-multi__next .mpq-btn { min-width: 160px; }
+
+/* Choice buttons */
+.mpq-choices { display: flex; flex-direction: column; gap: 10px; }
+.mpq-choice__btn {
+  width: 100%; text-align: left; padding: 1rem 1.25rem;
+  border: 2px solid var(--mpq-gray-200); border-radius: var(--mpq-radius);
+  background: var(--mpq-white); font-size: 0.975rem; font-weight: 500;
+  color: var(--mpq-black); cursor: pointer; display: flex; align-items: center; gap: 1rem;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+.mpq-choice__btn:hover { border-color: var(--mpq-gold); transform: translateX(4px); }
+.mpq-choice__btn.selected { border-color: var(--mpq-gold); background: var(--mpq-gold-bg); font-weight: 600; }
+.mpq-choice__key {
+  width: 28px; height: 28px; flex-shrink: 0;
+  border: 1.5px solid var(--mpq-gray-200); border-radius: var(--mpq-radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 800; color: var(--mpq-gray-400);
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.mpq-choice__btn.selected .mpq-choice__key,
+.mpq-choice__btn:hover .mpq-choice__key { border-color: var(--mpq-gold); background: var(--mpq-gold); color: var(--mpq-black); }
+
+/* Loading */
+.mpq-loading {
+  position: fixed; inset: 0; z-index: 200; background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(4px); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.25rem; font-size: 1rem; color: var(--mpq-gray-600);
+}
+.mpq-loading--hidden { display: none; }
+.mpq-loading__spinner { width: 44px; height: 44px; border: 3px solid var(--mpq-gray-200); border-top-color: var(--mpq-gold); border-radius: 50%; animation: mpqSpin 0.7s linear infinite; }
+@keyframes mpqSpin { to { transform: rotate(360deg); } }
+
+/* Results screen */
+#mpq-results { background: var(--mpq-gray-50); align-items: flex-start; }
+.mpq-results__inner { max-width: 760px; width: 100%; margin: 0 auto; padding: 4rem 2rem 5rem; }
+.mpq-results__eyebrow { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mpq-gold-dark); margin-bottom: 0.75rem; }
+.mpq-results__title { font-size: clamp(1.75rem, 5vw, 2.75rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.75rem; color: var(--mpq-black); }
+.mpq-results__subtitle { font-size: 0.95rem; color: var(--mpq-gray-600); line-height: 1.65; margin-bottom: 2.5rem; }
+.mpq-section-title {
+  font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mpq-gray-400); margin-top: 3rem; margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--mpq-gray-200);
+}
+
+/* Gift cards */
+.mpq-gifts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 0.5rem; }
+.mpq-gift-card { background: var(--mpq-white); border-radius: var(--mpq-radius); padding: 1.5rem; box-shadow: var(--mpq-shadow); border-top: 4px solid; }
+.mpq-gift-card--rank-1 { border-top-color: var(--mpq-gold); }
+.mpq-gift-card--rank-2 { border-top-color: #AAAAAA; }
+.mpq-gift-card--rank-3 { border-top-color: #C07C36; }
+.mpq-gift-card__rank { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mpq-gray-400); margin-bottom: 0.5rem; }
+.mpq-gift-card__name { font-size: 1.2rem; font-weight: 800; color: var(--mpq-black); margin-bottom: 0.5rem; }
+.mpq-gift-card__pct  { font-size: 2rem; font-weight: 900; color: var(--mpq-gold); line-height: 1; margin-bottom: 0.6rem; }
+.mpq-gift-card__desc { font-size: 0.83rem; line-height: 1.55; color: var(--mpq-gray-600); }
+
+/* Ministry cards */
+.mpq-ministries-list { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 1.5rem; }
+.mpq-ministry-card {
+  background: var(--mpq-white); border-radius: var(--mpq-radius); box-shadow: var(--mpq-shadow);
+  overflow: hidden; display: flex; flex-direction: column; border-left: 4px solid transparent;
+  cursor: pointer; transition: box-shadow 0.2s, transform 0.2s;
+}
+.mpq-ministry-card:hover { box-shadow: var(--mpq-shadow-lg); transform: translateY(-2px); }
+.mpq-ministry-card--rank-1 { border-left-color: var(--mpq-gold); }
+.mpq-ministry-card--rank-2 { border-left-color: #AAAAAA; }
+.mpq-ministry-card--rank-3 { border-left-color: #C07C36; }
+
+/* Image area — only shown when a real URL is provided */
+.mpq-ministry-card__image {
+  width: 100%; height: 160px; background: var(--mpq-black);
+  background-size: cover; background-position: center;
+  position: relative; display: flex; align-items: flex-end; padding: 1rem;
+}
+.mpq-ministry-card__logo { position: absolute; top: 1rem; right: 1rem; height: 40px; width: auto; object-fit: contain; background: white; border-radius: 4px; padding: 3px 6px; }
+
+/* Badge — inline in image when image exists, in card body when no image */
+.mpq-ministry-card__badge {
+  display: inline-block; font-size: 0.65rem; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--mpq-black); background: var(--mpq-gold);
+  border-radius: 99px; padding: 0.2rem 0.65rem;
+}
+.mpq-ministry-card__body .mpq-ministry-card__badge { margin-bottom: 0.75rem; }
+
+.mpq-ministry-card__body { padding: 1.25rem 1.5rem 1rem; flex: 1; }
+.mpq-ministry-card__name { font-size: 1.15rem; font-weight: 800; color: var(--mpq-black); margin-bottom: 0.5rem; }
+.mpq-ministry-card__desc { font-size: 0.875rem; line-height: 1.6; color: var(--mpq-gray-600); margin-bottom: 0.75rem; }
+.mpq-ministry-card__commitment { font-size: 0.78rem; font-weight: 600; color: var(--mpq-gray-400); display: flex; align-items: center; gap: 0.4rem; }
+.mpq-ministry-card__commitment::before { content: '🕐'; }
+
+/* Ministry interest checkbox */
+.mpq-ministry-card__check { padding: 0.875rem 1.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; border-top: 1px solid var(--mpq-gray-100); user-select: none; }
+.mpq-ministry-check { display: none; }
+.mpq-ministry-check__box { width: 22px; height: 22px; flex-shrink: 0; border: 2px solid var(--mpq-gray-200); border-radius: 5px; background: var(--mpq-white); display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, background 0.2s; position: relative; }
+.mpq-ministry-check__box::after { content: ''; width: 5px; height: 9px; border: 2px solid var(--mpq-black); border-top: 0; border-left: 0; transform: rotate(45deg) scale(0) translateY(-1px); transition: transform 0.15s ease; position: absolute; }
+.mpq-ministry-check:checked ~ .mpq-ministry-check__box { border-color: var(--mpq-gold); background: var(--mpq-gold); }
+.mpq-ministry-check:checked ~ .mpq-ministry-check__box::after { transform: rotate(45deg) scale(1) translateY(-1px); }
+.mpq-ministry-check__label { font-size: 0.9rem; font-weight: 600; color: var(--mpq-gray-600); transition: color 0.2s; }
+.mpq-ministry-card:has(.mpq-ministry-check:checked) .mpq-ministry-check__label { color: var(--mpq-gold-dark); }
+
+/* All gifts bar chart */
+.mpq-all-gifts { background: var(--mpq-white); border-radius: var(--mpq-radius); padding: 1.75rem; box-shadow: var(--mpq-shadow); margin-bottom: 2.5rem; }
+.mpq-gift-bar-row { display: grid; grid-template-columns: 140px 1fr 40px; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+.mpq-gift-bar-row:last-child { margin-bottom: 0; }
+.mpq-gift-bar__label { font-size: 0.78rem; font-weight: 600; color: var(--mpq-black); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mpq-gift-bar__track { height: 8px; background: var(--mpq-gray-100); border-radius: 99px; overflow: hidden; }
+.mpq-gift-bar__fill  { height: 100%; background: var(--mpq-gold); border-radius: 99px; width: 0%; transition: width 1s var(--mpq-ease); }
+.mpq-gift-bar__pct   { font-size: 0.73rem; font-weight: 700; color: var(--mpq-gray-400); text-align: right; }
+
+/* Connect form */
+.mpq-connect-form { background: var(--mpq-black); border-radius: var(--mpq-radius-lg); padding: 2.5rem; color: var(--mpq-white); margin-top: 3rem; }
+.mpq-connect-form__title { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.mpq-connect-form__desc  { font-size: 0.925rem; color: rgba(255,255,255,0.65); margin-bottom: 1.75rem; }
+.mpq-connect-error { background: rgba(255,60,60,0.12); border: 1px solid rgba(255,60,60,0.3); border-radius: var(--mpq-radius-sm); padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.875rem; color: #ff6b6b; }
+.mpq-connect-error p { margin: 0 0 4px; }
+.mpq-connect-error p:last-child { margin: 0; }
+.mpq-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.mpq-form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+.mpq-form-field label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: rgba(255,255,255,0.6); text-transform: uppercase; }
+.mpq-form-field input { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15); border-radius: var(--mpq-radius-sm); padding: 0.75rem 1rem; font-size: 1rem; color: var(--mpq-white); outline: none; transition: border-color 0.2s; }
+.mpq-form-field input::placeholder { color: rgba(255,255,255,0.3); }
+.mpq-form-field input:focus { border-color: var(--mpq-gold); }
+
+/* Confirmation screen */
+#mpq-confirmation { background: var(--mpq-black); color: var(--mpq-white); }
+.mpq-confirmation__inner { max-width: 520px; text-align: center; padding: 2rem 1.5rem; }
+.mpq-confirmation__icon { width: 72px; height: 72px; background: var(--mpq-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: var(--mpq-black); margin: 0 auto 1.5rem; }
+.mpq-confirmation__title { font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 1rem; }
+.mpq-confirmation__body  { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.7); margin-bottom: 2rem; }
+
+@media (max-width: 600px) {
+  .mpq-quiz__header { padding: 1.25rem 1.25rem 1rem; }
+  .mpq-quiz__body   { padding: 2.5rem 1.25rem; }
+  .mpq-quiz__footer { padding: 1.25rem 1.25rem 1.75rem; }
+  .mpq-scale__options { gap: 6px; }
+  .mpq-scale__btn { min-height: 48px; font-size: 0.9rem; border-radius: 8px; }
+  .mpq-gifts-grid { grid-template-columns: 1fr; }
+  .mpq-gift-bar-row { grid-template-columns: 100px 1fr 34px; gap: 0.5rem; }
+  .mpq-form-row { grid-template-columns: 1fr; }
+  .mpq-results__inner { padding: 2.5rem 1.25rem 4rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="mpq-app" class="mpq-app" role="main" aria-label="Ministry Placement Quiz">
+
+  <!-- Welcome -->
+  <div id="mpq-welcome" class="mpq-screen mpq-screen--active">
+    <div class="mpq-screen__inner">
+      <p class="mpq-eyebrow">Hope Church</p>
+      <h1 class="mpq-welcome__title">Find Your<br>Place to Serve</h1>
+      <p class="mpq-welcome__subtitle">Answer a few questions about how God has wired you and we&rsquo;ll help match you with the ministries where you&rsquo;ll thrive.</p>
+      <ul class="mpq-welcome__meta">
+        <li><span class="mpq-meta-icon">&#9201;</span> About 7 minutes</li>
+        <li><span class="mpq-meta-icon">&#128100;</span> No sign-up required</li>
+      </ul>
+      <button id="mpq-start-btn" class="mpq-btn mpq-btn--primary mpq-btn--lg">
+        Let&rsquo;s Get Started <span class="mpq-btn__arrow">&#8594;</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div id="mpq-quiz" class="mpq-screen" aria-live="polite">
+    <div class="mpq-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div id="mpq-progress-fill" class="mpq-progress-bar__fill"></div>
+    </div>
+    <div class="mpq-quiz__header">
+      <div id="mpq-q-counter" class="mpq-q-counter"></div>
+    </div>
+    <div class="mpq-quiz__body">
+      <div id="mpq-question-wrap" class="mpq-question-wrap"></div>
+    </div>
+    <div class="mpq-quiz__footer">
+      <button id="mpq-back-btn" class="mpq-back-btn" aria-label="Previous question">&#8592; Back</button>
+      <button id="mpq-next-btn" class="mpq-btn mpq-btn--primary" disabled>
+        Next <span class="mpq-btn__arrow">&#8594;</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="mpq-results" class="mpq-screen">
+    <div class="mpq-results__inner">
+      <div id="mpq-results-content"></div>
+    </div>
+  </div>
+
+  <!-- Confirmation -->
+  <div id="mpq-confirmation" class="mpq-screen">
+    <div class="mpq-screen__inner mpq-confirmation__inner">
+      <div class="mpq-confirmation__icon">&#10003;</div>
+      <p class="mpq-eyebrow">You&rsquo;re all set!</p>
+      <h2 class="mpq-confirmation__title">Thanks for taking the next step.</h2>
+      <p class="mpq-confirmation__body">We&rsquo;ve received your ministry interests and our team will be in touch soon. We can&rsquo;t wait to serve alongside you!</p>
+      <div id="mpq-confirmation__cta"></div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div id="mpq-loading" class="mpq-loading mpq-loading--hidden" aria-hidden="true">
+    <div class="mpq-loading__spinner"></div>
+    <p>Discovering your gifts&hellip;</p>
+  </div>
+
+</div>
+
+<script>
+/* Question data + client-side scoring engine */
+
+var mpqData = {
+  ajaxUrl:    '__preview__',
+  nonce:      null,
+  siteName:   'Hope Church',
+  connectUrl: 'https://hopechurch.net',
+  questions: (function () {
+    var sg = [
+      {id:'T1',  category:'teaching',       type:'scale', text:'I enjoy explaining Bible passages in ways that help others understand.'},
+      {id:'T3',  category:'teaching',       type:'scale', text:'I love preparing lessons or studies that help others grow in their faith.'},
+      {id:'EN1', category:'encouragement',  type:'scale', text:"I naturally find ways to lift others up when they're struggling."},
+      {id:'EN3', category:'encouragement',  type:'scale', text:'I enjoy helping others recognize their potential and cheering them on.'},
+      {id:'GV1', category:'giving',         type:'scale', text:"I feel deep satisfaction when I give generously to God's work."},
+      {id:'GV3', category:'giving',         type:'scale', text:'I give sacrificially and trust God to meet my own needs.'},
+      {id:'LD1', category:'leadership',     type:'scale', text:'People naturally look to me to lead when direction is needed.'},
+      {id:'LD2', category:'leadership',     type:'scale', text:'I am able to cast vision and motivate others to work toward a goal.'},
+      {id:'MC1', category:'mercy',          type:'scale', text:'I am deeply moved by the pain and struggles of others.'},
+      {id:'MC2', category:'mercy',          type:'scale', text:'I am drawn to minister to people who are hurting or forgotten.'},
+      {id:'SV1', category:'service',        type:'scale', text:"I feel most fulfilled when I'm helping others complete their work."},
+      {id:'SV3', category:'service',        type:'scale', text:'I notice practical needs and want to meet them without being asked.'},
+      {id:'AD1', category:'administration', type:'scale', text:'I enjoy creating systems and processes that help things run smoothly.'},
+      {id:'AD2', category:'administration', type:'scale', text:'I thrive when organizing people, tasks, and resources toward a common goal.'},
+      {id:'EV1', category:'evangelism',     type:'scale', text:"I feel a strong urgency to share the Gospel with those who don't know Jesus."},
+      {id:'EV2', category:'evangelism',     type:'scale', text:'I find it natural and comfortable to tell others about my faith.'},
+      {id:'PS1', category:'pastor',         type:'scale', text:'I feel responsible for the spiritual growth and wellbeing of those around me.'},
+      {id:'PS2', category:'pastor',         type:'scale', text:'I naturally invest in long-term relationships with people I disciple.'},
+      {id:'WS1', category:'wisdom',         type:'scale', text:'People frequently seek my counsel for important decisions.'},
+      {id:'WS2', category:'wisdom',         type:'scale', text:'I have a sense of how biblical truth applies to complex, real-life situations.'},
+      {id:'KN1', category:'knowledge',      type:'scale', text:'I love digging deep into Scripture and researching biblical truth.'},
+      {id:'KN2', category:'knowledge',      type:'scale', text:'I often discover insights in the Bible that others may have overlooked.'},
+      {id:'FT1', category:'faith',          type:'scale', text:'I often sense God calling me to take steps others consider risky or unreasonable.'},
+      {id:'FT3', category:'faith',          type:'scale', text:'I have a strong confidence that God will act, even when outcomes seem impossible.'},
+      {id:'DS1', category:'discernment',    type:'scale', text:"I can often sense when someone's motives don't match what they're saying."},
+      {id:'DS2', category:'discernment',    type:'scale', text:"I quickly recognize when teaching or doctrine doesn't align with Scripture."},
+      {id:'HP1', category:'hospitality',    type:'scale', text:'I love making others feel welcomed and completely at home in my presence.'},
+      {id:'HP3', category:'hospitality',    type:'scale', text:'I notice when people feel like outsiders and go out of my way to include them.'},
+      {id:'PI1', category:'intercession',   type:'scale', text:'I feel a deep burden to pray for specific people or needs for extended periods.'},
+      {id:'PI3', category:'intercession',   type:'scale', text:'Prayer is a primary way I connect with God, and I find it deeply fulfilling.'},
+      {id:'CC1', category:'creative',       type:'scale', text:'I express spiritual truths through creative means — music, art, writing, drama, or design.'},
+      {id:'CC2', category:'creative',       type:'scale', text:"I feel most alive when using creative gifts to communicate God's heart."},
+      {id:'PY1', category:'prophecy',       type:'scale', text:"I feel compelled to speak God's truth even when it's difficult or uncomfortable."},
+      {id:'PY2', category:'prophecy',       type:'scale', text:'I have a strong sense of what God wants to say to a group or individual.'}
+    ];
+
+    var iq = [
+      {id:'I1',  category:'interest_age',         type:'choice', text:'Which age group do you most enjoy spending time with?',
+       options:[{value:'children',label:'Children (infant – 12)'},{value:'youth',label:'Teenagers & Young Adults'},{value:'adults',label:'Adults'},{value:'seniors',label:'Seniors'},{value:'all',label:'All ages — I love them equally'}]},
+      {id:'I2',  category:'interest_setting',      type:'choice', text:'Where do you feel most comfortable serving?',
+       options:[{value:'front',label:'Up front and visible (stage, door, leading)'},{value:'behind',label:'Behind the scenes — I keep things running'},{value:'one_on_one',label:'One-on-one conversations and relationships'},{value:'small_group',label:'Small groups and team settings'}]},
+      {id:'I3',  category:'interest_skill',        type:'multi',  text:'Which of these describe skills or experiences you have?',
+       options:[{value:'music',label:'I play an instrument or sing'},{value:'tech',label:'I work well with technology, audio/video, or computers'},{value:'physical',label:"I'm good with my hands — building, maintenance, or physical work"},{value:'people',label:"I'm a natural communicator and connector with people"}]},
+      {id:'I4',  category:'interest_children_exp', type:'choice', text:'Have you worked with children as a teacher, coach, parent, or volunteer?',
+       options:[{value:'yes',label:'Yes — regularly and I love it'},{value:'some',label:"Some experience, and I'd like more"},{value:'no',label:'Not much experience yet'}]},
+      {id:'I5',  category:'interest_social',       type:'choice', text:"When you walk into a room full of people you don't know well, you tend to:",
+       options:[{value:'initiate',label:'Start conversations and introduce yourself'},{value:'deepen',label:'Seek out one person and go deep'},{value:'observe',label:'Watch, listen, and ease in gradually'},{value:'help',label:'Look for something useful to do'}]},
+      {id:'I6',  category:'interest_outreach',     type:'choice', text:"How do you feel about reaching people who aren't part of a church yet?",
+       options:[{value:'yes',label:"I'm passionate about it — it drives me"},{value:'somewhat',label:'I care, but prefer working within the church'},{value:'no',label:"I'm more drawn to serving those already here"}]},
+      {id:'I7',  category:'interest_teaching_exp', type:'choice', text:'Have you ever taught a class, led a group discussion, or mentored someone?',
+       options:[{value:'yes',label:"Yes — it's something I do regularly"},{value:'some',label:'A few times — I enjoyed it'},{value:'no',label:"Not much, but I'm open to growing in it"}]},
+      {id:'I8',  category:'interest_hands_on',     type:'choice', text:"If a task needs to get done, you're most likely to:",
+       options:[{value:'jump_in',label:'Roll up my sleeves and just do it'},{value:'plan',label:'Make a plan and coordinate with others'},{value:'delegate',label:'Recruit the right people and lead the effort'},{value:'support',label:'Help wherever someone needs an extra hand'}]},
+      {id:'I9',  category:'interest_safety',       type:'choice', text:'How do you feel about a role that involves protecting and keeping people safe?',
+       options:[{value:'yes',label:"That's exactly my type of role"},{value:'maybe',label:"I'm open to it"},{value:'no',label:"I'd prefer a different kind of role"}]},
+      {id:'I10', category:'interest_prayer_life',  type:'choice', text:'How would you describe your prayer life?',
+       options:[{value:'deep',label:"I pray for extended periods regularly — it's central to my life"},{value:'daily',label:'I pray briefly but consistently each day'},{value:'growing',label:"It's something I'm growing in"},{value:'new',label:'Prayer is relatively new to me'}]},
+      {id:'I11', category:'interest_creativity',   type:'multi',  text:'Which creative areas feel natural to you?',
+       options:[{value:'music',label:'Music — singing, playing, writing songs'},{value:'visual',label:'Visual arts, graphic design, or video'},{value:'writing',label:'Writing, storytelling, or speaking'},{value:'none',label:"Creativity isn't really my thing"}]},
+      {id:'I12', category:'interest_time',         type:'choice', text:'How much time could you realistically commit to serving each week?',
+       options:[{value:'minimal',label:'1 – 2 hours (Sundays only)'},{value:'moderate',label:'3 – 5 hours (Sundays + some midweek)'},{value:'significant',label:'6+ hours (a major commitment)'}]}
+    ];
+
+    var all = [], gi = 0, interval = Math.floor(sg.length / iq.length);
+    sg.forEach(function (q, i) {
+      all.push(q);
+      if ((i + 1) % interval === 0 && gi < iq.length) { all.push(iq[gi]); gi++; }
+    });
+    while (gi < iq.length) { all.push(iq[gi]); gi++; }
+    return all;
+  }())
+};
+
+/* Client-side scoring engine */
+var MPQ_Scoring = {
+  giftsInfo: {
+    teaching:       {name:'Teaching',               description:"You have a God-given ability to explain Scripture clearly and help others grow in their understanding of God's Word."},
+    encouragement:  {name:'Encouragement',          description:"You have a remarkable ability to come alongside others, speak life into them, and help them see God's purpose."},
+    giving:         {name:'Giving',                 description:"You feel called to be generous with your resources and trust God to use your giving to advance His kingdom."},
+    leadership:     {name:'Leadership',             description:"You have the ability to cast vision, motivate others, and guide people toward a God-honoring goal."},
+    mercy:          {name:'Mercy',                  description:"You are deeply moved by the suffering of others and called to show God's compassion to those who are hurting."},
+    service:        {name:'Service & Helps',        description:"You find deep fulfillment in supporting others and working behind the scenes so that ministry can happen."},
+    administration: {name:'Administration',         description:"You have a gift for organizing people, resources, and systems to accomplish ministry goals effectively."},
+    evangelism:     {name:'Evangelism',             description:"You feel a natural urgency and joy in sharing the Gospel and helping others encounter Jesus."},
+    pastor:         {name:'Shepherding',            description:"You feel a deep responsibility for the spiritual health and growth of others and love investing in long-term discipleship."},
+    wisdom:         {name:'Wisdom',                 description:"You have an unusual ability to apply God's truth to real-life situations and offer sound, godly counsel."},
+    knowledge:      {name:'Knowledge',              description:"You have a passion for deep Bible study and often discover truths that help the body of Christ grow."},
+    faith:          {name:'Faith',                  description:"You have an extraordinary ability to trust God in circumstances others might find impossible, and your faith inspires those around you."},
+    discernment:    {name:'Discernment',            description:"You have a Spirit-given ability to recognize truth from error and sense what is spiritually happening in situations."},
+    hospitality:    {name:'Hospitality',            description:"You have a gift for making people feel genuinely welcome and creating spaces where people feel loved and included."},
+    intercession:   {name:'Prayer & Intercession',  description:"You feel a deep calling to pray fervently for others and believe strongly in the power of persistent prayer."},
+    creative:       {name:'Creative Communication', description:"You communicate spiritual truths through creative means — music, art, writing, drama, or design — in ways that move people's hearts."},
+    prophecy:       {name:'Prophecy',               description:"You feel a bold calling to speak God's truth clearly and directly, even when it's challenging or uncomfortable."}
+  },
+
+  ministries: {
+    hope_kids_preschool: {
+      name:'Hope Kids — Preschool', commitment:'Sundays + occasional events',
+      description:"Create a warm, nurturing environment where babies, toddlers, and preschoolers take their very first steps of faith and experience God's love through play, stories, and gentle care.",
+      gifts:{service:3,mercy:3,encouragement:2,hospitality:2,pastor:1},
+      interest_age:{children:5,all:1}, interest_children_exp:{yes:4,some:2}, interest_setting:{small_group:1}
+    },
+    hope_kids_elementary: {
+      name:'Hope Kids — Elementary', commitment:'Sundays + occasional events',
+      description:"Help kids in Kindergarten through 5th grade discover who Jesus is through energetic worship, engaging Bible lessons, and meaningful friendships that build a lifelong faith.",
+      gifts:{teaching:4,encouragement:2,service:2,mercy:1,hospitality:1,pastor:1},
+      interest_age:{children:5,all:1}, interest_children_exp:{yes:4,some:2}, interest_teaching_exp:{yes:3,some:1}, interest_setting:{small_group:1}
+    },
+    hope_students: {
+      name:'Hope Student Ministries', commitment:'Weekly meetings + events',
+      description:"Come alongside middle and high school students through authentic relationships, Biblical teaching, and life-on-life discipleship during a critical season of their lives.",
+      gifts:{evangelism:2,encouragement:3,leadership:2,hospitality:2,pastor:3},
+      interest_age:{youth:5,all:1}, interest_social:{initiate:2,deepen:2}, interest_setting:{small_group:1,one_on_one:1}, interest_outreach:{yes:1}
+    },
+    hope_young_adults: {
+      name:'Hope Young Adults', commitment:'Weekly gatherings + community events',
+      description:"Help build a community where people in their 20s and 30s find real belonging, lasting friendships, and a faith that anchors their lives.",
+      gifts:{encouragement:3,hospitality:3,evangelism:2,pastor:2,leadership:1},
+      interest_age:{adults:2,all:1}, interest_social:{initiate:2,deepen:1}, interest_setting:{small_group:2,front:1}, interest_outreach:{yes:1}
+    },
+    worship: {
+      name:'Worship', commitment:'Weekly rehearsals + Sundays',
+      description:"Use your musical gifting to lead our church family into God's presence each Sunday through Spirit-led worship that points people to Jesus.",
+      gifts:{creative:5,faith:1,leadership:1},
+      interest_skill:{music:6,people:1}, interest_creativity:{music:6,visual:1}, interest_setting:{front:3}
+    },
+    hospitality: {
+      name:'Hospitality', commitment:'Sunday mornings',
+      description:"Create a warm, welcoming atmosphere where everyone — regulars and first-timers alike — feels genuinely seen, valued, and at home at Hope Church.",
+      gifts:{hospitality:5,service:2,mercy:1,encouragement:2},
+      interest_social:{initiate:3,help:1}, interest_setting:{front:2}, interest_skill:{people:3}
+    },
+    greeters: {
+      name:'Greeters', commitment:'Sunday mornings (rotating schedule)',
+      description:"Be the first smile someone sees — warmly welcoming guests and members at the door and helping everyone feel like they've come home.",
+      gifts:{hospitality:4,encouragement:2,service:1},
+      interest_social:{initiate:4,help:1}, interest_setting:{front:3}, interest_skill:{people:3}
+    },
+    ushers: {
+      name:'Ushers', commitment:'Sunday mornings (rotating schedule)',
+      description:"Serve in the aisles to help services run smoothly, assist guests, manage seating, and support our weekend experience from start to finish.",
+      gifts:{service:3,administration:2,hospitality:2},
+      interest_setting:{front:1,behind:2}, interest_hands_on:{jump_in:2,support:2}, interest_skill:{people:1}
+    },
+    security: {
+      name:'Security', commitment:'Sundays + special events',
+      description:"Protect and serve our church family by maintaining a safe environment during services and events so everyone can worship without distraction.",
+      gifts:{service:3,administration:2,leadership:2,discernment:3,faith:1},
+      interest_safety:{yes:7,maybe:2}, interest_setting:{front:1,behind:1}, interest_hands_on:{jump_in:1,plan:1}
+    },
+    facilities: {
+      name:'Facilities', commitment:'Weekdays + weekends as needed',
+      description:"Keep our campus clean, safe, and fully set up so that every ministry and service can happen without a hitch. If you love practical hands-on work, this is your place.",
+      gifts:{service:5,administration:2},
+      interest_setting:{behind:4}, interest_hands_on:{jump_in:4,support:2}, interest_skill:{physical:6,tech:1}
+    },
+    hope_family: {
+      name:'Lead a Hope Family', commitment:'Weekly Hope Family meeting + prep time',
+      description:"Facilitate a small group of people who do life together — growing in God's Word, carrying one another's burdens, and becoming true church family.",
+      gifts:{teaching:2,pastor:4,encouragement:3,wisdom:2,hospitality:2},
+      interest_age:{adults:2,all:1}, interest_setting:{small_group:5,one_on_one:1}, interest_teaching_exp:{yes:2,some:1}, interest_social:{deepen:2,initiate:1}
+    },
+    media: {
+      name:'Media Team', commitment:'Sundays + special productions',
+      description:"Use your technical and creative skills to support live worship, livestreaming, social media, graphic design, and the digital presence of Hope Church.",
+      gifts:{administration:1,creative:3,service:3},
+      interest_skill:{tech:6,music:1}, interest_creativity:{visual:5,music:2}, interest_setting:{behind:4}, interest_hands_on:{plan:2,jump_in:1}
+    },
+    outreach: {
+      name:'Outreach', commitment:'Monthly events + ongoing opportunities',
+      description:"Bring the love of Jesus to our city through servant evangelism, community service, and Gospel conversations that reach people who don't yet know Hope Church.",
+      gifts:{evangelism:4,giving:1,service:2,faith:2,mercy:2},
+      interest_outreach:{yes:6,somewhat:2}, interest_social:{initiate:3}, interest_hands_on:{jump_in:2}
+    },
+    prayer_team: {
+      name:'Prayer Ministry Team', commitment:'Sundays + prayer gatherings',
+      description:"Come alongside others to pray with them during services, at prayer gatherings, and at key moments in people's lives. If intercession is central to your calling, this is your place.",
+      gifts:{intercession:6,mercy:2,encouragement:2,faith:3,wisdom:1},
+      interest_prayer_life:{deep:7,daily:3,growing:1}, interest_social:{one_on_one:3,deepen:2}, interest_setting:{one_on_one:2,front:1}
+    }
+  },
+
+  interestMap: {
+    I1:'interest_age', I2:'interest_setting', I3:'interest_skill', I4:'interest_children_exp',
+    I5:'interest_social', I6:'interest_outreach', I7:'interest_teaching_exp', I8:'interest_hands_on',
+    I9:'interest_safety', I10:'interest_prayer_life', I11:'interest_creativity', I12:'interest_time'
+  },
+
+  calculate: function (answers) {
+    var scores = {}, counts = {};
+    var self = this;
+
+    mpqData.questions.forEach(function (q) {
+      if (q.type !== 'scale') return;
+      var cat = q.category;
+      if (!scores[cat]) { scores[cat] = 0; counts[cat] = 0; }
+      var val = Math.min(5, Math.max(1, parseInt(answers[q.id] || 1, 10)));
+      scores[cat] += val; counts[cat]++;
+    });
+
+    var pct = {};
+    Object.keys(scores).forEach(function (cat) {
+      pct[cat] = counts[cat] > 0 ? Math.round((scores[cat] / (counts[cat] * 5)) * 100) : 0;
+    });
+
+    var sortedCats = Object.keys(pct).sort(function (a, b) { return pct[b] - pct[a]; });
+    var topGifts = sortedCats.slice(0, 3).map(function (cat) {
+      var info = self.giftsInfo[cat] || {name: cat, description: ''};
+      return {category: cat, name: info.name, description: info.description, percentage: pct[cat]};
+    });
+    var allGifts = sortedCats.map(function (cat) {
+      var info = self.giftsInfo[cat] || {name: cat};
+      return {category: cat, name: info.name, percentage: pct[cat]};
+    });
+
+    var mScores = {};
+    Object.keys(self.ministries).forEach(function (mid) {
+      var m = self.ministries[mid];
+      var score = 0;
+      Object.keys(m.gifts).forEach(function (gift) {
+        score += ((pct[gift] || 0) / 100) * m.gifts[gift];
+      });
+      Object.keys(self.interestMap).forEach(function (qid) {
+        var intCat = self.interestMap[qid];
+        if (!m[intCat]) return;
+        var raw = answers[qid];
+        if (raw === undefined || raw === null) return;
+        var vals = Array.isArray(raw) ? raw : [raw];
+        vals.forEach(function (v) {
+          if (m[intCat][v] !== undefined) score += m[intCat][v];
+        });
+      });
+      mScores[mid] = score;
+    });
+
+    var sortedM = Object.keys(mScores).sort(function (a, b) { return mScores[b] - mScores[a]; });
+    var topMinistries = sortedM.slice(0, 3).map(function (id) {
+      var m = self.ministries[id];
+      return {id: id, name: m.name, description: m.description, commitment: m.commitment, image_url: '', logo_url: ''};
+    });
+
+    return {top_gifts: topGifts, all_gifts: allGifts, top_ministries: topMinistries};
+  }
+};
+
+/* Preview fetch override */
+(function () {
+  window.fetch = function (url, opts) {
+    var answers = {}, action = '';
+    if (opts && opts.body && typeof opts.body.forEach === 'function') {
+      opts.body.forEach(function (val, key) {
+        if (key === 'action') { action = val; return; }
+        var m = key.match(/^answers\[(.+?)\]\[\]$/);
+        if (m) {
+          if (!answers[m[1]]) answers[m[1]] = [];
+          answers[m[1]].push(isNaN(val) ? val : parseInt(val, 10));
+          return;
+        }
+        var s = key.match(/^answers\[(.+?)\]$/);
+        if (s) { answers[s[1]] = isNaN(val) ? val : parseInt(val, 10); }
+      });
+    }
+    var responseData = action === 'mpq_submit'
+      ? {success: true, data: MPQ_Scoring.calculate(answers)}
+      : {success: true, data: {id: 0}};
+    return Promise.resolve({ok: true, json: function () { return Promise.resolve(responseData); }});
+  };
+}());
+</script>
+
+<script>
+/* Quiz UI */
+document.addEventListener('DOMContentLoaded', function () {
+
+  var questions   = mpqData.questions;
+  var answers     = {};
+  var current     = 0;
+  var total       = questions.length;
+  var exiting     = false;
+  var resultsData = null;
+
+  var welcome      = document.getElementById('mpq-welcome');
+  var quizScreen   = document.getElementById('mpq-quiz');
+  var resultsScr   = document.getElementById('mpq-results');
+  var confirmScr   = document.getElementById('mpq-confirmation');
+  var loading      = document.getElementById('mpq-loading');
+  var startBtn     = document.getElementById('mpq-start-btn');
+  var nextBtn      = document.getElementById('mpq-next-btn');
+  var backBtn      = document.getElementById('mpq-back-btn');
+  var qWrap        = document.getElementById('mpq-question-wrap');
+  var qCounter     = document.getElementById('mpq-q-counter');
+  var progressFill = document.getElementById('mpq-progress-fill');
+  var resultsCont  = document.getElementById('mpq-results-content');
+  var confirmCta   = document.getElementById('mpq-confirmation__cta');
+
+  function showScreen(id) {
+    [welcome, quizScreen, resultsScr, confirmScr].forEach(function (s) {
+      if (s) { s.style.display = 'none'; s.classList.remove('mpq-screen--active'); }
+    });
+    var target = document.getElementById(id);
+    if (target) { target.style.display = 'flex'; target.classList.add('mpq-screen--active'); }
+    try { window.scrollTo({top: 0, behavior: 'smooth'}); } catch (e) { window.scrollTo(0, 0); }
+  }
+
+  function setLoading(on) {
+    if (!loading) return;
+    if (on) { loading.classList.remove('mpq-loading--hidden'); loading.removeAttribute('aria-hidden'); }
+    else     { loading.classList.add('mpq-loading--hidden');    loading.setAttribute('aria-hidden', 'true'); }
+  }
+
+  function updateProgress() {
+    var pct = Math.round((current / total) * 100);
+    if (progressFill) { progressFill.style.width = pct + '%'; progressFill.parentElement.setAttribute('aria-valuenow', pct); }
+    if (qCounter) qCounter.textContent = 'Question ' + (current + 1) + ' of ' + total;
+    if (backBtn) backBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+  }
+
+  function isAnswered(q) {
+    if (q.type === 'multi') return Array.isArray(answers[q.id]) && answers[q.id].length > 0;
+    return answers[q.id] !== undefined && answers[q.id] !== null && answers[q.id] !== '';
+  }
+
+  var choiceKeys = ['A', 'B', 'C', 'D', 'E'];
+
+  function renderQuestion(idx) {
+    var q = questions[idx];
+    var typeLabel = q.type === 'scale' ? 'Spiritual Gifts' : 'About You';
+    var isLast = idx === total - 1;
+
+    var html = '<div class="mpq-question">'
+      + '<span class="mpq-question__type">' + typeLabel + '</span>'
+      + '<p class="mpq-question__text">' + escHtml(q.text) + '</p>';
+    if (q.type === 'scale') {
+      html += renderScale(q);
+    } else if (q.type === 'multi') {
+      html += renderMulti(q, isLast);
+    } else {
+      html += renderChoices(q);
+    }
+    html += '</div>';
+
+    /* Multi: Next lives inline; hide footer Next */
+    if (nextBtn) {
+      nextBtn.style.display = (q.type === 'multi') ? 'none' : '';
+      nextBtn.disabled = !isAnswered(q);
+      nextBtn.innerHTML = isLast
+        ? 'See My Results <span class="mpq-btn__arrow">&#8594;</span>'
+        : 'Next <span class="mpq-btn__arrow">&#8594;</span>';
+    }
+
+    if (qWrap.firstChild && !exiting) {
+      exiting = true;
+      var old = qWrap.firstChild;
+      old.classList.add('mpq-question--exit');
+      setTimeout(function () { qWrap.innerHTML = html; attachHandlers(q, isLast); updateProgress(); exiting = false; }, 260);
+    } else if (!exiting) {
+      qWrap.innerHTML = html; attachHandlers(q, isLast); updateProgress();
+    }
+  }
+
+  function renderScale(q) {
+    var labels = ['Not at all', '', 'Sometimes', '', 'Very much me'];
+    var html = '<div class="mpq-scale__label-row">';
+    labels.forEach(function (l) { html += '<span>' + escHtml(l) + '</span>'; });
+    html += '</div><div class="mpq-scale__options" role="group" aria-label="Rate from 1 to 5">';
+    for (var i = 1; i <= 5; i++) {
+      var sel = answers[q.id] === i ? ' selected' : '';
+      html += '<button class="mpq-scale__btn' + sel + '" data-val="' + i + '" aria-label="' + i + '">' + i + '</button>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function renderMulti(q, isLast) {
+    var selected = Array.isArray(answers[q.id]) ? answers[q.id] : [];
+    var hasAnswer = selected.length > 0;
+    var html = '<p class="mpq-multi__hint">Select all that apply</p><div class="mpq-choices" role="group">';
+    q.options.forEach(function (opt, i) {
+      var isSel = selected.indexOf(opt.value) !== -1;
+      html += '<button class="mpq-choice__btn' + (isSel ? ' selected' : '') + '" data-val="' + escAttr(opt.value) + '" type="button">'
+        + '<span class="mpq-choice__key">' + (isSel ? '&#10003;' : choiceKeys[i]) + '</span>'
+        + '<span>' + escHtml(opt.label) + '</span>'
+        + '</button>';
+    });
+    html += '</div>'
+      + '<div class="mpq-multi__next">'
+      + '<button class="mpq-btn mpq-btn--primary mpq-multi__next-btn" type="button"' + (hasAnswer ? '' : ' disabled') + '>'
+      + (isLast ? 'See My Results' : 'Next') + ' <span class="mpq-btn__arrow">&#8594;</span>'
+      + '</button></div>';
+    return html;
+  }
+
+  function renderChoices(q) {
+    var html = '<div class="mpq-choices" role="group">';
+    q.options.forEach(function (opt, i) {
+      var sel = answers[q.id] === opt.value ? ' selected' : '';
+      html += '<button class="mpq-choice__btn' + sel + '" data-val="' + escAttr(opt.value) + '">'
+        + '<span class="mpq-choice__key">' + choiceKeys[i] + '</span>'
+        + '<span>' + escHtml(opt.label) + '</span>'
+        + '</button>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function attachHandlers(q, isLast) {
+    if (q.type === 'scale') {
+      qWrap.querySelectorAll('.mpq-scale__btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          qWrap.querySelectorAll('.mpq-scale__btn').forEach(function (b) { b.classList.remove('selected'); });
+          btn.classList.add('selected');
+          answers[q.id] = parseInt(btn.getAttribute('data-val'), 10);
+          if (nextBtn) nextBtn.disabled = false;
+          setTimeout(advance, 320);
+        });
+      });
+    } else if (q.type === 'multi') {
+      var multiNextBtn = qWrap.querySelector('.mpq-multi__next-btn');
+      if (multiNextBtn) multiNextBtn.addEventListener('click', advance);
+      var allBtns = Array.prototype.slice.call(qWrap.querySelectorAll('.mpq-choice__btn'));
+      allBtns.forEach(function (btn, btnIdx) {
+        btn.addEventListener('click', function () {
+          var val = btn.getAttribute('data-val');
+          var cur = Array.isArray(answers[q.id]) ? answers[q.id].slice() : [];
+          var pos = cur.indexOf(val);
+          if (pos === -1) {
+            cur.push(val); btn.classList.add('selected');
+            btn.querySelector('.mpq-choice__key').innerHTML = '&#10003;';
+          } else {
+            cur.splice(pos, 1); btn.classList.remove('selected');
+            btn.querySelector('.mpq-choice__key').textContent = choiceKeys[btnIdx];
+          }
+          answers[q.id] = cur;
+          if (multiNextBtn) multiNextBtn.disabled = cur.length === 0;
+        });
+      });
+    } else {
+      qWrap.querySelectorAll('.mpq-choice__btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          qWrap.querySelectorAll('.mpq-choice__btn').forEach(function (b) { b.classList.remove('selected'); });
+          btn.classList.add('selected');
+          answers[q.id] = btn.getAttribute('data-val');
+          if (nextBtn) nextBtn.disabled = false;
+          setTimeout(advance, 320);
+        });
+      });
+    }
+  }
+
+  function advance() {
+    if (!isAnswered(questions[current])) return;
+    if (current < total - 1) { current++; renderQuestion(current); }
+    else { submitQuiz(); }
+  }
+
+  if (startBtn) startBtn.addEventListener('click', function () { showScreen('mpq-quiz'); renderQuestion(0); });
+  if (nextBtn)  nextBtn.addEventListener('click', advance);
+  if (backBtn)  backBtn.addEventListener('click', function () { if (current > 0) { current--; renderQuestion(current); } });
+
+  document.addEventListener('keydown', function (e) {
+    if (!quizScreen || quizScreen.style.display === 'none') return;
+    var q = questions[current];
+    if (e.key === 'Enter' && isAnswered(q)) { advance(); return; }
+    if (q.type === 'scale') {
+      var n = parseInt(e.key, 10);
+      if (n >= 1 && n <= 5) { var sb = qWrap.querySelector('.mpq-scale__btn[data-val="'+n+'"]'); if (sb) sb.click(); }
+    }
+    if (q.type === 'choice' || q.type === 'multi') {
+      var map = {a:0,b:1,c:2,d:3,e:4};
+      var idx = map[e.key.toLowerCase()];
+      if (idx !== undefined) { var btns = qWrap.querySelectorAll('.mpq-choice__btn'); if (btns[idx]) btns[idx].click(); }
+    }
+  });
+
+  function submitQuiz() {
+    setLoading(true);
+    showScreen('mpq-results');
+    var formData = new FormData();
+    formData.append('action', 'mpq_submit');
+    formData.append('nonce', mpqData.nonce);
+    Object.keys(answers).forEach(function (k) {
+      var v = answers[k];
+      if (Array.isArray(v)) { v.forEach(function (item) { formData.append('answers[' + k + '][]', item); }); }
+      else { formData.append('answers[' + k + ']', v); }
+    });
+    fetch(mpqData.ajaxUrl, {method:'POST', body:formData})
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        setLoading(false);
+        if (data.success) { resultsData = data.data; renderResults(data.data); }
+        else { alert('Something went wrong. Please try again.'); }
+      })
+      .catch(function () { setLoading(false); alert('Network error. Please try again.'); });
+  }
+
+  function renderResults(data) {
+    var topGifts      = data.top_gifts      || [];
+    var topMinistries = data.top_ministries || [];
+    var allGifts      = data.all_gifts      || [];
+
+    var rankLabels   = ['Your #1 Gift', 'Your #2 Gift', 'Your #3 Gift'];
+    var mBadges      = ['Best Match', 'Great Fit', 'Strong Fit'];
+    var mRankClasses = ['mpq-ministry-card--rank-1', 'mpq-ministry-card--rank-2', 'mpq-ministry-card--rank-3'];
+
+    var html = '<p class="mpq-results__eyebrow">Your Results</p>'
+      + '<h2 class="mpq-results__title">Here\'s How God<br>Has Wired You</h2>'
+      + '<p class="mpq-results__subtitle">Based on your answers, here are your top spiritual gifts and the Hope Church ministries where you\'d likely thrive.</p>';
+
+    html += '<p class="mpq-section-title" style="margin-top:0">Your Top Spiritual Gifts</p>';
+    html += '<div class="mpq-gifts-grid">';
+    topGifts.forEach(function (g, i) {
+      html += '<div class="mpq-gift-card mpq-gift-card--rank-' + (i+1) + '">'
+        + '<div class="mpq-gift-card__rank">' + rankLabels[i] + '</div>'
+        + '<div class="mpq-gift-card__name">' + escHtml(g.name) + '</div>'
+        + '<div class="mpq-gift-card__pct">' + g.percentage + '%</div>'
+        + '<p class="mpq-gift-card__desc">' + escHtml(g.description) + '</p>'
+        + '</div>';
+    });
+    html += '</div>';
+
+    html += '<p class="mpq-section-title">Recommended Ministries for You</p>'
+      + '<p class="mpq-results__subtitle" style="margin-top:0;margin-bottom:1.5rem;">Check the ministries you\'re interested in, then fill out your info below so our team can connect with you.</p>';
+
+    html += '<div class="mpq-ministries-list" id="mpq-ministry-cards">';
+    topMinistries.forEach(function (m, i) {
+      html += '<label class="mpq-ministry-card ' + mRankClasses[i] + '" for="mpq-m-' + escAttr(m.id) + '">';
+
+      /* Only show image area when a real URL exists */
+      if (m.image_url) {
+        html += '<div class="mpq-ministry-card__image" style="background-image:url(' + m.image_url + ')">';
+        if (m.logo_url) html += '<img src="' + escAttr(m.logo_url) + '" class="mpq-ministry-card__logo" alt="' + escAttr(m.name) + ' logo">';
+        html += '<span class="mpq-ministry-card__badge">' + mBadges[i] + '</span></div>';
+      }
+
+      html += '<div class="mpq-ministry-card__body">';
+      if (!m.image_url) html += '<span class="mpq-ministry-card__badge">' + mBadges[i] + '</span>';
+      html += '<div class="mpq-ministry-card__name">' + escHtml(m.name) + '</div>'
+        + '<p class="mpq-ministry-card__desc">' + escHtml(m.description) + '</p>'
+        + '<span class="mpq-ministry-card__commitment">' + escHtml(m.commitment) + '</span>'
+        + '</div>'
+        + '<div class="mpq-ministry-card__check">'
+        + '<input type="checkbox" id="mpq-m-' + escAttr(m.id) + '" name="ministry" value="' + escAttr(m.id) + '" class="mpq-ministry-check">'
+        + '<span class="mpq-ministry-check__box"></span>'
+        + '<span class="mpq-ministry-check__label">I\'m interested</span>'
+        + '</div>'
+        + '</label>';
+    });
+    html += '</div>';
+
+    html += '<p class="mpq-section-title">Your Full Gifts Profile</p><div class="mpq-all-gifts">';
+    allGifts.forEach(function (g) {
+      html += '<div class="mpq-gift-bar-row">'
+        + '<span class="mpq-gift-bar__label">' + escHtml(g.name) + '</span>'
+        + '<div class="mpq-gift-bar__track"><div class="mpq-gift-bar__fill" data-pct="' + g.percentage + '"></div></div>'
+        + '<span class="mpq-gift-bar__pct">' + g.percentage + '%</span>'
+        + '</div>';
+    });
+    html += '</div>';
+
+    html += '<div class="mpq-connect-form" id="mpq-connect-form">'
+      + '<h3 class="mpq-connect-form__title">Ready to Take the Next Step?</h3>'
+      + '<p class="mpq-connect-form__desc">Enter your info and our team will reach out to help get you connected!</p>'
+      + '<div id="mpq-connect-error" class="mpq-connect-error" style="display:none;"></div>'
+      + '<div class="mpq-form-row">'
+      + '<div class="mpq-form-field"><label for="mpq-name">Your Name</label><input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name"></div>'
+      + '<div class="mpq-form-field"><label for="mpq-email">Email Address</label><input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email"></div>'
+      + '</div>'
+      + '<button class="mpq-btn mpq-btn--primary" id="mpq-connect-btn">Connect Me &#8594;</button>'
+      + '</div>';
+
+    resultsCont.innerHTML = html;
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        resultsCont.querySelectorAll('.mpq-gift-bar__fill').forEach(function (bar) { bar.style.width = bar.getAttribute('data-pct') + '%'; });
+      });
+    });
+
+    document.getElementById('mpq-connect-btn').addEventListener('click', handleConnect);
+  }
+
+  function handleConnect() {
+    var nameEl  = document.getElementById('mpq-name');
+    var emailEl = document.getElementById('mpq-email');
+    var errEl   = document.getElementById('mpq-connect-error');
+    var name    = nameEl  ? nameEl.value.trim()  : '';
+    var email   = emailEl ? emailEl.value.trim() : '';
+    var selIds  = [];
+    resultsCont.querySelectorAll('.mpq-ministry-check:checked').forEach(function (cb) { selIds.push(cb.value); });
+
+    var errors = [];
+    if (!name)                errors.push('Please enter your name.');
+    if (!isValidEmail(email)) errors.push('Please enter a valid email address.');
+    if (!selIds.length)       errors.push('Please select at least one ministry you\'re interested in.');
+
+    if (errors.length) {
+      errEl.innerHTML = errors.map(function (e) { return '<p>' + escHtml(e) + '</p>'; }).join('');
+      errEl.style.display = 'block';
+      try { errEl.scrollIntoView({behavior:'smooth', block:'center'}); } catch (e) {}
+      return;
+    }
+
+    errEl.style.display = 'none';
+    setLoading(true);
+    var d = resultsData;
+    var recIds = (d.top_ministries || []).map(function (m) { return m.id; }).join(',');
+    var formData = new FormData();
+    formData.append('action', 'mpq_confirm');
+    formData.append('nonce', mpqData.nonce);
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('rec_ministries', recIds);
+    formData.append('sel_ministries', selIds.join(','));
+    formData.append('top_gifts', JSON.stringify(d.top_gifts || []));
+    formData.append('answers_json', JSON.stringify(answers));
+
+    fetch(mpqData.ajaxUrl, {method:'POST', body:formData})
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        setLoading(false);
+        if (data.success) {
+          if (confirmCta && mpqData.connectUrl) {
+            confirmCta.innerHTML = '<a href="' + escAttr(mpqData.connectUrl) + '" class="mpq-btn mpq-btn--primary">Visit Our Connect Page &#8594;</a>';
+          }
+          showScreen('mpq-confirmation');
+        } else {
+          alert((data.data && data.data.message) ? data.data.message : 'Something went wrong.');
+        }
+      })
+      .catch(function () { setLoading(false); alert('Network error. Please try again.'); });
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+  function escAttr(str) { return String(str).replace(/"/g,'&quot;'); }
+  function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+}); // end DOMContentLoaded
+</script>
+
+</body>
+</html>
