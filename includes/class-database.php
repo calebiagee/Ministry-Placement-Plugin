@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class MPQ_Database {
 
 	const TABLE = 'mpq_submissions';
-	const DB_VERSION = '1.0';
+	const DB_VERSION = '1.1';
 	const VERSION_OPTION = 'mpq_db_version';
 
 	public static function create_table() {
@@ -16,6 +16,7 @@ class MPQ_Database {
 			id          BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			name        VARCHAR(150)        NOT NULL DEFAULT '',
 			email       VARCHAR(200)        NOT NULL DEFAULT '',
+			phone       VARCHAR(50)         NOT NULL DEFAULT '',
 			top_gifts   TEXT                         DEFAULT NULL,
 			rec_ministries TEXT                      DEFAULT NULL,
 			sel_ministries TEXT                      DEFAULT NULL,
@@ -47,12 +48,13 @@ class MPQ_Database {
 			[
 				'name'           => sanitize_text_field( $data['name'] ?? '' ),
 				'email'          => sanitize_email( $data['email'] ?? '' ),
+				'phone'          => sanitize_text_field( $data['phone'] ?? '' ),
 				'top_gifts'      => wp_json_encode( $data['top_gifts'] ?? [] ),
 				'rec_ministries' => sanitize_text_field( $data['rec_ministries'] ?? '' ),
 				'sel_ministries' => sanitize_text_field( $data['sel_ministries'] ?? '' ),
 				'answers_json'   => wp_json_encode( $data['answers'] ?? [] ),
 			],
-			[ '%s', '%s', '%s', '%s', '%s', '%s' ]
+			[ '%s', '%s', '%s', '%s', '%s', '%s', '%s' ]
 		);
 
 		return $inserted ? $wpdb->insert_id : false;
@@ -67,7 +69,7 @@ class MPQ_Database {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		return $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id, name, email, top_gifts, rec_ministries, sel_ministries, submitted_at
+				"SELECT id, name, email, phone, top_gifts, rec_ministries, sel_ministries, submitted_at
 				 FROM {$table}
 				 ORDER BY submitted_at DESC
 				 LIMIT %d OFFSET %d",

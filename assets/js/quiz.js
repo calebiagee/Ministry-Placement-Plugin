@@ -320,7 +320,7 @@
     var mRankClasses = ['mpq-ministry-card--rank-1', 'mpq-ministry-card--rank-2', 'mpq-ministry-card--rank-3'];
 
     var html = '<p class="mpq-results__eyebrow">Your Results</p>'
-      + '<h2 class="mpq-results__title">Here\'s How God<br>Has Wired You</h2>'
+      + '<h2 class="mpq-results__title">Your Results<br>Are In!</h2>'
       + '<p class="mpq-results__subtitle">Based on your answers, here are your top spiritual gifts and the Hope Church ministries where you\'d likely thrive.</p>';
 
     /* ---- Top Gifts ---- */
@@ -371,6 +371,28 @@
     });
     html += '</div>';
 
+    /* ---- Connect form (above the full gifts profile) ---- */
+    html += '<div class="mpq-connect-form" id="mpq-connect-form">'
+      + '<h3 class="mpq-connect-form__title">Ready to Take the Next Step?</h3>'
+      + '<p class="mpq-connect-form__desc">Enter your info and our team will reach out to help get you connected!</p>'
+      + '<div id="mpq-connect-error" class="mpq-connect-error" style="display:none;"></div>'
+      + '<div class="mpq-form-field mpq-form-field--full">'
+      + '<label for="mpq-name">Your Name</label>'
+      + '<input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name">'
+      + '</div>'
+      + '<div class="mpq-form-row">'
+      + '<div class="mpq-form-field">'
+      + '<label for="mpq-email">Email Address</label>'
+      + '<input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email">'
+      + '</div>'
+      + '<div class="mpq-form-field">'
+      + '<label for="mpq-phone">Phone Number</label>'
+      + '<input type="tel" id="mpq-phone" placeholder="(555) 123-4567" autocomplete="tel">'
+      + '</div>'
+      + '</div>'
+      + '<button class="mpq-btn mpq-btn--primary" id="mpq-connect-btn">Connect Me &rarr;</button>'
+      + '</div>';
+
     /* ---- All gifts bar chart ---- */
     html += '<p class="mpq-section-title">Your Full Gifts Profile</p>'
       + '<div class="mpq-all-gifts">';
@@ -382,24 +404,6 @@
         + '</div>';
     });
     html += '</div>';
-
-    /* ---- Connect form ---- */
-    html += '<div class="mpq-connect-form" id="mpq-connect-form">'
-      + '<h3 class="mpq-connect-form__title">Ready to Take the Next Step?</h3>'
-      + '<p class="mpq-connect-form__desc">Enter your info and our team will reach out to help get you connected!</p>'
-      + '<div id="mpq-connect-error" class="mpq-connect-error" style="display:none;"></div>'
-      + '<div class="mpq-form-row">'
-      + '<div class="mpq-form-field">'
-      + '<label for="mpq-name">Your Name</label>'
-      + '<input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name">'
-      + '</div>'
-      + '<div class="mpq-form-field">'
-      + '<label for="mpq-email">Email Address</label>'
-      + '<input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email">'
-      + '</div>'
-      + '</div>'
-      + '<button class="mpq-btn mpq-btn--primary" id="mpq-connect-btn">Connect Me &rarr;</button>'
-      + '</div>';
 
     resultsCont.innerHTML = html;
 
@@ -420,10 +424,12 @@
   function handleConnect() {
     var nameEl  = document.getElementById('mpq-name');
     var emailEl = document.getElementById('mpq-email');
+    var phoneEl = document.getElementById('mpq-phone');
     var errEl   = document.getElementById('mpq-connect-error');
 
     var name  = nameEl  ? nameEl.value.trim()  : '';
     var email = emailEl ? emailEl.value.trim() : '';
+    var phone = phoneEl ? phoneEl.value.trim() : '';
 
     var checked = resultsCont.querySelectorAll('.mpq-ministry-check:checked');
     var selIds  = [];
@@ -432,6 +438,7 @@
     var errors = [];
     if (!name)               errors.push('Please enter your name.');
     if (!isValidEmail(email)) errors.push('Please enter a valid email address.');
+    if (!phone)              errors.push('Please enter your phone number.');
     if (selIds.length === 0)  errors.push('Please select at least one ministry you\'re interested in.');
 
     if (errors.length) {
@@ -452,6 +459,7 @@
     formData.append('nonce',           mpqData.nonce);
     formData.append('name',            name);
     formData.append('email',           email);
+    formData.append('phone',           phone);
     formData.append('rec_ministries',  recIds);
     formData.append('sel_ministries',  selIds.join(','));
     formData.append('top_gifts',       JSON.stringify(d.top_gifts || []));

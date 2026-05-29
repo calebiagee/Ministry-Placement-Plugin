@@ -218,6 +218,7 @@ class Ministry_Placement_Quiz {
 
 		$name           = sanitize_text_field( $_POST['name']            ?? '' );
 		$email          = sanitize_email(      $_POST['email']           ?? '' );
+		$phone          = sanitize_text_field( $_POST['phone']           ?? '' );
 		$sel_ids        = sanitize_text_field( $_POST['sel_ministries']  ?? '' );
 		$rec_ids        = sanitize_text_field( $_POST['rec_ministries']  ?? '' );
 		$top_gifts_json = stripslashes(        $_POST['top_gifts']       ?? '[]' );
@@ -233,6 +234,7 @@ class Ministry_Placement_Quiz {
 		$submission_id = MPQ_Database::save_submission( [
 			'name'           => $name,
 			'email'          => $email,
+			'phone'          => $phone,
 			'top_gifts'      => $top_gifts,
 			'rec_ministries' => $rec_ids,
 			'sel_ministries' => $sel_ids,
@@ -242,6 +244,7 @@ class Ministry_Placement_Quiz {
 		MPQ_Email::send_team_notification( [
 			'name'           => $name,
 			'email'          => $email,
+			'phone'          => $phone,
 			'top_gifts'      => $top_gifts,
 			'rec_ministries' => $rec_ids,
 			'sel_ministries' => $sel_ids,

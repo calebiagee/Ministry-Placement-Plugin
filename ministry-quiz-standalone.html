@@ -245,6 +245,7 @@ body { margin: 0; padding: 0; }
 .mpq-connect-error p:last-child { margin: 0; }
 .mpq-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
 .mpq-form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+.mpq-form-field--full { margin-bottom: 1.5rem; }
 .mpq-form-field label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: rgba(255,255,255,0.6); text-transform: uppercase; }
 .mpq-form-field input { background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15); border-radius: var(--mpq-radius-sm); padding: 0.75rem 1rem; font-size: 1rem; color: var(--mpq-white); outline: none; transition: border-color 0.2s; }
 .mpq-form-field input::placeholder { color: rgba(255,255,255,0.3); }
@@ -850,7 +851,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var mRankClasses = ['mpq-ministry-card--rank-1', 'mpq-ministry-card--rank-2', 'mpq-ministry-card--rank-3'];
 
     var html = '<p class="mpq-results__eyebrow">Your Results</p>'
-      + '<h2 class="mpq-results__title">Here\'s How God<br>Has Wired You</h2>'
+      + '<h2 class="mpq-results__title">Your Results<br>Are In!</h2>'
       + '<p class="mpq-results__subtitle">Based on your answers, here are your top spiritual gifts and the Hope Church ministries where you\'d likely thrive.</p>';
 
     html += '<p class="mpq-section-title" style="margin-top:0">Your Top Spiritual Gifts</p>';
@@ -894,6 +895,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     html += '</div>';
 
+    html += '<div class="mpq-connect-form" id="mpq-connect-form">'
+      + '<h3 class="mpq-connect-form__title">Ready to Take the Next Step?</h3>'
+      + '<p class="mpq-connect-form__desc">Enter your info and our team will reach out to help get you connected!</p>'
+      + '<div id="mpq-connect-error" class="mpq-connect-error" style="display:none;"></div>'
+      + '<div class="mpq-form-field mpq-form-field--full"><label for="mpq-name">Your Name</label><input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name"></div>'
+      + '<div class="mpq-form-row">'
+      + '<div class="mpq-form-field"><label for="mpq-email">Email Address</label><input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email"></div>'
+      + '<div class="mpq-form-field"><label for="mpq-phone">Phone Number</label><input type="tel" id="mpq-phone" placeholder="(555) 123-4567" autocomplete="tel"></div>'
+      + '</div>'
+      + '<button class="mpq-btn mpq-btn--primary" id="mpq-connect-btn">Connect Me &#8594;</button>'
+      + '</div>';
+
     html += '<p class="mpq-section-title">Your Full Gifts Profile</p><div class="mpq-all-gifts">';
     allGifts.forEach(function (g) {
       html += '<div class="mpq-gift-bar-row">'
@@ -903,17 +916,6 @@ document.addEventListener('DOMContentLoaded', function () {
         + '</div>';
     });
     html += '</div>';
-
-    html += '<div class="mpq-connect-form" id="mpq-connect-form">'
-      + '<h3 class="mpq-connect-form__title">Ready to Take the Next Step?</h3>'
-      + '<p class="mpq-connect-form__desc">Enter your info and our team will reach out to help get you connected!</p>'
-      + '<div id="mpq-connect-error" class="mpq-connect-error" style="display:none;"></div>'
-      + '<div class="mpq-form-row">'
-      + '<div class="mpq-form-field"><label for="mpq-name">Your Name</label><input type="text" id="mpq-name" placeholder="First and last name" autocomplete="name"></div>'
-      + '<div class="mpq-form-field"><label for="mpq-email">Email Address</label><input type="email" id="mpq-email" placeholder="your@email.com" autocomplete="email"></div>'
-      + '</div>'
-      + '<button class="mpq-btn mpq-btn--primary" id="mpq-connect-btn">Connect Me &#8594;</button>'
-      + '</div>';
 
     resultsCont.innerHTML = html;
 
@@ -929,15 +931,18 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleConnect() {
     var nameEl  = document.getElementById('mpq-name');
     var emailEl = document.getElementById('mpq-email');
+    var phoneEl = document.getElementById('mpq-phone');
     var errEl   = document.getElementById('mpq-connect-error');
     var name    = nameEl  ? nameEl.value.trim()  : '';
     var email   = emailEl ? emailEl.value.trim() : '';
+    var phone   = phoneEl ? phoneEl.value.trim() : '';
     var selIds  = [];
     resultsCont.querySelectorAll('.mpq-ministry-check:checked').forEach(function (cb) { selIds.push(cb.value); });
 
     var errors = [];
     if (!name)                errors.push('Please enter your name.');
     if (!isValidEmail(email)) errors.push('Please enter a valid email address.');
+    if (!phone)               errors.push('Please enter your phone number.');
     if (!selIds.length)       errors.push('Please select at least one ministry you\'re interested in.');
 
     if (errors.length) {
@@ -956,6 +961,7 @@ document.addEventListener('DOMContentLoaded', function () {
     formData.append('nonce', mpqData.nonce);
     formData.append('name', name);
     formData.append('email', email);
+    formData.append('phone', phone);
     formData.append('rec_ministries', recIds);
     formData.append('sel_ministries', selIds.join(','));
     formData.append('top_gifts', JSON.stringify(d.top_gifts || []));

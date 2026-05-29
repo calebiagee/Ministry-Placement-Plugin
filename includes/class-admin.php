@@ -69,6 +69,7 @@ class MPQ_Admin {
 						<th width="30">#</th>
 						<th>Name</th>
 						<th>Email</th>
+						<th>Phone</th>
 						<th>Top Gifts</th>
 						<th>Recommended</th>
 						<th>Interested In</th>
@@ -91,6 +92,7 @@ class MPQ_Admin {
 						<td><?php echo intval( $row->id ); ?></td>
 						<td><strong><?php echo esc_html( $row->name ?: '—' ); ?></strong></td>
 						<td><a href="mailto:<?php echo esc_attr( $row->email ); ?>"><?php echo esc_html( $row->email ?: '—' ); ?></a></td>
+						<td><?php echo $row->phone ? '<a href="tel:' . esc_attr( preg_replace( '/[^0-9+]/', '', $row->phone ) ) . '">' . esc_html( $row->phone ) . '</a>' : '—'; ?></td>
 						<td><?php echo esc_html( implode( ', ', $gift_names ) ?: '—' ); ?></td>
 						<td><?php echo esc_html( implode( ', ', $rec_names ) ?: '—' ); ?></td>
 						<td class="mpq-interested"><?php echo $sel_names ? esc_html( implode( ', ', $sel_names ) ) : '<span class="mpq-none">None selected</span>'; ?></td>

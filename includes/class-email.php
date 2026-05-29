@@ -12,6 +12,7 @@ class MPQ_Email {
 
 		$name            = esc_html( $submission['name'] );
 		$email           = esc_html( $submission['email'] );
+		$phone           = esc_html( $submission['phone'] ?? '' );
 		$top_gifts       = $submission['top_gifts']       ?? [];
 		$rec_ministries  = $submission['rec_ministries']  ?? '';
 		$sel_ministries  = $submission['sel_ministries']  ?? '';
@@ -23,6 +24,7 @@ class MPQ_Email {
 			'site_name'       => $site_name,
 			'name'            => $name,
 			'email'           => $email,
+			'phone'           => $phone,
 			'top_gifts'       => $top_gifts,
 			'rec_ministries'  => $rec_ministries,
 			'sel_ministries'  => $sel_ministries,
@@ -78,7 +80,8 @@ class MPQ_Email {
 
           <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;">Name</p>
           <p style="margin:0 0 4px;font-size:18px;font-weight:700;color:#111;">' . esc_html( $d['name'] ) . '</p>
-          <p style="margin:0 0 28px;"><a href="mailto:' . esc_attr( $d['email'] ) . '" style="color:#C8A43A;text-decoration:none;font-size:14px;">' . esc_html( $d['email'] ) . '</a></p>
+          <p style="margin:0 0 6px;"><a href="mailto:' . esc_attr( $d['email'] ) . '" style="color:#C8A43A;text-decoration:none;font-size:14px;">' . esc_html( $d['email'] ) . '</a></p>
+          ' . ( $d['phone'] ? '<p style="margin:0 0 28px;"><a href="tel:' . esc_attr( preg_replace( '/[^0-9+]/', '', $d['phone'] ) ) . '" style="color:#C8A43A;text-decoration:none;font-size:14px;">' . esc_html( $d['phone'] ) . '</a></p>' : '<p style="margin:0 0 28px;"></p>' ) . '
 
           <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px;">
 
