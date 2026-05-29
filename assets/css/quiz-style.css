@@ -325,7 +325,7 @@
 /* ============================================================
    Results screen
    ============================================================ */
-#mpq-results { background: var(--mpq-gray-50); align-items: flex-start; }
+#mpq-results { background: var(--mpq-gray-50); justify-content: flex-start; }
 
 .mpq-results__inner {
   max-width: 760px; width: 100%;
